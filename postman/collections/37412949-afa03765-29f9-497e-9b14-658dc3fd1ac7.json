@@ -1,0 +1,113 @@
+{
+	"info": {
+		"_postman_id": "37412949-afa03765-29f9-497e-9b14-658dc3fd1ac7",
+		"name": "Task2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CREATE",
+			"id": "37412949-690193f8-90ec-4cd8-b840-1b53bf925e66",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": 2,\n    \"fullname\": \"ANYAGE Daniel\",\n    \"surname\": \"DANOZ\",\n    \"age\": null,\n    \"field\": \"Computer science\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "READ",
+			"id": "37412949-30d7cf1b-f762-437b-a110-ab502c19374b",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UPDATE",
+			"id": "37412949-8fda8cda-2077-4753-b7d4-bfeb297105e3",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "        {\n            \"id\": 6,\n            \"fullname\": \"KONDO Ibrahim\",\n            \"surname\": \"ibraum\",\n            \"age\": null,\n            \"field\": \"computer science\"\n        }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DELETE",
+			"id": "37412949-617267f2-b67a-434e-910c-31da5cf664fa",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/6",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"6"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
