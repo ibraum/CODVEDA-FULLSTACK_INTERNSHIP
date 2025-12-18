@@ -86,3 +86,7 @@ This task confirms that the development environment is **fully operational** and
 **KONDO Ibrahim**
 Full Stack Development Intern
 Codveda Technologies
+
+---
+
+# Full Stack Development - Task 2
