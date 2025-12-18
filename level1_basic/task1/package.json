@@ -1,0 +1,24 @@
+{
+  "name": "task1",
+  "version": "1.0.0",
+  "description": "Setup development environment",
+  "keywords": [
+    "fullstack",
+    "nodejs",
+    "npm/yarn",
+    "vscode",
+    "git"
+  ],
+  "license": "ISC",
+  "author": "KONDO Ibrahim",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node index.js"
+  },
+  "dependencies": {
+    "express": "^5.2.1",
+    "node": "^24.12.0"
+  }
+}
