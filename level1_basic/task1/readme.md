@@ -19,7 +19,7 @@ The following tools were installed and configured successfully:
 * **Visual Studio Code (VS Code)** – Code editor
 * **Git** – Version control system
 * **GitHub** – Remote repository hosting
-* **Database**: MongoDB *(can be replaced with MySQL or PostgreSQL if applicable)*
+* **Database**: PostgreSQL
 * **Operating System Terminal** – Command-line usage
 
 ---
@@ -32,7 +32,7 @@ The following tools were installed and configured successfully:
   * `npm -v`
 * Git was installed and configured with username and email.
 * A GitHub repository was created and linked to the local project.
-* MongoDB was installed and verified to be running locally.
+* PostgreSQL and PgAdmin were installed and verified to be running locally.
 * VS Code was configured with essential extensions for development.
 
 ---
@@ -40,7 +40,7 @@ The following tools were installed and configured successfully:
 ### 📂 Project Structure
 
 ```text
-task-1-environment-setup/
+task-1/
 │
 ├── README.md
 ├── package.json
