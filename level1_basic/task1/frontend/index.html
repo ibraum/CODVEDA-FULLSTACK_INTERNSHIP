@@ -21,20 +21,20 @@
         </div>
         <div class="">
           <div class="fullname poppins-bold">KONDO Ibrahim</div>
-          <div class="description poppins-mdium">
+          <div class="description poppins-medium">
             <span class="badge-blue">Développeur fullstack</span>
           </div>
         </div>
       </header>
       <section class="">
-        <div class="">
+        <div class="poppins-extralight" style="text-align: justify;">
           The final outcome of the <strong>Level 1</strong> Codveda Internship
           Program:
           <i
             >a simple CRUD API paired with a modern frontend built using our
             core stack</i
           >.
-          <ul>
+          <ul class="poppins-extralight">
             <li>HTML</li>
             <li>CSS</li>
             <li>JavaScript</li>
@@ -42,20 +42,32 @@
         </div>
       </section>
       <main class="">
-        <div class="table-actions"></div>
-        <div id="users">
-            <div class="line">
-                <div class="">a</div>
-                <div class="">a</div>
-                <div class="">a</div>
-                <div class="">a</div>
-                <div class="">a</div>
-                <div class="">a</div>
-                <div class="">a</div>
-            </div>
+        <div class="table-actions">
+          <div style="font-size: 1.2rem; font-weight: 600;">Users list</div>
+          <div class="">
+            <button class="create-user poppins-medium">Create user</button>
+          </div>
         </div>
+        <table>
+          <thead class="poppins-medium">
+            <tr>
+              <th>ID</th>
+              <th>Nom</th>
+              <th>Prénom</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Age</th>
+              <th>Domaine</th>
+              <th style="text-align: end;">Action</th>
+            </tr>
+          </thead>
+          <tbody id="users" class="poppins-light"></tbody>
+        </table>
       </main>
       <footer class=""></footer>
     </div>
+
+    <div id="blur-modals" class="modal"></div>
+    <div id="form" class="modal"></div>
   </body>
 </html>
