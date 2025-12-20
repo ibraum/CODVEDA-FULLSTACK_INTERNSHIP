@@ -11,6 +11,8 @@ const closeModalBtn = document.getElementById('closeModal');
 const deleteModal = document.getElementById('confirm-delete-modal');
 const confirmDeleteBtn = document.getElementById('confirmDelete');
 const cancelDeleteBtn = document.getElementById('cancelDelete');
+const modalTitle = document.getElementById('modalTitle');
+const submitBtn = document.getElementById('submitBtn');
 
 let users = [];
 let editingUserId = null;
@@ -42,12 +44,18 @@ function renderUsers() {
 
   let table = '';
   users.forEach(user => {
+    const badgeStyle = user.isActive 
+      ? 'background-color: #16a34a33; color: #0bbd4cff;'
+      : 'background-color: #ef444441; color: #ef4444ff;';
+    const badgeText = user.isActive ? 'Yes' : 'No';
+    
     table += `
       <tr>
         <td>${user.id}</td>
         <td>${user.lastname || ''}</td>
         <td>${user.firstname || ''}</td>
         <td>${user.username || ''}</td>
+        <td><span style="display: inline-block; padding: 2px 12px; border-radius: 8px; font-size: 10px; font-weight: 600; ${badgeStyle}">${badgeText}</span></td>
         <td>${user.email || ''}</td>
         <td>${user.age || ''}</td>
         <td>${user.field || ''}</td>
@@ -100,6 +108,8 @@ function toggleModal(show = null) {
 blurModals.addEventListener('click', () => {
   toggleModal(false);
   if (deleteModal) deleteModal.classList.remove('show');
+  const viewModal = document.getElementById('view-user-modal');
+  if (viewModal) viewModal.classList.remove('show');
   pendingDeleteId = null;
 });
 
@@ -109,6 +119,8 @@ closeModalBtn.addEventListener('click', () => toggleModal(false));
 function openCreateModal() {
   editingUserId = null;
   userForm.reset();
+  modalTitle.textContent = 'Create User';
+  submitBtn.textContent = 'Create';
   toggleModal(true);
 }
 
@@ -122,8 +134,9 @@ function openEditModal(id) {
   userForm.email.value = u.email || '';
   userForm.age.value = u.age || '';
   userForm.field.value = u.field || '';
-  userForm.role.value = u.role || '';
   userForm.isActive.value = u.isActive === false ? 'false' : 'true';
+  modalTitle.textContent = 'Edit User';
+  submitBtn.textContent = 'Update';
   toggleModal(true);
 }
 
@@ -137,7 +150,6 @@ userForm.addEventListener('submit', async (e) => {
     email: formData.get('email'),
     age: Number(formData.get('age')) || null,
     field: formData.get('field'),
-    role: formData.get('role') || null,
     isActive: formData.get('isActive') === 'true',
   };
 
@@ -162,9 +174,14 @@ userForm.addEventListener('submit', async (e) => {
 
     toggleModal(false);
     await getUsers();
+    if (editingUserId) {
+      showToast('User updated successfully', 'success');
+    } else {
+      showToast('User created successfully', 'success');
+    }
   } catch (err) {
     console.error(err);
-    showMessage('An error occured. See console.');
+    showToast('An error occurred. See console.', 'error');
   }
 });
 
@@ -201,9 +218,10 @@ if (confirmDeleteBtn) confirmDeleteBtn.addEventListener('click', async () => {
     if (blurModals) blurModals.classList.remove('show');
     pendingDeleteId = null;
     await getUsers();
+    showToast('User deleted successfully', 'success');
   } catch (err) {
     console.error(err);
-    showMessage('Delete failed');
+    showToast('Delete failed', 'error');
   }
 });
 
@@ -211,7 +229,51 @@ function showViewModal(user) {
   const viewModal = document.getElementById('view-user-modal');
   const viewContent = document.getElementById('viewUserContent');
   if (!viewModal || !viewContent) return;
-  viewContent.textContent = JSON.stringify(user, null, 2);
+  
+  const badgeStyle = user.isActive 
+    ? 'background-color: #16a34a; color: white;'
+    : 'background-color: #ef4444; color: white;';
+  
+  const badgeText = user.isActive ? 'Yes' : 'No';
+  
+  const displayText = `
+    <div style="display: grid; gap: 12px;">
+      <div style="display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: center;">
+        <strong>ID:</strong>
+        <span>${user.id}</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: center;">
+        <strong>First Name:</strong>
+        <span>${user.firstname || 'N/A'}</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: center;">
+        <strong>Last Name:</strong>
+        <span>${user.lastname || 'N/A'}</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: center;">
+        <strong>Username:</strong>
+        <span>${user.username || 'N/A'}</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: center;">
+        <strong>Email:</strong>
+        <span>${user.email || 'N/A'}</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: center;">
+        <strong>Age:</strong>
+        <span>${user.age || 'N/A'}</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: center;">
+        <strong>Field:</strong>
+        <span>${user.field || 'N/A'}</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 120px 1fr; gap: 16px; align-items: center;">
+        <strong>Active:</strong>
+        <span style="display: inline-block; padding: 4px 12px; border-radius: 4px; font-size: 12px; font-weight: 600; ${badgeStyle}">${badgeText}</span>
+      </div>
+    </div>
+  `.trim();
+  
+  viewContent.innerHTML = displayText;
   viewModal.classList.add('show');
   blurModals.classList.add('show');
 }
@@ -230,5 +292,78 @@ function showMessage(text, timeout = 3000) {
   msg.style.display = 'block';
   setTimeout(() => { msg.style.display = 'none'; }, timeout);
 }
+
+function showToast(message, type = 'default', duration = 3000) {
+  const toastContainer = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  
+  let bgColor = '#1e293b';
+  let textColor = '#e2e8f0';
+  let borderColor = '#334155';
+  let icon = 'ℹ';
+  
+  if (type === 'success') {
+    bgColor = '#16a34a';
+    borderColor = '#22c55e';
+    icon = '✓';
+  } else if (type === 'error') {
+    bgColor = '#dc2626';
+    borderColor = '#ef4444';
+    icon = '✕';
+  } else if (type === 'warning') {
+    bgColor = '#f59e0b';
+    borderColor = '#fbbf24';
+    icon = '⚠';
+  }
+  
+  toast.style.cssText = `
+    background-color: ${bgColor};
+    border: 1px solid ${borderColor};
+    color: ${textColor};
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    animation: slideIn 0.3s ease-out;
+  `;
+  
+  toast.innerHTML = `<span>${icon}</span><span>${message}</span>`;
+  toastContainer.appendChild(toast);
+  
+  setTimeout(() => {
+    toast.style.animation = 'slideOut 0.3s ease-out';
+    setTimeout(() => toast.remove(), 300);
+  }, duration);
+}
+
+const style = document.createElement('style');
+style.textContent = `
+  @keyframes slideIn {
+    from {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }
+  
+  @keyframes slideOut {
+    from {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateX(100%);
+    }
+  }
+`;
+document.head.appendChild(style);
 
 getUsers();

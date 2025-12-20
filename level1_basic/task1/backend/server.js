@@ -4,12 +4,13 @@ import cors from "cors";
 
 const PORT = process.env.PORT || 3000;
 const app = express();
+const option = {
+  origin: ["http://127.0.0.1:8080"]
+}
 
 app.use(express.json());
 app.use(morgan('dev'));
-
-// During development allow all origins. In production, restrict this.
-app.use(cors());
+app.use(cors(option));
 
 let data = [
   {
@@ -19,6 +20,7 @@ let data = [
     username: "ibraum",
     email: "ibraum@example.com",
     age: 24,
+    isActive: true,
     field: "Computer Science",
   },
   {
@@ -28,6 +30,7 @@ let data = [
     username: "aminad",
     email: "amina.diallo@example.com",
     age: 22,
+    isActive: true,
     field: "Software Engineering",
   },
   {
@@ -37,6 +40,7 @@ let data = [
     username: "jdupont",
     email: "jean.dupont@example.com",
     age: 27,
+    isActive: true,
     field: "Web Development",
   },
   {
@@ -46,6 +50,7 @@ let data = [
     username: "sarahm",
     email: "sarah.mensah@example.com",
     age: 25,
+    isActive: true,
     field: "Information Systems",
   },
   {
@@ -55,6 +60,7 @@ let data = [
     username: "mbrown",
     email: "michael.brown@example.com",
     age: 29,
+    isActive: false,
     field: "Data Science",
   },
   {
@@ -64,6 +70,7 @@ let data = [
     username: "fatous",
     email: "fatou.sow@example.com",
     age: 23,
+    isActive: true,
     field: "Cybersecurity",
   },
 ];
@@ -93,7 +100,6 @@ app.post("/", (req, res) => {
         username: null,
         age: null,
         field: null,
-        role: null,
         isActive: null,
       },
     });
@@ -131,7 +137,6 @@ app.put("/:id", (req, res) => {
         username: null,
         age: null,
         field: null,
-        role: null,
         isActive: null,
       },
     });
