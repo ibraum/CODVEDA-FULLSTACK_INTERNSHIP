@@ -130,7 +130,7 @@ body {
 .wrapper {
   margin: 0 auto;
   width: 90%;
-  max-width: 1000px;
+  max-width: 1100px;
   min-height: 100svh;
   padding: 25px 0;
   border-left: 1px dashed grey;
@@ -229,7 +229,11 @@ td {
    padding: 15px 0;
 }
 
-/* Modals parts */
+footer {
+  position: absolute;
+  bottom: 10px;
+  font-size: .9rem;
+}
 
 #blur-modals {
   position: fixed;
@@ -258,7 +262,6 @@ td {
   top: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0,0,0,.4);
   display: flex;
   justify-content: flex-end;
   opacity: 0;
