@@ -12,12 +12,13 @@
   "license": "ISC",
   "author": "KONDO Ibrahim",
   "type": "module",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon index.js"
+    "dev": "nodemon server.js"
   },
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^5.2.1",
     "morgan": "^1.10.1",
     "node": "^24.12.0",
