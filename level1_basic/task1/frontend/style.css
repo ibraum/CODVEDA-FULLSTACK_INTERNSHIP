@@ -336,15 +336,19 @@ td {
   margin: 20px 0 10px 0;
 }
 
-input {
+input, select {
   padding: 10px 15px;
   border: none;
   border-radius: 8px;
-  outline: 1px solid grey;
+  outline: 1px dashed grey;
 }
 
-input:focus {
-  outline: 1px dashed grey;
+select {
+  background-color: transparent;
+}
+
+input:focus, select:focus {
+  outline: 1px solid grey;
 }
 
 h3 {

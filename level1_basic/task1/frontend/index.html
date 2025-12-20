@@ -127,5 +127,32 @@
         </div>
       </form>
     </div>
+    <div id="confirm-delete-modal" class="modal" style="z-index:30;">
+      <div class="modal-content" style="width:420px; max-width:90%; border-radius:12px;">
+        <div style="padding:20px;">
+          <h3>Confirmer la suppression</h3>
+          <div class="bottom-dashed-border"></div>
+          <p>Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette action est irréversible.</p>
+          <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:20px;">
+            <button id="cancelDelete" type="button">Annuler</button>
+            <button id="confirmDelete" type="button" style="background:#ca1616; color:#fff; padding:10px 20px; border-radius:8px; border:none;">Supprimer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="view-user-modal" class="modal" style="z-index:30;">
+      <div class="modal-content" style="width:420px; max-width:90%; border-radius:12px;">
+        <div style="padding:20px;">
+          <h3>Utilisateur</h3>
+          <div class="bottom-dashed-border"></div>
+          <pre id="viewUserContent" style="white-space:pre-wrap; word-break:break-word;"></pre>
+          <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:20px;">
+            <button id="closeView" type="button">Fermer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="message" style="position:fixed;top:20px;right:20px;background:#333;color:#fff;padding:10px 15px;border-radius:8px;display:none;z-index:9999"></div>
   </body>
 </html>
