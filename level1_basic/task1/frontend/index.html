@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>USER MANAGER APP</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css"
+    />
+    <script src="script.js" defer></script>
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="profil-container">
+        <div class="profil">
+          <img src="resources/me.jpeg" alt="" />
+        </div>
+        <div class="">
+          <div class="fullname poppins-bold">KONDO Ibrahim</div>
+          <div class="description poppins-medium">
+            <span class="badge-blue">Développeur fullstack</span>
+          </div>
+        </div>
+      </header>
+      <section class="">
+        <div class="poppins-extralight" style="text-align: justify">
+          The final outcome of the <strong>Level 1</strong> Codveda Internship
+          Program:
+          <em
+            >a simple CRUD API paired with a modern frontend built using our
+            core stack</em
+          >.
+          <ul class="poppins-extralight">
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>JavaScript</li>
+          </ul>
+        </div>
+      </section>
+      <div class="bottom-dashed-border"></div>
+      <main class="">
+        <div class="table-actions">
+          <div style="font-size: 1.2rem; font-weight: 600">Users list</div>
+          <div class="">
+            <button class="create-user poppins-medium">Create user</button>
+          </div>
+        </div>
+        <table>
+          <thead class="poppins-extralight">
+            <tr>
+              <th>ID</th>
+              <th>Nom</th>
+              <th>Prénom</th>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Age</th>
+              <th>Domaine</th>
+              <th style="text-align: end">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="users" class="poppins-extralight"></tbody>
+        </table>
+      </main>
+      <div class="bottom-dashed-border"></div>
+      <footer class=""></footer>
+    </div>
+
+    <div id="blur-modals" class="modal"></div>
+    <div id="form" class="modal">
+      <form id="userForm" class="modal-content">
+        <h3>Ajouter un utilisateur</h3>
+        <div class="bottom-dashed-border"></div>
+        <div class="form-group">
+          <label>Firstname</label>
+          <input type="text" name="firstname" required />
+        </div>
+
+        <div class="form-group">
+          <label>Lastname</label>
+          <input type="text" name="lastname" required />
+        </div>
+
+        <div class="form-group">
+          <label>Username</label>
+          <input type="text" name="username" required />
+        </div>
+
+        <div class="form-group">
+          <label>Email</label>
+          <input type="email" name="email" required />
+        </div>
+
+        <div class="form-group">
+          <label>Age</label>
+          <input type="number" name="age" min="1" required />
+        </div>
+
+        <div class="form-group">
+          <label>Field</label>
+          <input type="text" name="field" required />
+        </div>
+
+        <div class="form-group">
+          <label>Role</label>
+          <input type="text" name="role" />
+        </div>
+
+        <div class="form-group">
+          <label>Is Active ?</label>
+          <select name="isActive">
+            <option value="true">Yes</option>
+            <option value="false">No</option>
+          </select>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" id="closeModal">Cancel</button>
+          <button type="submit">Save</button>
+        </div>
+      </form>
+    </div>
+    <div id="confirm-delete-modal" class="modal" style="z-index:30;">
+      <div class="modal-content" style="width:420px; max-width:90%; border-radius:12px;">
+        <div style="padding:20px;">
+          <h3>Confirmer la suppression</h3>
+          <div class="bottom-dashed-border"></div>
+          <p>Êtes-vous sûr de vouloir supprimer cet utilisateur ? Cette action est irréversible.</p>
+          <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:20px;">
+            <button id="cancelDelete" type="button">Annuler</button>
+            <button id="confirmDelete" type="button" style="background:#ca1616; color:#fff; padding:10px 20px; border-radius:8px; border:none;">Supprimer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="view-user-modal" class="modal" style="z-index:30;">
+      <div class="modal-content" style="width:420px; max-width:90%; border-radius:12px;">
+        <div style="padding:20px;">
+          <h3>Utilisateur</h3>
+          <div class="bottom-dashed-border"></div>
+          <pre id="viewUserContent" style="white-space:pre-wrap; word-break:break-word;"></pre>
+          <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:20px;">
+            <button id="closeView" type="button">Fermer</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="message" style="position:fixed;top:20px;right:20px;background:#333;color:#fff;padding:10px 15px;border-radius:8px;display:none;z-index:9999"></div>
+  </body>
+</html>
