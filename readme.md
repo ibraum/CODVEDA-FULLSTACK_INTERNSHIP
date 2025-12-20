@@ -53,9 +53,9 @@ Submit completed tasks with the Codveda submission form (link after share). Prov
 
 ---
 
-**Task List**
+# **Task List**
 
-Level 1 : Basic (Completed)
+## Level 1 : Basic (Completed)
 
 - Task 1: Setup Development Environment
 	- Install Node.js, npm, VS Code, Git
@@ -72,7 +72,9 @@ Level 1 : Basic (Completed)
 	- Fetch API data from your REST API and render dynamically
 	- Basic styling and responsive layout
 
-Level 2 : Intermediate
+<img src="./shots/level1.png" alt="">
+
+## Level 2 : Intermediate
 
 - Task 1: Frontend using a JavaScript framework (React / Vue / Angular)
 	- Component-driven architecture
@@ -88,7 +90,7 @@ Level 2 : Intermediate
 	- Use MongoDB (Mongoose) or SQL (Prisma/Sequelize)
 	- Create models, relations, validation, and indexing
 
-Level 3 : Advanced
+## Level 3 : Advanced
 
 - Task 1: Full-Stack Application (MERN / MEVN / PERN)
 	- Integrate auth, DB, and a framework frontend
