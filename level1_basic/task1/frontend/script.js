@@ -5,6 +5,8 @@ const protocol = "http";
 let usersDiv = document.getElementById('users');
 const blurModals = document.getElementById('blur-modals');
 const form = document.getElementById('form');
+const createUser = document.querySelectorAll('.create-user');
+console.log(createUser[0])
 let users = [];
 
 function construct_url (id) {
@@ -33,6 +35,13 @@ async function getUsers () {
         <td>${user.email}</td>
         <td>${user.age}</td>
         <td>${user.field}</td>
+        <td>
+                <div class="actions-icons">
+      <i class="fa-solid fa-eye" style="color: #005eff;"></i>
+      <i class="fa-solid fa-pen-clip" style="color: #ffc800;"></i>
+      <i class="fa-solid fa-trash-can" style="color: #ca1616;"></i>
+    </div>
+        </td>
       </tr>
     `;
   });
@@ -44,10 +53,16 @@ async function getUsers () {
 getUsers()
 
 function toggleModal () {
-
+    blurModals.classList.toggle('show');
+    form.classList.toggle('show');
 }
 
 blurModals.addEventListener('click', function () {
-    blurModals.classList.toggle('show');
-    form.classList.toggle('show');
+    toggleModal();
 });
+
+createUser.forEach((cu) => {
+    cu.addEventListener('click', function (e) {
+        toggleModal();
+    })
+})
