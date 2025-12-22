@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import type { User } from '../types/User';
 import { apiService } from '../services/api';
+import { useAuth } from '../contexts/AuthContext';
 import Header from '../components/Header';
 import UserTable from '../components/UserTable';
 import UserFormModal from '../components/UserFormModal';
@@ -15,6 +16,7 @@ interface Toast {
 }
 
 const Home: React.FC = () => {
+  const { user, logout } = useAuth();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [showFormModal, setShowFormModal] = useState(false);
@@ -137,7 +139,20 @@ const Home: React.FC = () => {
       />
       
       <div className="mx-auto w-[90%] max-w-6xl min-h-screen py-10 border-x border-dashed border-gray-400">
-        <Header />
+        <div className="flex justify-between items-center mb-6 px-6">
+          <Header />
+          <div className="flex items-center space-x-4">
+            <span className="text-sm text-gray-600">
+              Welcome, {user?.firstname} {user?.lastname} ({user?.role})
+            </span>
+            <button
+              onClick={logout}
+              className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors text-sm font-medium"
+            >
+              Logout
+            </button>
+          </div>
+        </div>
         
         <section className="mb-6 px-6">
           <div className="text-justify font-light">
