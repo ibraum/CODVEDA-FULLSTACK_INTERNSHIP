@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import type { User, LoginCredentials, SignupCredentials, AuthResponse } from '../types/User';
 import * as tokenUtils from '../utils/tokenUtils';
 

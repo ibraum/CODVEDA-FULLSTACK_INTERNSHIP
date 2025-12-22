@@ -32,8 +32,10 @@ const Login = () => {
 
     try {
       await login(formData);
-    } catch (err: any) {
-      setError(err.message || 'Login failed');
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || 'Login failed');
+      }
     } finally {
       setIsLoading(false);
     }

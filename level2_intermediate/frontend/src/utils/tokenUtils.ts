@@ -4,13 +4,23 @@ import type { User } from '../types/User';
 const TOKEN_KEY = 'auth_token';
 const COOKIE_EXPIRES = 7; // 7 days
 
+type JWTPayload = {
+  id: number;
+  email: string;
+  role: string;
+  user: User;
+  exp: number;
+  iat?: number;
+} | null;
+
+
 export const setToken = (token: string): void => {
   try {
     Cookies.set(TOKEN_KEY, token, {
       expires: COOKIE_EXPIRES,
       secure: import.meta.env.PROD,
       sameSite: 'strict',
-      httpOnly: false, // false for client-side access, set to true in backend
+      httpOnly: false,
     });
   } catch (error) {
     console.error('Error setting token:', error);
@@ -35,7 +45,7 @@ export const removeToken = (): void => {
   }
 };
 
-export const parseJWT = (token: string): any => {
+export const parseJWT = (token: string): JWTPayload | null => {
   try {
     const base64Url = token.split('.')[1];
     const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');

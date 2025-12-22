@@ -83,7 +83,7 @@ export const apiService = {
     return response.json();
   },
 
-  async signup(userData: any) {
+  async signup(userData: Partial<User>) {
     const response = await fetch(`${API_BASE_URL}/auth/signup`, {
       method: 'POST',
       headers: {
