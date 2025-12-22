@@ -1,12 +1,15 @@
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
-import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+import sequelize from './config/database.js';
+import User from './models/User.js';
+
+dotenv.config();
 
 const PORT = process.env.PORT || 3000;
-const JWT_SECRET = process.env.JWT_SECRET || 'your-super-secret-jwt-key-change-in-production';
-const SALT_ROUNDS = 10;
+const JWT_SECRET = process.env.JWT_SECRET || '';
 
 const app = express();
 
@@ -24,35 +27,6 @@ const corsOptions = {
 app.use(express.json());
 app.use(morgan('dev'));
 app.use(cors(corsOptions));
-
-let users = [
-  {
-    id: 1,
-    firstname: "Ibrahim",
-    lastname: "KONDO",
-    username: "ibraum",
-    email: "ibraum@example.com",
-    password: "$2b$10$rQ8OQW7h8K9Y6T0F7QZzOe3N4P9S7L2X5C8V1A0J3D6G9H2I5K8L1M4N7O0P3",
-    age: 24,
-    isActive: true,
-    field: "Computer Science",
-    role: "admin",
-  },
-  {
-    id: 2,
-    firstname: "Amina",
-    lastname: "Diallo",
-    username: "aminad",
-    email: "amina.diallo@example.com",
-    password: "$2b$10$rQ8OQW7h8K9Y6T0F7QZzOe3N4P9S7L2X5C8V1A0J3D6G9H2I5K8L1M4N7O0P3",
-    age: 22,
-    isActive: true,
-    field: "Software Engineering",
-    role: "user",
-  }
-];
-
-let nextUserId = 3;
 
 const generateToken = (user) => {
   return jwt.sign(
@@ -110,12 +84,28 @@ const requireRole = (roles) => {
   };
 };
 
-const hashPassword = async (password) => {
-  return await bcrypt.hash(password, SALT_ROUNDS);
-};
+const handleSequelizeError = (error) => {
+  if (error.name === 'SequelizeValidationError') {
+    const errors = error.errors.map(err => ({
+      field: err.path,
+      message: err.message
+    }));
+    return { status: 400, message: 'Validation error', errors };
+  }
 
-const comparePassword = async (password, hashedPassword) => {
-  return await bcrypt.compare(password, hashedPassword);
+  if (error.name === 'SequelizeUniqueConstraintError') {
+    const field = error.errors[0].path;
+    return { 
+      status: 409, 
+      message: `${field.charAt(0).toUpperCase() + field.slice(1)} already exists` 
+    };
+  }
+
+  if (error.name === 'SequelizeForeignKeyConstraintError') {
+    return { status: 400, message: 'Invalid reference' };
+  }
+
+  return { status: 500, message: 'Internal server error' };
 };
 
 app.post('/auth/signup', async (req, res) => {
@@ -129,43 +119,50 @@ app.post('/auth/signup', async (req, res) => {
       });
     }
 
-    const existingUser = users.find(u => u.email === email || u.username === username);
+    const existingUser = await User.findOne({
+      where: {
+        [sequelize.Sequelize.Op.or]: [
+          { email: email.toLowerCase().trim() },
+          { username: username.toLowerCase().trim() }
+        ]
+      }
+    });
+
     if (existingUser) {
       return res.status(409).json({ 
         message: 'User with this email or username already exists' 
       });
     }
 
-    const hashedPassword = await hashPassword(password);
-
-    const newUser = {
-      id: nextUserId++,
-      firstname,
-      lastname,
-      username,
-      email,
-      password: hashedPassword,
+    const newUser = await User.create({
+      firstname: firstname.trim(),
+      lastname: lastname.trim(),
+      username: username.toLowerCase().trim(),
+      email: email.toLowerCase().trim(),
+      password,
       age: parseInt(age),
-      field,
-      isActive: true,
+      field: field.trim(),
       role: 'user'
-    };
-
-    users.push(newUser);
+    });
 
     const token = generateToken(newUser);
 
-    const { password: _, ...userWithoutPassword } = newUser;
+    const userResponse = newUser.toJSON();
+    delete userResponse.password;
 
     res.status(201).json({
       message: 'User created successfully',
       token,
-      user: userWithoutPassword
+      user: userResponse
     });
 
   } catch (error) {
     console.error('Signup error:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    const errorResponse = handleSequelizeError(error);
+    res.status(errorResponse.status).json({
+      message: errorResponse.message,
+      errors: errorResponse.errors
+    });
   }
 });
 
@@ -179,13 +176,24 @@ app.post('/auth/login', async (req, res) => {
       });
     }
 
-    const user = users.find(u => u.email === email);
+    const user = await User.findOne({
+      where: { email: email.toLowerCase().trim() }
+    });
+
     if (!user) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    const isValidPassword = await comparePassword(password, user.password);
+    if (user.isLocked()) {
+      return res.status(423).json({ 
+        message: 'Account is temporarily locked due to too many failed attempts' 
+      });
+    }
+
+    const isValidPassword = await user.comparePassword(password);
+
     if (!isValidPassword) {
+      await user.incrementLoginAttempts();
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
@@ -193,53 +201,100 @@ app.post('/auth/login', async (req, res) => {
       return res.status(401).json({ message: 'Account is deactivated' });
     }
 
+    await user.resetLoginAttempts();
+
     const token = generateToken(user);
 
-    const { password: _, ...userWithoutPassword } = user;
+    const userResponse = user.toJSON();
+    delete userResponse.password;
 
     res.status(200).json({
       message: 'Login successful',
       token,
-      user: userWithoutPassword
+      user: userResponse
     });
 
   } catch (error) {
     console.error('Login error:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    const errorResponse = handleSequelizeError(error);
+    res.status(errorResponse.status).json({
+      message: errorResponse.message,
+      errors: errorResponse.errors
+    });
   }
 });
 
-app.get('/users', authenticateToken, (req, res) => {
-  const usersWithoutPasswords = users.map(({ password, ...user }) => user);
-  
-  const response = {
-    message: 'Users retrieved successfully',
-    data: usersWithoutPasswords,
-  };
+app.get('/users', authenticateToken, async (req, res) => {
+  try {
+    const { page = 1, limit = 10, role, isActive } = req.query;
+    const offset = (page - 1) * limit;
 
-  res.status(200).json(response);
+    const whereClause = {};
+    if (role) whereClause.role = role;
+    if (isActive !== undefined) whereClause.isActive = isActive === 'true';
+
+    const { count, rows } = await User.findAndCountAll({
+      where: whereClause,
+      limit: parseInt(limit),
+      offset: parseInt(offset),
+      order: [['createdAt', 'DESC']],
+      attributes: { exclude: ['password'] }
+    });
+
+    const response = {
+      message: 'Users retrieved successfully',
+      data: rows,
+      pagination: {
+        total: count,
+        page: parseInt(page),
+        limit: parseInt(limit),
+        pages: Math.ceil(count / limit)
+      }
+    };
+
+    res.status(200).json(response);
+
+  } catch (error) {
+    console.error('Get users error:', error);
+    const errorResponse = handleSequelizeError(error);
+    res.status(errorResponse.status).json({
+      message: errorResponse.message,
+      errors: errorResponse.errors
+    });
+  }
 });
 
-app.get('/users/:id', authenticateToken, (req, res) => {
-  const id = Number(req.params.id);
-  
-  if (isNaN(id) || id < 0) {
-    return res.status(400).json({ message: 'Invalid user ID' });
+app.get('/users/:id', authenticateToken, async (req, res) => {
+  try {
+    const id = parseInt(req.params.id);
+
+    if (isNaN(id) || id <= 0) {
+      return res.status(400).json({ message: 'Invalid user ID' });
+    }
+
+    const user = await User.findByPk(id, {
+      attributes: { exclude: ['password'] }
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    const response = {
+      message: 'User retrieved successfully',
+      data: [user]
+    };
+
+    res.status(200).json(response);
+
+  } catch (error) {
+    console.error('Get user error:', error);
+    const errorResponse = handleSequelizeError(error);
+    res.status(errorResponse.status).json({
+      message: errorResponse.message,
+      errors: errorResponse.errors
+    });
   }
-
-  const user = users.find(u => u.id === id);
-  if (!user) {
-    return res.status(404).json({ message: 'User not found' });
-  }
-
-  const { password, ...userWithoutPassword } = user;
-
-  const response = {
-    message: 'User retrieved successfully',
-    data: [userWithoutPassword],
-  };
-
-  res.status(200).json(response);
 });
 
 app.post('/users', authenticateToken, requireRole(['admin']), async (req, res) => {
@@ -253,64 +308,79 @@ app.post('/users', authenticateToken, requireRole(['admin']), async (req, res) =
       });
     }
 
-    const existingUser = users.find(u => u.email === email || u.username === username);
+    const existingUser = await User.findOne({
+      where: {
+        [sequelize.Sequelize.Op.or]: [
+          { email: email.toLowerCase().trim() },
+          { username: username.toLowerCase().trim() }
+        ]
+      }
+    });
+
     if (existingUser) {
       return res.status(409).json({ 
         message: 'User with this email or username already exists' 
       });
     }
 
-    const hashedPassword = await hashPassword(password);
-
-    const newUser = {
-      id: nextUserId++,
-      firstname,
-      lastname,
-      username,
-      email,
-      password: hashedPassword,
+    const newUser = await User.create({
+      firstname: firstname.trim(),
+      lastname: lastname.trim(),
+      username: username.toLowerCase().trim(),
+      email: email.toLowerCase().trim(),
+      password,
       age: parseInt(age),
-      field,
-      isActive: true,
+      field: field.trim(),
       role: role || 'user'
-    };
+    });
 
-    users.push(newUser);
-
-    const usersWithoutPasswords = users.map(({ password, ...user }) => user);
+    const users = await User.findAll({
+      attributes: { exclude: ['password'] },
+      order: [['createdAt', 'DESC']]
+    });
 
     const response = {
       message: 'User created successfully',
-      data: usersWithoutPasswords,
+      data: users
     };
 
     res.status(201).json(response);
 
   } catch (error) {
     console.error('Create user error:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    const errorResponse = handleSequelizeError(error);
+    res.status(errorResponse.status).json({
+      message: errorResponse.message,
+      errors: errorResponse.errors
+    });
   }
 });
 
-app.put('/users/:id', authenticateToken, requireRole(['admin']), (req, res) => {
+app.put('/users/:id', authenticateToken, requireRole(['admin']), async (req, res) => {
   try {
-    const id = Number(req.params.id);
+    const id = parseInt(req.params.id);
     const updateData = req.body;
 
-    if (isNaN(id) || id < 0) {
+    if (isNaN(id) || id <= 0) {
       return res.status(400).json({ message: 'Invalid user ID' });
     }
 
-    const userIndex = users.findIndex(u => u.id === id);
-    if (userIndex === -1) {
+    const user = await User.findByPk(id);
+    if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
     if (updateData.email || updateData.username) {
-      const existingUser = users.find(u => 
-        (u.email === updateData.email || u.username === updateData.username) && 
-        u.id !== id
-      );
+      const existingUser = await User.findOne({
+        where: {
+          [sequelize.Sequelize.Op.or]: [
+            { email: updateData.email?.toLowerCase().trim() },
+            { username: updateData.username?.toLowerCase().trim() }
+          ],
+          id: { [sequelize.Sequelize.Op.ne]: id }
+        }
+      });
+
       if (existingUser) {
         return res.status(409).json({ 
           message: 'Email or username already exists' 
@@ -318,59 +388,90 @@ app.put('/users/:id', authenticateToken, requireRole(['admin']), (req, res) => {
       }
     }
 
-    const updatedUser = { ...users[userIndex], ...updateData, id };
-    users[userIndex] = updatedUser;
+    await user.update(updateData);
 
-    const usersWithoutPasswords = users.map(({ password, ...user }) => user);
+    const users = await User.findAll({
+      attributes: { exclude: ['password'] },
+      order: [['createdAt', 'DESC']]
+    });
 
     const response = {
       message: 'User updated successfully',
-      data: usersWithoutPasswords,
+      data: users
     };
 
     res.status(200).json(response);
 
   } catch (error) {
     console.error('Update user error:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    const errorResponse = handleSequelizeError(error);
+    res.status(errorResponse.status).json({
+      message: errorResponse.message,
+      errors: errorResponse.errors
+    });
   }
 });
 
-app.delete('/users/:id', authenticateToken, requireRole(['admin']), (req, res) => {
+app.delete('/users/:id', authenticateToken, requireRole(['admin']), async (req, res) => {
   try {
-    const id = Number(req.params.id);
+    const id = parseInt(req.params.id);
 
-    if (isNaN(id) || id < 0) {
+    if (isNaN(id) || id <= 0) {
       return res.status(400).json({ message: 'Invalid user ID' });
     }
 
-    const userExists = users.some(u => u.id === id);
-    if (!userExists) {
+    const user = await User.findByPk(id);
+    if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    users = users.filter(u => u.id !== id);
+    await user.destroy();
 
-    const usersWithoutPasswords = users.map(({ password, ...user }) => user);
+    const users = await User.findAll({
+      attributes: { exclude: ['password'] },
+      order: [['createdAt', 'DESC']]
+    });
 
     const response = {
       message: 'User deleted successfully',
-      data: usersWithoutPasswords,
+      data: users
     };
 
     res.status(200).json(response);
 
   } catch (error) {
     console.error('Delete user error:', error);
-    res.status(500).json({ message: 'Internal server error' });
+    const errorResponse = handleSequelizeError(error);
+    res.status(errorResponse.status).json({
+      message: errorResponse.message,
+      errors: errorResponse.errors
+    });
   }
 });
 
-app.get('/auth/me', authenticateToken, (req, res) => {
-  res.status(200).json({
-    message: 'User profile retrieved successfully',
-    user: req.user.user
-  });
+app.get('/auth/me', authenticateToken, async (req, res) => {
+  try {
+    const user = await User.findByPk(req.user.id, {
+      attributes: { exclude: ['password'] }
+    });
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({
+      message: 'User profile retrieved successfully',
+      user: user
+    });
+
+  } catch (error) {
+    console.error('Get profile error:', error);
+    const errorResponse = handleSequelizeError(error);
+    res.status(errorResponse.status).json({
+      message: errorResponse.message,
+      errors: errorResponse.errors
+    });
+  }
 });
 
 app.post('/auth/logout', authenticateToken, (req, res) => {
@@ -379,8 +480,9 @@ app.post('/auth/logout', authenticateToken, (req, res) => {
 
 app.get('/', (req, res) => {
   res.status(200).json({
-    message: 'API is running',
-    version: '1.0.0',
+    message: 'API is running with PostgreSQL database',
+    version: '2.0.0',
+    database: 'PostgreSQL with Sequelize ORM',
     endpoints: {
       auth: {
         'POST /auth/signup': 'Create new user account',
@@ -389,7 +491,7 @@ app.get('/', (req, res) => {
         'POST /auth/logout': 'User logout'
       },
       users: {
-        'GET /users': 'Get all users (auth required)',
+        'GET /users': 'Get all users with pagination (auth required)',
         'GET /users/:id': 'Get specific user (auth required)',
         'POST /users': 'Create user (admin only)',
         'PUT /users/:id': 'Update user (admin only)',
@@ -399,10 +501,29 @@ app.get('/', (req, res) => {
   });
 });
 
-app.listen(PORT, (err) => {
-  if (err) console.error("Error starting server:", err.message);
-  console.log(`Server is running on: http://localhost:${PORT}`);
-  console.log('Default admin credentials:');
-  console.log('Email: ibraum@example.com');
-  console.log('Password: password123');
-});
+const startServer = async () => {
+  try {
+    await sequelize.authenticate();
+    console.log('Database connection established successfully.');
+
+    await sequelize.sync({ force: false });
+    console.log('Database synchronized successfully.');
+
+    app.listen(PORT, (err) => {
+      if (err) {
+        console.error("Error starting server:", err.message);
+        process.exit(1);
+      }
+      console.log(`Server is running on: http://localhost:${PORT}`);
+      console.log('Database: PostgreSQL with Sequelize ORM');
+      console.log('Default admin credentials:');
+      console.log('Email: ibraum@example.com');
+      console.log('Password: password123');
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
+};
+
+startServer();
