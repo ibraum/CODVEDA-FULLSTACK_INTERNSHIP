@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import type { User } from '../types/User';
+import React, { useState, useEffect } from "react";
+import type { User } from "../types/User";
 
 interface UserFormModalProps {
   isOpen: boolean;
@@ -8,14 +8,22 @@ interface UserFormModalProps {
   onSubmit: (userData: Partial<User>) => Promise<void>;
 }
 
-const UserFormModal: React.FC<UserFormModalProps> = ({ isOpen, onClose, user, onSubmit }) => {
+const pass = "password123";
+
+const UserFormModal: React.FC<UserFormModalProps> = ({
+  isOpen,
+  onClose,
+  user,
+  onSubmit,
+}) => {
   const [formData, setFormData] = useState({
-    firstname: '',
-    lastname: '',
-    username: '',
-    email: '',
+    firstname: "",
+    lastname: "",
+    username: "",
+    email: "",
+    password: pass,
     age: 0,
-    field: '',
+    field: "",
     isActive: true,
   });
   const [loading, setLoading] = useState(false);
@@ -23,33 +31,41 @@ const UserFormModal: React.FC<UserFormModalProps> = ({ isOpen, onClose, user, on
   useEffect(() => {
     if (user) {
       setFormData({
-        firstname: user.firstname || '',
-        lastname: user.lastname || '',
-        username: user.username || '',
-        email: user.email || '',
+        firstname: user.firstname || "",
+        lastname: user.lastname || "",
+        username: user.username || "",
+        email: user.email || "",
+        password: pass,
         age: user.age || 0,
-        field: user.field || '',
+        field: user.field || "",
         isActive: user.isActive ?? true,
       });
     } else {
       setFormData({
-        firstname: '',
-        lastname: '',
-        username: '',
-        email: '',
+        firstname: "",
+        lastname: "",
+        username: "",
+        email: "",
+        password: pass,
         age: 0,
-        field: '',
+        field: "",
         isActive: true,
       });
     }
   }, [user]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     const { name, value, type } = e.target;
-    setFormData(prev => ({
+    setFormData((prev) => ({
       ...prev,
-      [name]: type === 'checkbox' ? (e.target as HTMLInputElement).checked : 
-              type === 'number' ? Number(value) : value
+      [name]:
+        type === "checkbox"
+          ? (e.target as HTMLInputElement).checked
+          : type === "number"
+          ? Number(value)
+          : value,
     }));
   };
 
@@ -60,7 +76,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({ isOpen, onClose, user, on
       await onSubmit(formData);
       onClose();
     } catch (error) {
-      console.error('Form submission error:', error);
+      console.error("Form submission error:", error);
     } finally {
       setLoading(false);
     }
@@ -68,29 +84,30 @@ const UserFormModal: React.FC<UserFormModalProps> = ({ isOpen, onClose, user, on
 
   return (
     <>
-      <div 
+      <div
         className="modal fixed right-0 top-0 bottom-0 bg-white z-1000"
         style={{
-          width: '400px',
-          maxWidth: '400px',
-          height: '100%',
-          boxShadow: '0 0 10px 1px rgba(0, 0, 0, 0.1)',
-          borderLeft: '1px dashed grey',
-          transform: isOpen ? 'translateX(0)' : 'translateX(100%)',
-          transition: 'transform 0.4s ease',
+          width: "400px",
+          maxWidth: "400px",
+          height: "100%",
+          boxShadow: "0 0 10px 1px rgba(0, 0, 0, 0.1)",
+          borderLeft: "1px dashed grey",
+          transform: isOpen ? "translateX(0)" : "translateX(100%)",
+          transition: "transform 0.4s ease",
           opacity: isOpen ? 1 : 0,
-          visibility: isOpen ? 'visible' : 'hidden',
-          display: 'flex',
-          justifyContent: 'flex-end',
-          alignItems: 'flex-start'
-        }}>
+          visibility: isOpen ? "visible" : "hidden",
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "flex-start",
+        }}
+      >
         <div className="h-full flex flex-col">
           <div className="p-5 border-b border-gray-200">
             <h3 className="font-bold text-lg">
-              {user ? 'Edit User' : 'Create User'}
+              {user ? "Edit User" : "Create User"}
             </h3>
           </div>
-          
+
           <form onSubmit={handleSubmit} className="flex-1 p-5 space-y-4">
             <div className="form-group">
               <label>Firstname</label>
@@ -141,6 +158,19 @@ const UserFormModal: React.FC<UserFormModalProps> = ({ isOpen, onClose, user, on
             </div>
 
             <div className="form-group">
+              <label>Password</label>
+              <input
+                type="text"
+                name="password"
+                value={formData.password}
+                onChange={handleInputChange}
+                required
+                disabled
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            <div className="form-group">
               <label>Age</label>
               <input
                 type="number"
@@ -153,7 +183,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({ isOpen, onClose, user, on
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group" >
               <label>Field</label>
               <input
                 type="text"
@@ -193,7 +223,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({ isOpen, onClose, user, on
               disabled={loading}
               className="px-6 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50"
             >
-              {loading ? 'Saving...' : (user ? 'Update' : 'Create')}
+              {loading ? "Saving..." : user ? "Update" : "Create"}
             </button>
           </div>
         </div>
@@ -203,7 +233,7 @@ const UserFormModal: React.FC<UserFormModalProps> = ({ isOpen, onClose, user, on
 };
 
 // Add CSS styles
-const style = document.createElement('style');
+const style = document.createElement("style");
 style.textContent = `
   .form-group {
     padding: 0 20px;

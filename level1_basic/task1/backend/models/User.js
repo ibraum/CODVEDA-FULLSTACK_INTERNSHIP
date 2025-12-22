@@ -152,7 +152,8 @@ const User = sequelize.define('User', {
   isActive: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
-    defaultValue: true
+    defaultValue: true,
+    field: 'is_active'
   },
   lastLogin: {
     type: DataTypes.DATE,

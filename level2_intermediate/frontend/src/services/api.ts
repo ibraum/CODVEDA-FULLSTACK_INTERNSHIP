@@ -39,6 +39,7 @@ export const apiService = {
       throw new Error('Failed to create user');
     }
     const data: ApiResponse = await response.json();
+    console.log(data.data)
     return data.data;
   },
 

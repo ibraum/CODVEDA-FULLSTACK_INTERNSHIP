@@ -1,6 +1,8 @@
 import sequelize from '../config/database.js';
 import bcrypt from 'bcrypt';
 
+const SEED_KEYWORD = 'SEED::INITIAL';
+
 const setupDatabase = async () => {
   try {
     console.log('Setting up database...');
@@ -13,84 +15,78 @@ const setupDatabase = async () => {
     
     const User = (await import('../models/User.js')).default;
     
-    const hashedPassword = await bcrypt.hash('password123', 10);
-    const hashedPassword2 = await bcrypt.hash('userpass123', 10);
+    const hashedPasswordAdmin = await bcrypt.hash('password123', 10);
+    const hashedPasswordUser = await bcrypt.hash('userpass123', 10);
     
     await User.bulkCreate([
       {
-        id: 1,
         firstname: 'Ibrahim',
         lastname: 'KONDO',
         username: 'ibraum',
         email: 'ibraum@example.com',
-        password: hashedPassword,
+        password: hashedPasswordAdmin,
         age: 24,
-        field: 'Computer Science',
+        field: `Computer Science | ${SEED_KEYWORD}`,
         role: 'admin',
         isActive: true,
         loginAttempts: 0
       },
       {
-        id: 2,
         firstname: 'Amina',
         lastname: 'Diallo',
         username: 'aminad',
         email: 'amina.diallo@example.com',
-        password: hashedPassword2,
+        password: hashedPasswordUser,
         age: 22,
-        field: 'Software Engineering',
+        field: `Software Engineering | ${SEED_KEYWORD}`,
         role: 'user',
         isActive: true,
         loginAttempts: 0
       },
       {
-        id: 3,
         firstname: 'Jean',
         lastname: 'Dupont',
         username: 'jdupont',
         email: 'jean.dupont@example.com',
-        password: hashedPassword2,
+        password: hashedPasswordUser,
         age: 27,
-        field: 'Web Development',
+        field: `Web Development | ${SEED_KEYWORD}`,
         role: 'user',
         isActive: true,
         loginAttempts: 0
       },
       {
-        id: 4,
         firstname: 'Sarah',
         lastname: 'Mensah',
         username: 'sarahm',
         email: 'sarah.mensah@example.com',
-        password: hashedPassword2,
+        password: hashedPasswordUser,
         age: 25,
-        field: 'Information Systems',
+        field: `Information Systems | ${SEED_KEYWORD}`,
         role: 'user',
         isActive: true,
         loginAttempts: 0
       },
       {
-        id: 5,
         firstname: 'Michael',
         lastname: 'Brown',
         username: 'mbrown',
         email: 'michael.brown@example.com',
-        password: hashedPassword2,
+        password: hashedPasswordUser,
         age: 29,
-        field: 'Data Science',
+        field: `Data Science | ${SEED_KEYWORD}`,
         role: 'user',
         isActive: false,
         loginAttempts: 0
       },
       {
-        id: 6,
         firstname: 'Fatou',
         lastname: 'Sow',
         username: 'fatous',
         email: 'fatou.sow@example.com',
-        password: hashedPassword2,
+        password: hashedPasswordUser,
         age: 23,
-        field: 'Cybersecurity',
+        field: `Cybersecurity | ${SEED_KEYWORD}`,
         role: 'user',
         isActive: true,
         loginAttempts: 0
@@ -98,7 +94,7 @@ const setupDatabase = async () => {
     ]);
     
     console.log('Sample users created successfully.');
-    console.log('\\nDefault credentials:');
+    console.log('\nDefault credentials:');
     console.log('Admin: ibraum@example.com / password123');
     console.log('User: amina.diallo@example.com / userpass123');
     

@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import sequelize from './config/database.js';
 import User from './models/User.js';
+import { Op } from 'sequelize';
 
 dotenv.config();
 
@@ -229,7 +230,9 @@ app.get('/users', authenticateToken, async (req, res) => {
     const { page = 1, limit = 10, role, isActive } = req.query;
     const offset = (page - 1) * limit;
 
-    const whereClause = {};
+    const whereClause = {
+      id: { [Op.ne]: req.user.id }
+    };
     if (role) whereClause.role = role;
     if (isActive !== undefined) whereClause.isActive = isActive === 'true';
 
