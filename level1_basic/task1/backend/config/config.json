@@ -15,9 +15,9 @@
     }
   },
   "test": {
-    "username": "postgres",
+    "username": "your_username",
     "password": "your_password",
-    "database": "codveda_test_db",
+    "database": "your_test_db", 
     "host": "localhost",
     "port": 5432,
     "dialect": "postgres",

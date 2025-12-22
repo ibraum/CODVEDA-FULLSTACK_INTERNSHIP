@@ -2,7 +2,7 @@
 
 This backend application implements a complete user management system with authentication, authorization, and database integration using PostgreSQL and Sequelize ORM.
 
-## 🚀 Features Implemented
+## Features Implemented
 
 ### Task 2: Authentication and Authorization
 - ✅ User authentication with bcrypt password hashing
@@ -51,7 +51,7 @@ backend/
 └── server.js              # Main application file
 ```
 
-## 🗄️ Database Schema
+## Database Schema
 
 ### Users Table
 ```sql
@@ -74,12 +74,12 @@ CREATE TABLE users (
 );
 ```
 
-## 📊 Database Indexes
+## Database Indexes
 
 - **Unique Indexes**: `email`, `username`
 - **Performance Indexes**: `role`, `isActive`, `createdAt`
 
-## 📋 API Endpoints
+## API Endpoints
 
 ### Authentication Endpoints
 - `POST /auth/signup` - Create new user account
@@ -94,7 +94,7 @@ CREATE TABLE users (
 - `PUT /users/:id` - Update user (admin only)
 - `DELETE /users/:id` - Delete user (admin only)
 
-## 🔧 Setup Instructions
+## Setup Instructions
 
 ### 1. Prerequisites
 - Node.js (v18 or higher)
@@ -147,7 +147,7 @@ npm run dev
 npm start
 ```
 
-## 🎯 Default Credentials
+## Default Credentials
 
 ### Admin User
 - **Email**: ibraum@example.com
@@ -159,7 +159,7 @@ npm start
 - **Password**: password123
 - **Role**: User
 
-## 🔒 Security Features
+## Security Features
 
 ### Password Security
 - **bcrypt** hashing with 10 salt rounds
@@ -178,7 +178,7 @@ npm start
 - Unique constraint enforcement
 - Data type validation
 
-## 📈 Performance Optimizations
+## Performance Optimizations
 
 ### Database Optimization
 - **Connection pooling** (max: 10, min: 0)
@@ -192,7 +192,7 @@ npm start
 - **Error handling** with proper HTTP status codes
 - **Logging** with Morgan for debugging
 
-## 🧪 Testing
+## Testing
 
 ### Manual Testing
 1. **Authentication Flow:**
@@ -222,7 +222,7 @@ curl -X POST http://localhost:3000/auth/login \\
   -d '{"email":"ibraum@example.com","password":"password123"}'
 ```
 
-## 🚨 Error Handling
+## Error Handling
 
 ### Database Errors
 - **Validation errors**: 400 Bad Request with field details
@@ -236,7 +236,7 @@ curl -X POST http://localhost:3000/auth/login \\
 - **Account locked**: 423 Locked
 - **Insufficient permissions**: 403 Forbidden
 
-## 🔄 Database Migrations
+## Database Migrations
 
 ### Create New Migration
 ```bash
@@ -253,7 +253,7 @@ npx sequelize-cli db:migrate
 npx sequelize-cli db:migrate:undo
 ```
 
-## 🌱 Database Seeding
+## Database Seeding
 
 ### Run Seeders
 ```bash
@@ -265,7 +265,7 @@ npx sequelize-cli db:seed:all
 npx sequelize-cli seed:generate --name new-seeder-name
 ```
 
-## 📝 Environment Variables
+## Environment Variables
 
 | Variable | Description | Default |
 |----------|-------------|---------|
@@ -278,7 +278,7 @@ npx sequelize-cli seed:generate --name new-seeder-name
 | `JWT_SECRET` | JWT signing secret | - |
 | `NODE_ENV` | Environment mode | development |
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -298,7 +298,7 @@ npx sequelize-cli seed:generate --name new-seeder-name
 ### Debug Mode
 Set `NODE_ENV=development` in .env for detailed database logs.
 
-## 📚 Additional Resources
+## Additional Resources
 
 - [Sequelize Documentation](https://sequelize.org/docs/v6/)
 - [PostgreSQL Documentation](https://www.postgresql.org/docs/)
