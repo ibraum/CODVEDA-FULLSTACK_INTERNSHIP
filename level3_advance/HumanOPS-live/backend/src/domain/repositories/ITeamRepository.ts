@@ -8,4 +8,7 @@ export interface ITeamRepository {
   update(id: string, data: UpdateTeamDTO): Promise<Team>;
   delete(id: string): Promise<void>;
   hasActiveMembers(teamId: string): Promise<boolean>;
+  addMember(teamId: string, userId: string): Promise<void>;
+  removeMember(teamId: string, userId: string): Promise<void>;
+  updateMember(teamId: string, userId: string): Promise<void>; // Pour changer d'équipe
 }

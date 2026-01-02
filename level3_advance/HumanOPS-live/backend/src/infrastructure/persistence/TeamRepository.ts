@@ -51,4 +51,35 @@ export class TeamRepository implements ITeamRepository {
     
     return count > 0;
   }
+
+  async addMember(teamId: string, userId: string): Promise<void> {
+    await prisma.teamMember.create({
+      data: {
+        teamId,
+        userId,
+      },
+    });
+  }
+
+  async removeMember(teamId: string, userId: string): Promise<void> {
+    // Vérifier d'abord que l'utilisateur appartient bien à cette équipe
+    const membership = await prisma.teamMember.findUnique({
+      where: { userId },
+    });
+
+    if (!membership || membership.teamId !== teamId) {
+      throw new Error('User is not a member of this team');
+    }
+
+    await prisma.teamMember.delete({
+      where: { userId },
+    });
+  }
+
+  async updateMember(teamId: string, userId: string): Promise<void> {
+    await prisma.teamMember.update({
+      where: { userId },
+      data: { teamId },
+    });
+  }
 }
