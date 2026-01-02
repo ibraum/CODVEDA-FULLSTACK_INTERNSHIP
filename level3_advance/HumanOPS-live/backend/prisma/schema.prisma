@@ -45,23 +45,30 @@ enum ReinforcementResponse {
 }
 
 model User {
-  id           String  @id @default(uuid())
-  email        String  @unique
+  id           String    @id @default(uuid())
+  email        String    @unique
   passwordHash String
   role         Role
-  isActive     Boolean @default(true)
+  isActive     Boolean   @default(true)
+  deletedAt    DateTime? // Soft delete
 
   profile           CollaboratorProfile?
   teamMember        TeamMember?
   managedTeams      Team[]                       @relation("TeamManager")
-  humanState        HumanState?                  @relation(fields: [humanStateId], references: [id])
+  humanState        HumanState?
   humanStateHistory HumanStateHistory[]
   reliability       ReliabilityScore?
   responses         ReinforcementResponseModel[]
+  alerts            Alert[]
+  rhSettingChanges  RHSettingHistory[]
 
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  humanStateId String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([email])
+  @@index([role])
+  @@index([isActive])
+  @@index([deletedAt])
 }
 
 model Team {
@@ -87,6 +94,9 @@ model TeamMember {
   team Team @relation(fields: [teamId], references: [id])
 
   joinedAt DateTime @default(now())
+
+  @@index([teamId])
+  @@index([userId])
 }
 
 model CollaboratorProfile {
@@ -124,10 +134,12 @@ model HumanState {
   workload     Workload
   availability Availability
 
+  user    User                @relation(fields: [userId], references: [id])
   history HumanStateHistory[]
 
   updatedAt DateTime @updatedAt
-  users     User[]
+
+  @@index([userId])
 }
 
 model HumanStateHistory {
@@ -142,6 +154,9 @@ model HumanStateHistory {
   humanState HumanState @relation(fields: [humanStateId], references: [id])
 
   changedAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([changedAt])
 }
 
 model ReliabilityScore {
@@ -160,11 +175,15 @@ model ReinforcementRequest {
   requiredSkills Json
   urgencyLevel   Int
   status         ReinforcementStatus @default(OPEN)
+  expiresAt      DateTime // Date d'expiration automatique
 
   team      Team                         @relation(fields: [teamId], references: [id])
   responses ReinforcementResponseModel[]
 
   createdAt DateTime @default(now())
+
+  @@index([status])
+  @@index([expiresAt])
 }
 
 model ReinforcementResponseModel {
@@ -193,18 +212,53 @@ model TensionLevelSnapshot {
 }
 
 model Alert {
-  id         String @id @default(uuid())
+  id         String    @id @default(uuid())
   type       String
-  targetRole Role
+  targetRole Role? // Optionnel si ciblage individuel
+  userId     String? // Destinataire spécifique
+  isRead     Boolean   @default(false)
+  readAt     DateTime?
   payload    Json
 
+  user User? @relation(fields: [userId], references: [id])
+
   createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@index([targetRole])
+  @@index([isRead])
+  @@index([createdAt])
 }
 
 model RHSetting {
-  id    String @id @default(uuid())
-  key   String @unique
-  value Json
+  id        String  @id @default(uuid())
+  key       String  @unique
+  value     Json
+  updatedBy String? // Utilisateur qui a fait la modification
 
+  history RHSettingHistory[]
+
+  createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([key])
+}
+
+// Audit trail pour les modifications de paramètres RH
+model RHSettingHistory {
+  id        String @id @default(uuid())
+  settingId String
+  key       String
+  oldValue  Json?
+  newValue  Json
+  changedBy String
+
+  setting RHSetting @relation(fields: [settingId], references: [id])
+  user    User      @relation(fields: [changedBy], references: [id])
+
+  changedAt DateTime @default(now())
+
+  @@index([settingId])
+  @@index([changedBy])
+  @@index([changedAt])
 }
