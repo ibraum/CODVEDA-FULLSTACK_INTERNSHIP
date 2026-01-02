@@ -1,12 +1,11 @@
 import swaggerJsdoc from 'swagger-jsdoc';
-import { version } from '../../package.json';
 
 const options: swaggerJsdoc.Options = {
   definition: {
     openapi: '3.0.0',
     info: {
       title: 'HumanOps Live API',
-      version,
+      version: '1.0.0',
       description: 'API documentation for HumanOps Live backend. Human Observability System (HOS).',
       contact: {
         name: 'HumanOps Team',
@@ -36,6 +35,8 @@ const options: swaggerJsdoc.Options = {
   apis: [
     './src/infrastructure/http/routes/*.ts',
     './src/infrastructure/http/controllers/*.ts',
+    './dist/infrastructure/http/routes/*.js',
+    './dist/infrastructure/http/controllers/*.js',
   ], // Path to the API docs
 };
 

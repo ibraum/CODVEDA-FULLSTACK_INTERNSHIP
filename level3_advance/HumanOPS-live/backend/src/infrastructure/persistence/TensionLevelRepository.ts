@@ -1,6 +1,6 @@
-import { ITensionLevelRepository } from '../../domain/repositories/ITensionLevelRepository';
-import { TensionLevelSnapshot, CreateTensionSnapshotDTO } from '../../domain/entities/TensionLevelSnapshot';
-import { prisma } from './prisma';
+import { ITensionLevelRepository } from '../../domain/repositories/ITensionLevelRepository.js';
+import { TensionLevelSnapshot, CreateTensionSnapshotDTO } from '../../domain/entities/TensionLevelSnapshot.js';
+import { prisma } from './prisma.js';
 
 export class TensionLevelRepository implements ITensionLevelRepository {
   async create(data: CreateTensionSnapshotDTO): Promise<TensionLevelSnapshot> {

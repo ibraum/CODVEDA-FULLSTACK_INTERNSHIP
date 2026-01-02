@@ -1,7 +1,7 @@
-import { IHumanStateRepository } from '../../domain/repositories/IHumanStateRepository';
-import { UpdateHumanStateDTO, HumanState } from '../../domain/entities/HumanState';
-import { eventBus } from '../../infrastructure/event-bus/EventBus';
-import { HumanStateUpdatedEvent } from '../../domain/events';
+import { IHumanStateRepository } from '../../domain/repositories/IHumanStateRepository.js';
+import { UpdateHumanStateDTO, HumanState } from '../../domain/entities/HumanState.js';
+import { eventBus } from '../../infrastructure/event-bus/EventBus.js';
+import { HumanStateUpdatedEvent } from '../../domain/events/index.js';
 
 export class UpdateHumanStateUseCase {
   constructor(private humanStateRepository: IHumanStateRepository) {}

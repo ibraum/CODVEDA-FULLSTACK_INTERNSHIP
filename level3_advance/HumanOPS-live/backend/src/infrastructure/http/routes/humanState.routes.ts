@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { HumanStateController } from '../controllers/HumanStateController';
-import { authMiddleware, requireRole } from '../middlewares/auth.middleware';
-import { Role } from '../../../domain/value-objects/enums';
+import { HumanStateController } from '../controllers/HumanStateController.js';
+import { authMiddleware, requireRole } from '../middlewares/auth.middleware.js';
+import { Role } from '../../../domain/value-objects/enums.js';
 
 const router = Router();
 

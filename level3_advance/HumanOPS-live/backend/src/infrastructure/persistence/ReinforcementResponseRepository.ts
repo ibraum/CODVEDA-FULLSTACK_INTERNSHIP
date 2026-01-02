@@ -1,10 +1,10 @@
-import { IReinforcementResponseRepository } from '../../domain/repositories/IReinforcementResponseRepository';
-import { ReinforcementResponseModel, CreateReinforcementResponseDTO } from '../../domain/entities/ReinforcementResponse';
-import { prisma } from './prisma';
+import { IReinforcementResponseRepository } from '../../domain/repositories/IReinforcementResponseRepository.js';
+import { ReinforcementResponseModel, CreateReinforcementResponseDTO } from '../../domain/entities/ReinforcementResponse.js';
+import { prisma } from './prisma.js';
 
 export class ReinforcementResponseRepository implements IReinforcementResponseRepository {
   async create(data: CreateReinforcementResponseDTO): Promise<ReinforcementResponseModel> {
-    return await prisma.reinforcementResponse.create({
+    return await prisma.reinforcementResponseModel.create({
       data: {
         requestId: data.requestId,
         userId: data.userId,
@@ -15,13 +15,13 @@ export class ReinforcementResponseRepository implements IReinforcementResponseRe
   }
 
   async findByRequestId(requestId: string): Promise<ReinforcementResponseModel[]> {
-    return await prisma.reinforcementResponse.findMany({
+    return await prisma.reinforcementResponseModel.findMany({
       where: { requestId },
     }) as unknown as ReinforcementResponseModel[];
   }
 
   async findByUserResponse(requestId: string, userId: string): Promise<ReinforcementResponseModel | null> {
-    return await prisma.reinforcementResponse.findUnique({
+    return await prisma.reinforcementResponseModel.findUnique({
       where: {
         requestId_userId: { // Unique constraint composée supposée exister dans le schema
           requestId,

@@ -1,5 +1,5 @@
-import { CollaboratorProfile, CreateProfileDTO, UpdateProfileDTO } from '../entities/CollaboratorProfile';
-import { Skill } from '../entities/Skill';
+import { CollaboratorProfile, CreateProfileDTO, UpdateProfileDTO } from '../entities/CollaboratorProfile.js';
+import { Skill } from '../entities/Skill.js';
 
 export interface ICollaboratorProfileRepository {
   create(data: CreateProfileDTO): Promise<CollaboratorProfile>;

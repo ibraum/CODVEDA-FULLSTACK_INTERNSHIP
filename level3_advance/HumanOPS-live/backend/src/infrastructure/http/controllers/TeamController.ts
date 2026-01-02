@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
-import { CreateTeamUseCase } from '../../../application/use-cases/CreateTeamUseCase';
-import { ListTeamsUseCase } from '../../../application/use-cases/ListTeamsUseCase';
-import { AddTeamMemberUseCase } from '../../../application/use-cases/AddTeamMemberUseCase';
-import { RemoveTeamMemberUseCase } from '../../../application/use-cases/RemoveTeamMemberUseCase';
-import { TeamRepository } from '../../persistence/TeamRepository';
-import { UserRepository } from '../../persistence/UserRepository';
+import { CreateTeamUseCase } from '../../../application/use-cases/CreateTeamUseCase.js';
+import { ListTeamsUseCase } from '../../../application/use-cases/ListTeamsUseCase.js';
+import { AddTeamMemberUseCase } from '../../../application/use-cases/AddTeamMemberUseCase.js';
+import { RemoveTeamMemberUseCase } from '../../../application/use-cases/RemoveTeamMemberUseCase.js';
+import { TeamRepository } from '../../persistence/TeamRepository.js';
+import { UserRepository } from '../../persistence/UserRepository.js';
 
 const teamRepository = new TeamRepository();
 const userRepository = new UserRepository();

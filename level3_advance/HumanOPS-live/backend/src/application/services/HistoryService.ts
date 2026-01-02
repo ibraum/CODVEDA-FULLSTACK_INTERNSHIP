@@ -1,5 +1,5 @@
-import { eventBus } from '../../infrastructure/event-bus/EventBus';
-import { IHumanStateHistoryRepository } from '../../domain/repositories/IHumanStateHistoryRepository';
+import { eventBus } from '../../infrastructure/event-bus/EventBus.js';
+import { IHumanStateHistoryRepository } from '../../domain/repositories/IHumanStateHistoryRepository.js';
 
 export class HistoryService {
   constructor(private historyRepository: IHumanStateHistoryRepository) {

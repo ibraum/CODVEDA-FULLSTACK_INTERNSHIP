@@ -1,9 +1,9 @@
-import { IReinforcementResponseRepository } from '../../domain/repositories/IReinforcementResponseRepository';
-import { IReinforcementRequestRepository } from '../../domain/repositories/IReinforcementRequestRepository';
-import { ReinforcementResponseModel } from '../../domain/entities/ReinforcementResponse';
-import { ReinforcementResponse, ReinforcementStatus } from '../../domain/value-objects/enums';
-import { eventBus } from '../../infrastructure/event-bus/EventBus';
-import { ReinforcementAcceptedEvent, ReinforcementRefusedEvent } from '../../domain/events';
+import { IReinforcementResponseRepository } from '../../domain/repositories/IReinforcementResponseRepository.js';
+import { IReinforcementRequestRepository } from '../../domain/repositories/IReinforcementRequestRepository.js';
+import { ReinforcementResponseModel } from '../../domain/entities/ReinforcementResponse.js';
+import { ReinforcementResponse, ReinforcementStatus } from '../../domain/value-objects/enums.js';
+import { eventBus } from '../../infrastructure/event-bus/EventBus.js';
+import { ReinforcementAcceptedEvent, ReinforcementRefusedEvent } from '../../domain/events/index.js';
 
 export class RespondToReinforcementUseCase {
   constructor(

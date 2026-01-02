@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
-import { IUserRepository } from '../../domain/repositories/IUserRepository';
-import { User, CreateUserDTO, UpdateUserDTO, UserWithoutPassword } from '../../domain/entities/User';
-import { prisma } from './prisma';
+import { IUserRepository } from '../../domain/repositories/IUserRepository.js';
+import { User, CreateUserDTO, UpdateUserDTO, UserWithoutPassword } from '../../domain/entities/User.js';
+import { prisma } from './prisma.js';
 
 export class UserRepository implements IUserRepository {
   async create(data: CreateUserDTO): Promise<User> {

@@ -1,4 +1,4 @@
-import { IAlertRepository } from '../../domain/repositories/IAlertRepository';
+import { IAlertRepository } from '../../domain/repositories/IAlertRepository.js';
 
 export class MarkAlertAsReadUseCase {
   constructor(private alertRepository: IAlertRepository) {}

@@ -1,4 +1,4 @@
-import { ReinforcementResponseModel, CreateReinforcementResponseDTO } from '../entities/ReinforcementResponse';
+import { ReinforcementResponseModel, CreateReinforcementResponseDTO } from '../entities/ReinforcementResponse.js';
 
 export interface IReinforcementResponseRepository {
   create(data: CreateReinforcementResponseDTO): Promise<ReinforcementResponseModel>;

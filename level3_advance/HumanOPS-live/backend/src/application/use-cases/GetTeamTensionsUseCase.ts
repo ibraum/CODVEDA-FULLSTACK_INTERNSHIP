@@ -1,5 +1,5 @@
-import { ITensionLevelRepository } from '../../domain/repositories/ITensionLevelRepository';
-import { TensionLevelSnapshot } from '../../domain/entities/TensionLevelSnapshot';
+import { ITensionLevelRepository } from '../../domain/repositories/ITensionLevelRepository.js';
+import { TensionLevelSnapshot } from '../../domain/entities/TensionLevelSnapshot.js';
 
 export class GetTeamTensionsUseCase {
   constructor(private tensionRepository: ITensionLevelRepository) {}

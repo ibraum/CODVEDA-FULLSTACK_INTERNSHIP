@@ -1,7 +1,7 @@
-import { IReinforcementRequestRepository } from '../../domain/repositories/IReinforcementRequestRepository';
-import { CreateReinforcementRequestDTO, ReinforcementRequest } from '../../domain/entities/ReinforcementRequest';
-import { eventBus } from '../../infrastructure/event-bus/EventBus';
-import { ReinforcementRequestedEvent } from '../../domain/events';
+import { IReinforcementRequestRepository } from '../../domain/repositories/IReinforcementRequestRepository.js';
+import { CreateReinforcementRequestDTO, ReinforcementRequest } from '../../domain/entities/ReinforcementRequest.js';
+import { eventBus } from '../../infrastructure/event-bus/EventBus.js';
+import { ReinforcementRequestedEvent } from '../../domain/events/index.js';
 
 export class CreateReinforcementRequestUseCase {
   constructor(private reinforcementRepository: IReinforcementRequestRepository) {}

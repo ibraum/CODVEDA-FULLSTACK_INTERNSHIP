@@ -1,4 +1,4 @@
-import { IUserRepository } from '../../domain/repositories/IUserRepository';
+import { IUserRepository } from '../../domain/repositories/IUserRepository.js';
 
 export class SoftDeleteUserUseCase {
   constructor(private userRepository: IUserRepository) {}

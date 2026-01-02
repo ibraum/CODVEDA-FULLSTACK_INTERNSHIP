@@ -1,7 +1,7 @@
 import { Response, NextFunction } from 'express';
-import { AuthRequest } from '../middlewares/auth.middleware';
-import { UpdateHumanStateUseCase } from '../../../application/use-cases/UpdateHumanStateUseCase';
-import { HumanStateRepository } from '../../persistence/HumanStateRepository';
+import { AuthRequest } from '../middlewares/auth.middleware.js';
+import { UpdateHumanStateUseCase } from '../../../application/use-cases/UpdateHumanStateUseCase.js';
+import { HumanStateRepository } from '../../persistence/HumanStateRepository.js';
 
 const humanStateRepository = new HumanStateRepository();
 

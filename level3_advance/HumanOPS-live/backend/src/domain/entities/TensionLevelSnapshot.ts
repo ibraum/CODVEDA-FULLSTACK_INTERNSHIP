@@ -1,4 +1,4 @@
-import { TensionLevel } from '../value-objects/enums';
+import { TensionLevel } from '../value-objects/enums.js';
 
 export interface TensionLevelSnapshot {
   id: string;

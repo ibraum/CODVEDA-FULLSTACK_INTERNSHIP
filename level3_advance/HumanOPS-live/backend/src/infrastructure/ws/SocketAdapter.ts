@@ -3,9 +3,9 @@ import { Server as SocketIOServer, Socket } from 'socket.io';
 import { createAdapter } from '@socket.io/redis-adapter';
 import { createClient } from 'redis';
 import jwt from 'jsonwebtoken';
-import { config } from '../../config';
-import { eventBus } from '../event-bus/EventBus';
-import { Role } from '../../domain/value-objects/enums';
+import { config } from '../../config/index.js';
+import { eventBus } from '../event-bus/EventBus.js';
+import { Role } from '../../domain/value-objects/enums.js';
 
 export interface AuthenticatedSocket extends Socket {
   user?: {

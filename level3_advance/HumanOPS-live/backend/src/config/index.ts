@@ -1,33 +1,34 @@
+import { SignOptions } from 'jsonwebtoken';
+
 export const config = {
   port: process.env.PORT || 3000,
   nodeEnv: process.env.NODE_ENV || 'development',
-  
+
   database: {
     url: process.env.DATABASE_URL || '',
   },
-  
+
   redis: {
-    url: process.env.REDIS_URL, // Optionnel, si présent -> active Redis Adapter
+    url: process.env.REDIS_URL,
   },
-  
+
   jwt: {
     secret: process.env.JWT_SECRET || 'your-secret-key-change-in-production',
-    expiresIn: process.env.JWT_EXPIRES_IN || '24h',
+    expiresIn: process.env.JWT_EXPIRES_IN as SignOptions['expiresIn'] ?? '24h',
   },
-  
+
   cors: {
     origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
     credentials: true,
   },
-  
+
   socket: {
     cors: {
       origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
       credentials: true,
     },
   },
-  
-  // Paramètres métier par défaut
+
   business: {
     reliabilityScore: {
       min: 0.4,
@@ -38,6 +39,6 @@ export const config = {
       defaultExpirationHours: 24,
     },
   },
-} as const;
+};
 
 export type Config = typeof config;

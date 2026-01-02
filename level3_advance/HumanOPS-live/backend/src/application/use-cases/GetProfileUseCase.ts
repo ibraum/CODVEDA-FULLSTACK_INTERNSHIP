@@ -1,6 +1,6 @@
-import { ICollaboratorProfileRepository } from '../../domain/repositories/ICollaboratorProfileRepository';
-import { CollaboratorProfile } from '../../domain/entities/CollaboratorProfile';
-import { Skill } from '../../domain/entities/Skill';
+import { ICollaboratorProfileRepository } from '../../domain/repositories/ICollaboratorProfileRepository.js';
+import { CollaboratorProfile } from '../../domain/entities/CollaboratorProfile.js';
+import { Skill } from '../../domain/entities/Skill.js';
 
 export interface ProfileWithSkills {
   profile: CollaboratorProfile | null;

@@ -1,5 +1,5 @@
-import { IRHSettingRepository } from '../../domain/repositories/IRHSettingRepository';
-import { RHSetting } from '../../domain/entities/RHSetting';
+import { IRHSettingRepository } from '../../domain/repositories/IRHSettingRepository.js';
+import { RHSetting } from '../../domain/entities/RHSetting.js';
 
 export class GetRHSettingUseCase {
   constructor(private settingRepository: IRHSettingRepository) {}

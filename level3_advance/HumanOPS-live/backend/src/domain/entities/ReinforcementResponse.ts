@@ -1,4 +1,4 @@
-import { ReinforcementResponse } from '../value-objects/enums';
+import { ReinforcementResponse } from '../value-objects/enums.js';
 
 export interface ReinforcementResponseModel {
   id: string;

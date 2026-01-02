@@ -1,5 +1,5 @@
-import { ICollaboratorProfileRepository } from '../../domain/repositories/ICollaboratorProfileRepository';
-import { CollaboratorProfile, UpdateProfileDTO } from '../../domain/entities/CollaboratorProfile';
+import { ICollaboratorProfileRepository } from '../../domain/repositories/ICollaboratorProfileRepository.js';
+import { CollaboratorProfile, UpdateProfileDTO } from '../../domain/entities/CollaboratorProfile.js';
 
 export class UpdateProfileUseCase {
   constructor(private profileRepository: ICollaboratorProfileRepository) {}

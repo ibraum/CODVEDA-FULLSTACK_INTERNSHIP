@@ -1,4 +1,4 @@
-import { Role } from '../value-objects/enums';
+import { Role } from '../value-objects/enums.js';
 
 export interface User {
   id: string;

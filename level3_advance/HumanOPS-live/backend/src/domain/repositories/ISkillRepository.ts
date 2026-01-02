@@ -1,4 +1,4 @@
-import { Skill, CreateSkillDTO } from '../entities/Skill';
+import { Skill, CreateSkillDTO } from '../entities/Skill.js';
 
 export interface ISkillRepository {
   create(data: CreateSkillDTO): Promise<Skill>;

@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
-import { ListUsersUseCase } from '../../../application/use-cases/ListUsersUseCase';
-import { UpdateUserUseCase } from '../../../application/use-cases/UpdateUserUseCase';
-import { SoftDeleteUserUseCase } from '../../../application/use-cases/SoftDeleteUserUseCase';
-import { UserRepository } from '../../persistence/UserRepository';
-import { Role } from '../../../domain/value-objects/enums';
+import { ListUsersUseCase } from '../../../application/use-cases/ListUsersUseCase.js';
+import { UpdateUserUseCase } from '../../../application/use-cases/UpdateUserUseCase.js';
+import { SoftDeleteUserUseCase } from '../../../application/use-cases/SoftDeleteUserUseCase.js';
+import { UserRepository } from '../../persistence/UserRepository.js';
+import { Role } from '../../../domain/value-objects/enums.js';
 
 const userRepository = new UserRepository();
 

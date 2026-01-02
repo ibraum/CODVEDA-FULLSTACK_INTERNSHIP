@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { RHSettingController } from '../controllers/RHSettingController';
-import { authMiddleware, requireRole } from '../middlewares/auth.middleware';
-import { Role } from '../../../domain/value-objects/enums';
+import { RHSettingController } from '../controllers/RHSettingController.js';
+import { authMiddleware, requireRole } from '../middlewares/auth.middleware.js';
+import { Role } from '../../../domain/value-objects/enums.js';
 
 const router = Router();
 

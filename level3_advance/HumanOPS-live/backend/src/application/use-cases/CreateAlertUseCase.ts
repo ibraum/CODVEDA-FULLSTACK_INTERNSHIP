@@ -1,7 +1,7 @@
-import { IAlertRepository } from '../../domain/repositories/IAlertRepository';
-import { CreateAlertDTO, Alert } from '../../domain/entities/Alert';
-import { eventBus } from '../../infrastructure/event-bus/EventBus';
-import { AlertCreatedEvent } from '../../domain/events';
+import { IAlertRepository } from '../../domain/repositories/IAlertRepository.js';
+import { CreateAlertDTO, Alert } from '../../domain/entities/Alert.js';
+import { eventBus } from '../../infrastructure/event-bus/EventBus.js';
+import { AlertCreatedEvent } from '../../domain/events/index.js';
 
 export class CreateAlertUseCase {
   constructor(private alertRepository: IAlertRepository) {}

@@ -1,7 +1,7 @@
-import { IAlertRepository } from '../../domain/repositories/IAlertRepository';
-import { Alert, CreateAlertDTO } from '../../domain/entities/Alert';
-import { Role } from '../../domain/value-objects/enums';
-import { prisma } from './prisma';
+import { IAlertRepository } from '../../domain/repositories/IAlertRepository.js';
+import { Alert, CreateAlertDTO } from '../../domain/entities/Alert.js';
+import { Role } from '../../domain/value-objects/enums.js';
+import { prisma } from './prisma.js';
 
 export class AlertRepository implements IAlertRepository {
   async create(data: CreateAlertDTO): Promise<Alert> {

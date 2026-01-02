@@ -1,4 +1,4 @@
-import { TensionLevelSnapshot, CreateTensionSnapshotDTO } from '../entities/TensionLevelSnapshot';
+import { TensionLevelSnapshot, CreateTensionSnapshotDTO } from '../entities/TensionLevelSnapshot.js';
 
 export interface ITensionLevelRepository {
   create(data: CreateTensionSnapshotDTO): Promise<TensionLevelSnapshot>;

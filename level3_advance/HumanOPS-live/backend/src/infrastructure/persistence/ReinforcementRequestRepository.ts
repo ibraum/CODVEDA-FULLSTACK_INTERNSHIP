@@ -1,7 +1,7 @@
-import { IReinforcementRequestRepository } from '../../domain/repositories/IReinforcementRequestRepository';
-import { ReinforcementRequest, CreateReinforcementRequestDTO, UpdateReinforcementRequestDTO } from '../../domain/entities/ReinforcementRequest';
-import { ReinforcementStatus } from '../../domain/value-objects/enums';
-import { prisma } from './prisma';
+import { IReinforcementRequestRepository } from '../../domain/repositories/IReinforcementRequestRepository.js';
+import { ReinforcementRequest, CreateReinforcementRequestDTO, UpdateReinforcementRequestDTO } from '../../domain/entities/ReinforcementRequest.js';
+import { ReinforcementStatus } from '../../domain/value-objects/enums.js';
+import { prisma } from './prisma.js';
 
 export class ReinforcementRequestRepository implements IReinforcementRequestRepository {
   async create(data: CreateReinforcementRequestDTO): Promise<ReinforcementRequest> {

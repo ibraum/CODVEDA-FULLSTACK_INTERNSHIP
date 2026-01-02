@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { ReinforcementController } from '../controllers/ReinforcementController';
-import { authMiddleware, requireRole } from '../middlewares/auth.middleware';
-import { Role } from '../../../domain/value-objects/enums';
+import { ReinforcementController } from '../controllers/ReinforcementController.js';
+import { authMiddleware, requireRole } from '../middlewares/auth.middleware.js';
+import { Role } from '../../../domain/value-objects/enums.js';
 
 const router = Router();
 

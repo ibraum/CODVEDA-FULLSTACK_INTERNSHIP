@@ -1,6 +1,6 @@
-import { ITeamRepository } from '../../domain/repositories/ITeamRepository';
-import { IUserRepository } from '../../domain/repositories/IUserRepository';
-import { eventBus } from '../../infrastructure/event-bus/EventBus';
+import { ITeamRepository } from '../../domain/repositories/ITeamRepository.js';
+import { IUserRepository } from '../../domain/repositories/IUserRepository.js';
+import { eventBus } from '../../infrastructure/event-bus/EventBus.js';
 
 export class AddTeamMemberUseCase {
   constructor(

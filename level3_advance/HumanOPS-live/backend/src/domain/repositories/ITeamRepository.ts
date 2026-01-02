@@ -1,4 +1,4 @@
-import { Team, CreateTeamDTO, UpdateTeamDTO } from '../entities/Team';
+import { Team, CreateTeamDTO, UpdateTeamDTO } from '../entities/Team.js';
 
 export interface ITeamRepository {
   create(data: CreateTeamDTO): Promise<Team>;

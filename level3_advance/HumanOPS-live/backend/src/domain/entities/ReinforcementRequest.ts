@@ -1,4 +1,4 @@
-import { ReinforcementStatus } from '../value-objects/enums';
+import { ReinforcementStatus } from '../value-objects/enums.js';
 
 export interface ReinforcementRequest {
   id: string;

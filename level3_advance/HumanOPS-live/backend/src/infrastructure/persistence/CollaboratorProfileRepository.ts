@@ -1,7 +1,7 @@
-import { ICollaboratorProfileRepository } from '../../domain/repositories/ICollaboratorProfileRepository';
-import { CollaboratorProfile, CreateProfileDTO, UpdateProfileDTO } from '../../domain/entities/CollaboratorProfile';
-import { Skill } from '../../domain/entities/Skill';
-import { prisma } from './prisma';
+import { ICollaboratorProfileRepository } from '../../domain/repositories/ICollaboratorProfileRepository.js';
+import { CollaboratorProfile, CreateProfileDTO, UpdateProfileDTO } from '../../domain/entities/CollaboratorProfile.js';
+import { Skill } from '../../domain/entities/Skill.js';
+import { prisma } from './prisma.js';
 
 export class CollaboratorProfileRepository implements ICollaboratorProfileRepository {
   async create(data: CreateProfileDTO): Promise<CollaboratorProfile> {

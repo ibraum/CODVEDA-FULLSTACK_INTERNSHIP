@@ -1,5 +1,5 @@
-import { ITeamRepository } from '../../domain/repositories/ITeamRepository';
-import { eventBus } from '../../infrastructure/event-bus/EventBus';
+import { ITeamRepository } from '../../domain/repositories/ITeamRepository.js';
+import { eventBus } from '../../infrastructure/event-bus/EventBus.js';
 
 export class RemoveTeamMemberUseCase {
   constructor(private teamRepository: ITeamRepository) {}

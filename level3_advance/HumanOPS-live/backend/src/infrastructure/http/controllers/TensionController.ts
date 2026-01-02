@@ -1,15 +1,15 @@
 import { Response, NextFunction } from 'express';
-import { AuthRequest } from '../middlewares/auth.middleware';
-import { GetTeamTensionsUseCase } from '../../../application/use-cases/GetTeamTensionsUseCase';
-import { CalculateTensionUseCase } from '../../../application/use-cases/CalculateTensionUseCase';
-import { TensionLevelRepository } from '../../persistence/TensionLevelRepository';
-import { TeamRepository } from '../../persistence/TeamRepository';
-import { HumanStateRepository } from '../../persistence/HumanStateRepository';
-import { ReinforcementRequestRepository } from '../../persistence/ReinforcementRequestRepository';
-import { RHSettingRepository } from '../../persistence/RHSettingRepository';
+import { AuthRequest } from '../middlewares/auth.middleware.js';
+import { GetTeamTensionsUseCase } from '../../../application/use-cases/GetTeamTensionsUseCase.js';
+import { CalculateTensionUseCase } from '../../../application/use-cases/CalculateTensionUseCase.js';
+import { TensionLevelRepository } from '../../persistence/TensionLevelRepository.js';
+// import { TeamRepository } from '../../persistence/TeamRepository.js';
+import { HumanStateRepository } from '../../persistence/HumanStateRepository.js';
+import { ReinforcementRequestRepository } from '../../persistence/ReinforcementRequestRepository.js';
+import { RHSettingRepository } from '../../persistence/RHSettingRepository.js';
 
 const tensionRepository = new TensionLevelRepository();
-const teamRepository = new TeamRepository();
+// const teamRepository = new TeamRepository();
 const humanStateRepository = new HumanStateRepository();
 const reinforcementRepository = new ReinforcementRequestRepository();
 const settingRepository = new RHSettingRepository();
@@ -17,7 +17,7 @@ const settingRepository = new RHSettingRepository();
 // Pour le calcul manuel (déclencheur)
 const calculateTensionUseCase = new CalculateTensionUseCase(
   tensionRepository,
-  teamRepository,
+  // teamRepository,
   humanStateRepository,
   reinforcementRepository,
   settingRepository

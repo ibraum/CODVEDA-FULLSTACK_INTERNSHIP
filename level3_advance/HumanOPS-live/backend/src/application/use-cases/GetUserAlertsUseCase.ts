@@ -1,6 +1,6 @@
-import { IAlertRepository } from '../../domain/repositories/IAlertRepository';
-import { Alert } from '../../domain/entities/Alert';
-import { Role } from '../../domain/value-objects/enums';
+import { IAlertRepository } from '../../domain/repositories/IAlertRepository.js';
+import { Alert } from '../../domain/entities/Alert.js';
+import { Role } from '../../domain/value-objects/enums.js';
 
 export class GetUserAlertsUseCase {
   constructor(private alertRepository: IAlertRepository) {}

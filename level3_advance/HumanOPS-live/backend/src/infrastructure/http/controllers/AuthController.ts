@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
-import { AuthenticateUserUseCase } from '../../../application/use-cases/AuthenticateUserUseCase';
-import { CreateUserUseCase } from '../../../application/use-cases/CreateUserUseCase';
-import { UserRepository } from '../../persistence/UserRepository';
+import { AuthenticateUserUseCase } from '../../../application/use-cases/AuthenticateUserUseCase.js';
+import { CreateUserUseCase } from '../../../application/use-cases/CreateUserUseCase.js';
+import { UserRepository } from '../../persistence/UserRepository.js';
 
 const userRepository = new UserRepository();
 

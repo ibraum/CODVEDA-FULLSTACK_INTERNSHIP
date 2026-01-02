@@ -1,6 +1,6 @@
-import { IUserRepository } from '../../domain/repositories/IUserRepository';
-import { UserWithoutPassword } from '../../domain/entities/User';
-import { Role } from '../../domain/value-objects/enums';
+import { IUserRepository } from '../../domain/repositories/IUserRepository.js';
+import { UserWithoutPassword } from '../../domain/entities/User.js';
+import { Role } from '../../domain/value-objects/enums.js';
 
 export class ListUsersUseCase {
   constructor(private userRepository: IUserRepository) {}

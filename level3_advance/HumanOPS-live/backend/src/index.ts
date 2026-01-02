@@ -7,11 +7,11 @@ import helmet from 'helmet';
 import compression from 'compression';
 import { rateLimit } from 'express-rate-limit';
 import swaggerUi from 'swagger-ui-express';
-import { swaggerSpec } from './config/swagger';
-import { config } from './config';
-import routes from './infrastructure/http/routes';
-import { errorHandler } from './infrastructure/http/middlewares/error.middleware';
-import { SocketAdapter } from './infrastructure/ws/SocketAdapter';
+import { swaggerSpec } from './config/swagger.js';
+import { config } from './config/index.js';
+import routes from './infrastructure/http/routes/index.js';
+import { errorHandler } from './infrastructure/http/middlewares/error.middleware.js';
+import { SocketAdapter } from './infrastructure/ws/SocketAdapter.js';
 
 /**
  * HumanOps Live Backend
@@ -48,7 +48,7 @@ app.use(morgan('dev'));
 // Documentation API
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
-app.get('/health', (req, res) => {
+app.get('/health', (_req, res) => {
   res.status(200).json({
     status: 'ok',
     timestamp: new Date().toISOString(),
@@ -64,23 +64,23 @@ app.use('/api', routes);
 
 app.use(errorHandler);
 
-import { HumanStateHistoryRepository } from './infrastructure/persistence/HumanStateHistoryRepository';
-import { HistoryService } from './application/services/HistoryService';
-import { InternalReliabilityScoreRepository } from './infrastructure/persistence/InternalReliabilityScoreRepository';
-import { ReinforcementResponseRepository } from './infrastructure/persistence/ReinforcementResponseRepository';
-import { ReliabilityService } from './application/services/ReliabilityService';
+import { HumanStateHistoryRepository } from './infrastructure/persistence/HumanStateHistoryRepository.js';
+import { HistoryService } from './application/services/HistoryService.js';
+import { InternalReliabilityScoreRepository } from './infrastructure/persistence/InternalReliabilityScoreRepository.js';
+import { ReinforcementResponseRepository } from './infrastructure/persistence/ReinforcementResponseRepository.js';
+import { ReliabilityService } from './application/services/ReliabilityService.js';
 
 // ============================================
 // SERVICES INITIALIZATION
 // ============================================
 
 const historyRepository = new HumanStateHistoryRepository();
-const historyService = new HistoryService(historyRepository);
+new HistoryService(historyRepository);
 console.log('History Service initialized');
 
 const reliabilityRepository = new InternalReliabilityScoreRepository();
 const reinforcementResponseRepository = new ReinforcementResponseRepository();
-const reliabilityService = new ReliabilityService(
+new ReliabilityService(
   reliabilityRepository, 
   historyRepository, 
   reinforcementResponseRepository
@@ -91,7 +91,7 @@ console.log('Reliability Service initialized');
 // WEBSOCKET SETUP
 // ============================================
 
-const socketAdapter = new SocketAdapter(httpServer);
+new SocketAdapter(httpServer);
 console.log('WebSocket adapter initialized');
 
 // ============================================

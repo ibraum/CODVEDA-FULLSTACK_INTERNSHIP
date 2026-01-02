@@ -1,4 +1,4 @@
-import { User, CreateUserDTO, UpdateUserDTO, UserWithoutPassword } from '../entities/User';
+import { User, CreateUserDTO, UpdateUserDTO, UserWithoutPassword } from '../entities/User.js';
 
 export interface IUserRepository {
   create(data: CreateUserDTO): Promise<User>;

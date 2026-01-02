@@ -1,17 +1,32 @@
-import { IHumanStateHistoryRepository } from '../../domain/repositories/IHumanStateHistoryRepository';
-import { HumanStateHistory, CreateHumanStateHistoryDTO } from '../../domain/entities/HumanStateHistory';
-import { prisma } from './prisma';
+import { IHumanStateHistoryRepository } from '../../domain/repositories/IHumanStateHistoryRepository.js';
+import { HumanStateHistory, CreateHumanStateHistoryDTO } from '../../domain/entities/HumanStateHistory.js';
+import { prisma } from './prisma.js';
 
 export class HumanStateHistoryRepository implements IHumanStateHistoryRepository {
   async create(data: CreateHumanStateHistoryDTO): Promise<HumanStateHistory> {
-    return await prisma.humanStateHistory.create({
+    const humanState = await prisma.humanState.findUnique({ where: { userId: data.userId } });
+    if (!humanState) throw new Error(`HumanState not found for user ${data.userId}`);
+
+    const result = await prisma.humanStateHistory.create({
       data: {
         userId: data.userId,
-        workload: data.workload,
-        availability: data.availability,
-        // changedAt est auto-géré par @default(now()) dans le schema ou on laisse Prisma
+        humanStateId: humanState.id,
+        previousState: {}, 
+        newState: {
+          workload: data.workload,
+          availability: data.availability
+        },
       },
-    }) as unknown as HumanStateHistory;
+    });
+
+    const newState = result.newState as any;
+    return {
+      id: result.id,
+      userId: result.userId,
+      workload: newState?.workload || data.workload,
+      availability: newState?.availability || data.availability,
+      changedAt: result.changedAt,
+    } as HumanStateHistory;
   }
 
   async findByUserId(userId: string, limit?: number): Promise<HumanStateHistory[]> {

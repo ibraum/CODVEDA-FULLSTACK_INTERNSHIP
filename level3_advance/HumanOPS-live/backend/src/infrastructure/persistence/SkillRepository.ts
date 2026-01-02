@@ -1,6 +1,6 @@
-import { ISkillRepository } from '../../domain/repositories/ISkillRepository';
-import { Skill, CreateSkillDTO } from '../../domain/entities/Skill';
-import { prisma } from './prisma';
+import { ISkillRepository } from '../../domain/repositories/ISkillRepository.js';
+import { Skill, CreateSkillDTO } from '../../domain/entities/Skill.js';
+import { prisma } from './prisma.js';
 
 export class SkillRepository implements ISkillRepository {
   async create(data: CreateSkillDTO): Promise<Skill> {

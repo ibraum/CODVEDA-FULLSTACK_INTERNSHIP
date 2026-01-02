@@ -1,8 +1,8 @@
 import { Response, NextFunction } from 'express';
-import { AuthRequest } from '../middlewares/auth.middleware';
-import { GetRHSettingUseCase } from '../../../application/use-cases/GetRHSettingUseCase';
-import { UpdateRHSettingUseCase } from '../../../application/use-cases/UpdateRHSettingUseCase';
-import { RHSettingRepository } from '../../persistence/RHSettingRepository';
+import { AuthRequest } from '../middlewares/auth.middleware.js';
+import { GetRHSettingUseCase } from '../../../application/use-cases/GetRHSettingUseCase.js';
+import { UpdateRHSettingUseCase } from '../../../application/use-cases/UpdateRHSettingUseCase.js';
+import { RHSettingRepository } from '../../persistence/RHSettingRepository.js';
 
 const settingRepository = new RHSettingRepository();
 
@@ -19,7 +19,7 @@ export class RHSettingController {
    *       200:
    *         description: List of settings
    */
-  static async getAll(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
+  static async getAll(_req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
       const getUseCase = new GetRHSettingUseCase(settingRepository);
       const settings = await getUseCase.execute();

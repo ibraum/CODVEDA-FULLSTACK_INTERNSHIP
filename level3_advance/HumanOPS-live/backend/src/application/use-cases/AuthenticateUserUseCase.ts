@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
-import { IUserRepository } from '../../domain/repositories/IUserRepository';
-import { UserWithoutPassword } from '../../domain/entities/User';
-import { config } from '../../config';
+import { IUserRepository } from '../../domain/repositories/IUserRepository.js';
+import { UserWithoutPassword } from '../../domain/entities/User.js';
+import { config } from '../../config/index.js';
 
 export interface LoginDTO {
   email: string;

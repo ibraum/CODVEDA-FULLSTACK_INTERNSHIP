@@ -1,6 +1,6 @@
-import { IInternalReliabilityScoreRepository } from '../../domain/repositories/IInternalReliabilityScoreRepository';
-import { IReinforcementResponseRepository } from '../../domain/repositories/IReinforcementResponseRepository';
-import { IHumanStateHistoryRepository } from '../../domain/repositories/IHumanStateHistoryRepository';
+import { IInternalReliabilityScoreRepository } from '../../domain/repositories/IInternalReliabilityScoreRepository.js';
+import { IReinforcementResponseRepository } from '../../domain/repositories/IReinforcementResponseRepository.js';
+import { IHumanStateHistoryRepository } from '../../domain/repositories/IHumanStateHistoryRepository.js';
 
 export class CalculateReliabilityScoreUseCase {
   constructor(

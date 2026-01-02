@@ -1,6 +1,6 @@
-import { IHumanStateRepository } from '../../domain/repositories/IHumanStateRepository';
-import { HumanState, CreateHumanStateDTO, UpdateHumanStateDTO } from '../../domain/entities/HumanState';
-import { prisma } from './prisma';
+import { IHumanStateRepository } from '../../domain/repositories/IHumanStateRepository.js';
+import { HumanState, CreateHumanStateDTO, UpdateHumanStateDTO } from '../../domain/entities/HumanState.js';
+import { prisma } from './prisma.js';
 
 export class HumanStateRepository implements IHumanStateRepository {
   async create(data: CreateHumanStateDTO): Promise<HumanState> {

@@ -1,4 +1,4 @@
-import { InternalReliabilityScore, CreateReliabilityScoreDTO } from '../entities/InternalReliabilityScore';
+import { InternalReliabilityScore, CreateReliabilityScoreDTO } from '../entities/InternalReliabilityScore.js';
 
 export interface IInternalReliabilityScoreRepository {
   create(data: CreateReliabilityScoreDTO): Promise<InternalReliabilityScore>;

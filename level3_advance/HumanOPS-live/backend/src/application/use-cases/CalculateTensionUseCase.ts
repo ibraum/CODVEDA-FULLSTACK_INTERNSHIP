@@ -1,16 +1,16 @@
-import { ITensionLevelRepository } from '../../domain/repositories/ITensionLevelRepository';
-import { ITeamRepository } from '../../domain/repositories/ITeamRepository';
-import { IHumanStateRepository } from '../../domain/repositories/IHumanStateRepository';
-import { IReinforcementRequestRepository } from '../../domain/repositories/IReinforcementRequestRepository';
-import { IRHSettingRepository } from '../../domain/repositories/IRHSettingRepository';
-import { TensionLevel } from '../../domain/value-objects/enums';
-import { eventBus } from '../../infrastructure/event-bus/EventBus';
-import { TeamTensionComputedEvent, CriticalTensionDetectedEvent } from '../../domain/events';
+import { ITensionLevelRepository } from '../../domain/repositories/ITensionLevelRepository.js';
+// import { ITeamRepository } from '../../domain/repositories/ITeamRepository.js';
+import { IHumanStateRepository } from '../../domain/repositories/IHumanStateRepository.js';
+import { IReinforcementRequestRepository } from '../../domain/repositories/IReinforcementRequestRepository.js';
+import { IRHSettingRepository } from '../../domain/repositories/IRHSettingRepository.js';
+import { TensionLevel } from '../../domain/value-objects/enums.js';
+import { eventBus } from '../../infrastructure/event-bus/EventBus.js';
+import { TeamTensionComputedEvent, CriticalTensionDetectedEvent } from '../../domain/events/index.js';
 
 export class CalculateTensionUseCase {
   constructor(
     private tensionRepository: ITensionLevelRepository,
-    private teamRepository: ITeamRepository, // Conservé pour future utilisation (ex: taille équipe)
+    // private teamRepository: ITeamRepository, // Conservé pour future utilisation (ex: taille équipe)
     private stateRepository: IHumanStateRepository,
     private reinforcementRepository: IReinforcementRequestRepository,
     private settingRepository: IRHSettingRepository

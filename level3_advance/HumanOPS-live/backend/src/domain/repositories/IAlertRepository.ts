@@ -1,5 +1,5 @@
-import { Alert, CreateAlertDTO } from '../entities/Alert';
-import { Role } from '../value-objects/enums';
+import { Alert, CreateAlertDTO } from '../entities/Alert.js';
+import { Role } from '../value-objects/enums.js';
 
 export interface IAlertRepository {
   create(data: CreateAlertDTO): Promise<Alert>;

@@ -1,13 +1,13 @@
 import { Router } from 'express';
-import authRoutes from './auth.routes';
-import humanStateRoutes from './humanState.routes';
-import userRoutes from './user.routes';
-import teamRoutes from './team.routes';
-import profileRoutes from './profile.routes';
-import alertRoutes from './alert.routes';
-import reinforcementRoutes from './reinforcement.routes';
-import tensionRoutes from './tension.routes';
-import rhSettingRoutes from './rhSetting.routes';
+import authRoutes from './auth.routes.js';
+import humanStateRoutes from './humanState.routes.js';
+import userRoutes from './user.routes.js';
+import teamRoutes from './team.routes.js';
+import profileRoutes from './profile.routes.js';
+import alertRoutes from './alert.routes.js';
+import reinforcementRoutes from './reinforcement.routes.js';
+import tensionRoutes from './tension.routes.js';
+import rhSettingRoutes from './rhSetting.routes.js';
 
 const router = Router();
 

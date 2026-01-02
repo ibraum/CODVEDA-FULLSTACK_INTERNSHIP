@@ -1,6 +1,6 @@
-import { ITeamRepository } from '../../domain/repositories/ITeamRepository';
-import { Team, CreateTeamDTO, UpdateTeamDTO } from '../../domain/entities/Team';
-import { prisma } from './prisma';
+import { ITeamRepository } from '../../domain/repositories/ITeamRepository.js';
+import { Team, CreateTeamDTO, UpdateTeamDTO } from '../../domain/entities/Team.js';
+import { prisma } from './prisma.js';
 
 export class TeamRepository implements ITeamRepository {
   async create(data: CreateTeamDTO): Promise<Team> {

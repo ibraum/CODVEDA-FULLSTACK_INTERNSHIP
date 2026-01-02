@@ -1,10 +1,10 @@
 import { Response, NextFunction } from 'express';
-import { AuthRequest } from '../middlewares/auth.middleware';
-import { UpdateProfileUseCase } from '../../../application/use-cases/UpdateProfileUseCase';
-import { AddSkillUseCase } from '../../../application/use-cases/AddSkillUseCase';
-import { GetProfileUseCase } from '../../../application/use-cases/GetProfileUseCase';
-import { CollaboratorProfileRepository } from '../../persistence/CollaboratorProfileRepository';
-import { SkillRepository } from '../../persistence/SkillRepository';
+import { AuthRequest } from '../middlewares/auth.middleware.js';
+import { UpdateProfileUseCase } from '../../../application/use-cases/UpdateProfileUseCase.js';
+import { AddSkillUseCase } from '../../../application/use-cases/AddSkillUseCase.js';
+import { GetProfileUseCase } from '../../../application/use-cases/GetProfileUseCase.js';
+import { CollaboratorProfileRepository } from '../../persistence/CollaboratorProfileRepository.js';
+import { SkillRepository } from '../../persistence/SkillRepository.js';
 
 const profileRepository = new CollaboratorProfileRepository();
 const skillRepository = new SkillRepository();

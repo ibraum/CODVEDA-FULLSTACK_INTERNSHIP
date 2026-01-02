@@ -1,5 +1,5 @@
-import { IUserRepository } from '../../domain/repositories/IUserRepository';
-import { CreateUserDTO, UserWithoutPassword } from '../../domain/entities/User';
+import { IUserRepository } from '../../domain/repositories/IUserRepository.js';
+import { CreateUserDTO, UserWithoutPassword } from '../../domain/entities/User.js';
 
 export class CreateUserUseCase {
   constructor(private userRepository: IUserRepository) {}

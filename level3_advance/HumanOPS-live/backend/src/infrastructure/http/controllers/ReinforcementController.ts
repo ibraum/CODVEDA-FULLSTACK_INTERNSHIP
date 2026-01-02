@@ -1,10 +1,10 @@
 import { Response, NextFunction } from 'express';
-import { AuthRequest } from '../middlewares/auth.middleware';
-import { CreateReinforcementRequestUseCase } from '../../../application/use-cases/CreateReinforcementRequestUseCase';
-import { RespondToReinforcementUseCase } from '../../../application/use-cases/RespondToReinforcementUseCase';
-import { ReinforcementRequestRepository } from '../../persistence/ReinforcementRequestRepository';
-import { ReinforcementResponseRepository } from '../../persistence/ReinforcementResponseRepository';
-import { config } from '../../../config';
+import { AuthRequest } from '../middlewares/auth.middleware.js';
+import { CreateReinforcementRequestUseCase } from '../../../application/use-cases/CreateReinforcementRequestUseCase.js';
+import { RespondToReinforcementUseCase } from '../../../application/use-cases/RespondToReinforcementUseCase.js';
+import { ReinforcementRequestRepository } from '../../persistence/ReinforcementRequestRepository.js';
+import { ReinforcementResponseRepository } from '../../persistence/ReinforcementResponseRepository.js';
+import { config } from '../../../config/index.js';
 
 const requestRepository = new ReinforcementRequestRepository();
 const responseRepository = new ReinforcementResponseRepository();

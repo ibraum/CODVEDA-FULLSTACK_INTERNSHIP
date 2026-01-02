@@ -1,6 +1,6 @@
-import { IRHSettingRepository } from '../../domain/repositories/IRHSettingRepository';
-import { RHSetting, CreateSettingDTO, UpdateSettingDTO } from '../../domain/entities/RHSetting';
-import { prisma } from './prisma';
+import { IRHSettingRepository } from '../../domain/repositories/IRHSettingRepository.js';
+import { RHSetting, CreateSettingDTO, UpdateSettingDTO } from '../../domain/entities/RHSetting.js';
+import { prisma } from './prisma.js';
 
 export class RHSettingRepository implements IRHSettingRepository {
   async create(data: CreateSettingDTO): Promise<RHSetting> {

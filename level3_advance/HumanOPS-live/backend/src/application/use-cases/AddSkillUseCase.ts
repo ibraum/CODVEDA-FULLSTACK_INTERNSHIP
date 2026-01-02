@@ -1,5 +1,5 @@
-import { ICollaboratorProfileRepository } from '../../domain/repositories/ICollaboratorProfileRepository';
-import { ISkillRepository } from '../../domain/repositories/ISkillRepository';
+import { ICollaboratorProfileRepository } from '../../domain/repositories/ICollaboratorProfileRepository.js';
+import { ISkillRepository } from '../../domain/repositories/ISkillRepository.js';
 
 export class AddSkillUseCase {
   constructor(

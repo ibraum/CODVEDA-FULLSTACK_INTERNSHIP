@@ -1,5 +1,5 @@
-import { ITeamRepository } from '../../domain/repositories/ITeamRepository';
-import { Team } from '../../domain/entities/Team';
+import { ITeamRepository } from '../../domain/repositories/ITeamRepository.js';
+import { Team } from '../../domain/entities/Team.js';
 
 export class ListTeamsUseCase {
   constructor(private teamRepository: ITeamRepository) {}

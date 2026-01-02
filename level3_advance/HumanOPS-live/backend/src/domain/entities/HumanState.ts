@@ -1,4 +1,4 @@
-import { Workload, Availability } from '../value-objects/enums';
+import { Workload, Availability } from '../value-objects/enums.js';
 
 export interface HumanState {
   id: string;

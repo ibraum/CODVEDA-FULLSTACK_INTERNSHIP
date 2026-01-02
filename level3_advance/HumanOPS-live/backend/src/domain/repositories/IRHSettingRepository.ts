@@ -1,4 +1,4 @@
-import { RHSetting, CreateSettingDTO, UpdateSettingDTO } from '../entities/RHSetting';
+import { RHSetting, CreateSettingDTO, UpdateSettingDTO } from '../entities/RHSetting.js';
 
 export interface IRHSettingRepository {
   create(data: CreateSettingDTO): Promise<RHSetting>;

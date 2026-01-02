@@ -1,8 +1,8 @@
 import { Response, NextFunction } from 'express';
-import { AuthRequest } from '../middlewares/auth.middleware';
-import { GetUserAlertsUseCase } from '../../../application/use-cases/GetUserAlertsUseCase';
-import { MarkAlertAsReadUseCase } from '../../../application/use-cases/MarkAlertAsReadUseCase';
-import { AlertRepository } from '../../persistence/AlertRepository';
+import { AuthRequest } from '../middlewares/auth.middleware.js';
+import { GetUserAlertsUseCase } from '../../../application/use-cases/GetUserAlertsUseCase.js';
+import { MarkAlertAsReadUseCase } from '../../../application/use-cases/MarkAlertAsReadUseCase.js';
+import { AlertRepository } from '../../persistence/AlertRepository.js';
 
 const alertRepository = new AlertRepository();
 

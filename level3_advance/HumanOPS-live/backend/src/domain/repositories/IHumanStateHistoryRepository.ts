@@ -1,4 +1,4 @@
-import { HumanStateHistory, CreateHumanStateHistoryDTO } from '../entities/HumanStateHistory';
+import { HumanStateHistory, CreateHumanStateHistoryDTO } from '../entities/HumanStateHistory.js';
 
 export interface IHumanStateHistoryRepository {
   create(data: CreateHumanStateHistoryDTO): Promise<HumanStateHistory>;

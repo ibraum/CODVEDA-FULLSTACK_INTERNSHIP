@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { TeamController } from '../controllers/TeamController';
-import { authMiddleware, requireRole } from '../middlewares/auth.middleware';
-import { Role } from '../../../domain/value-objects/enums';
+import { TeamController } from '../controllers/TeamController.js';
+import { authMiddleware, requireRole } from '../middlewares/auth.middleware.js';
+import { Role } from '../../../domain/value-objects/enums.js';
 
 const router = Router();
 

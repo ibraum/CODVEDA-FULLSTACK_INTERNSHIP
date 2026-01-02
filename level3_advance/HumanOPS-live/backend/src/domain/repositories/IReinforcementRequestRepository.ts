@@ -1,4 +1,4 @@
-import { ReinforcementRequest, CreateReinforcementRequestDTO, UpdateReinforcementRequestDTO } from '../entities/ReinforcementRequest';
+import { ReinforcementRequest, CreateReinforcementRequestDTO, UpdateReinforcementRequestDTO } from '../entities/ReinforcementRequest.js';
 
 export interface IReinforcementRequestRepository {
   create(data: CreateReinforcementRequestDTO): Promise<ReinforcementRequest>;

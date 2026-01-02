@@ -1,8 +1,8 @@
-import { eventBus } from '../../infrastructure/event-bus/EventBus';
-import { CalculateReliabilityScoreUseCase } from '../use-cases/CalculateReliabilityScoreUseCase';
-import { IInternalReliabilityScoreRepository } from '../../domain/repositories/IInternalReliabilityScoreRepository';
-import { IHumanStateHistoryRepository } from '../../domain/repositories/IHumanStateHistoryRepository';
-import { IReinforcementResponseRepository } from '../../domain/repositories/IReinforcementResponseRepository';
+import { eventBus } from '../../infrastructure/event-bus/EventBus.js';
+import { CalculateReliabilityScoreUseCase } from '../use-cases/CalculateReliabilityScoreUseCase.js';
+import { IInternalReliabilityScoreRepository } from '../../domain/repositories/IInternalReliabilityScoreRepository.js';
+import { IHumanStateHistoryRepository } from '../../domain/repositories/IHumanStateHistoryRepository.js';
+import { IReinforcementResponseRepository } from '../../domain/repositories/IReinforcementResponseRepository.js';
 
 export class ReliabilityService {
   private calculateUseCase: CalculateReliabilityScoreUseCase;
