@@ -156,7 +156,7 @@ async function main() {
     { name: 'Leadership' }
   ];
 
-  const skills = {};
+  const skills: Record<string, any> = {};
   for (const s of skillsData) {
     skills[s.name] = await prisma.skill.create({ data: s });
   }
