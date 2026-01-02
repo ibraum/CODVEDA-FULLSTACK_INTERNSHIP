@@ -6,6 +6,8 @@ import teamRoutes from './team.routes';
 import profileRoutes from './profile.routes';
 import alertRoutes from './alert.routes';
 import reinforcementRoutes from './reinforcement.routes';
+import tensionRoutes from './tension.routes';
+import rhSettingRoutes from './rhSetting.routes';
 
 const router = Router();
 
@@ -16,5 +18,7 @@ router.use('/teams', teamRoutes);
 router.use('/profiles', profileRoutes);
 router.use('/alerts', alertRoutes);
 router.use('/reinforcements', reinforcementRoutes);
+router.use('/tensions', tensionRoutes);
+router.use('/settings', rhSettingRoutes);
 
 export default router;

@@ -47,6 +47,9 @@ app.use(errorHandler);
 
 import { HumanStateHistoryRepository } from './infrastructure/persistence/HumanStateHistoryRepository';
 import { HistoryService } from './application/services/HistoryService';
+import { InternalReliabilityScoreRepository } from './infrastructure/persistence/InternalReliabilityScoreRepository';
+import { ReinforcementResponseRepository } from './infrastructure/persistence/ReinforcementResponseRepository';
+import { ReliabilityService } from './application/services/ReliabilityService';
 
 // ============================================
 // SERVICES INITIALIZATION
@@ -54,14 +57,23 @@ import { HistoryService } from './application/services/HistoryService';
 
 const historyRepository = new HumanStateHistoryRepository();
 const historyService = new HistoryService(historyRepository);
-console.log('✅ History Service initialized');
+console.log('History Service initialized');
+
+const reliabilityRepository = new InternalReliabilityScoreRepository();
+const reinforcementResponseRepository = new ReinforcementResponseRepository();
+const reliabilityService = new ReliabilityService(
+  reliabilityRepository, 
+  historyRepository, 
+  reinforcementResponseRepository
+);
+console.log('Reliability Service initialized');
 
 // ============================================
 // WEBSOCKET SETUP
 // ============================================
 
 const socketAdapter = new SocketAdapter(httpServer);
-console.log('✅ WebSocket adapter initialized');
+console.log('WebSocket adapter initialized');
 
 // ============================================
 // SERVER START
@@ -69,15 +81,15 @@ console.log('✅ WebSocket adapter initialized');
 
 httpServer.listen(config.port, () => {
   console.log('');
-  console.log('🚀 HumanOps Live Backend');
+  console.log('HumanOps Live Backend');
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-  console.log(`📡 Server running on port ${config.port}`);
-  console.log(`🌍 Environment: ${config.nodeEnv}`);
-  console.log(`🔌 WebSocket enabled`);
-  console.log(`🏗️  Architecture: Hexagonal + Event-Driven`);
+  console.log(`Server running on port ${config.port}`);
+  console.log(`Environment: ${config.nodeEnv}`);
+  console.log(`WebSocket enabled`);
+  console.log(`Architecture: Hexagonal + Event-Driven`);
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   console.log('');
-  console.log('📚 Available endpoints:');
+  console.log('Available endpoints:');
   console.log('  GET  /health');
   console.log('  POST /api/auth/register');
   console.log('  POST /api/auth/login');

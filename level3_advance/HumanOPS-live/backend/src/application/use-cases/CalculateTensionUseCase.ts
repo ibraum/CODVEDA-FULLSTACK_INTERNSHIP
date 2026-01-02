@@ -2,6 +2,7 @@ import { ITensionLevelRepository } from '../../domain/repositories/ITensionLevel
 import { ITeamRepository } from '../../domain/repositories/ITeamRepository';
 import { IHumanStateRepository } from '../../domain/repositories/IHumanStateRepository';
 import { IReinforcementRequestRepository } from '../../domain/repositories/IReinforcementRequestRepository';
+import { IRHSettingRepository } from '../../domain/repositories/IRHSettingRepository';
 import { TensionLevel } from '../../domain/value-objects/enums';
 import { eventBus } from '../../infrastructure/event-bus/EventBus';
 import { TeamTensionComputedEvent, CriticalTensionDetectedEvent } from '../../domain/events';
@@ -9,59 +10,64 @@ import { TeamTensionComputedEvent, CriticalTensionDetectedEvent } from '../../do
 export class CalculateTensionUseCase {
   constructor(
     private tensionRepository: ITensionLevelRepository,
-    private teamRepository: ITeamRepository,
+    private teamRepository: ITeamRepository, // Conservé pour future utilisation (ex: taille équipe)
     private stateRepository: IHumanStateRepository,
-    private reinforcementRepository: IReinforcementRequestRepository
+    private reinforcementRepository: IReinforcementRequestRepository,
+    private settingRepository: IRHSettingRepository
   ) {}
 
   async execute(teamId: string): Promise<void> {
     // 1. Récupérer les membres de l'équipe
-    // (Note: stateRepository.findByTeamId récupère les états des membres directement)
     const states = await this.stateRepository.findByTeamId(teamId);
     
-    if (states.length === 0) return; // Pas de membres ou pas d'états, rien à calculer
+    if (states.length === 0) return;
 
     // 2. Calculer les métriques
     // - % Surcharge (Workload HIGH)
     const overloadCount = states.filter(s => s.workload === 'HIGH').length;
     const overloadPercentage = (overloadCount / states.length) * 100;
 
-    // - Requests Ratio (Demandes ouvertes vs Capacité réponse)
-    // On simplifie : ratio = demandes expiées / total
-    // Pour l'instant, utilisons un mock ou la donnée simple : demandes ouvertes
-    const openRequests = await this.reinforcementRepository.findByTeamId(teamId); // Suppose méthode filtrant open... ou on filtre ici
+    // - Requests Ratio
+    const openRequests = await this.reinforcementRepository.findByTeamId(teamId);
     const activeRequests = openRequests.filter(r => r.status === 'OPEN').length;
     
-    // Simplification du calcul pour l'exemple :
     const requestToAvailabilityRatio = activeRequests > 0 ? (activeRequests / states.length) : 0;
 
-    // Metrics object
     const metrics = {
       overloadPercentage,
-      averageDuration: 0, // Nécessiterait l'historique pour calculer la durée moyenne en High
+      averageDuration: 0,
       requestToAvailabilityRatio,
-      refusalRate: 0, // Nécessiterait l'historique des réponses
+      refusalRate: 0,
     };
 
-    // 3. Déterminer le niveau de tension
+    // 3. Récupérer les seuils configurés (ou valeurs par défaut)
+    const thresholdCritical = await this.getSettingValue('TENSION_THRESHOLD_CRITICAL', 70);
+    const thresholdHigh = await this.getSettingValue('TENSION_THRESHOLD_HIGH', 50);
+    const thresholdModerate = await this.getSettingValue('TENSION_THRESHOLD_MODERATE', 30);
+
+    const ratioCritical = await this.getSettingValue('RATIO_THRESHOLD_CRITICAL', 0.8);
+    const ratioHigh = await this.getSettingValue('RATIO_THRESHOLD_HIGH', 0.5);
+    const ratioModerate = await this.getSettingValue('RATIO_THRESHOLD_MODERATE', 0.3);
+
+    // 4. Déterminer le niveau de tension
     let level = TensionLevel.LOW;
 
-    if (overloadPercentage > 70 || requestToAvailabilityRatio > 0.8) {
+    if (overloadPercentage > thresholdCritical || requestToAvailabilityRatio > ratioCritical) {
       level = TensionLevel.CRITICAL;
-    } else if (overloadPercentage > 50 || requestToAvailabilityRatio > 0.5) {
+    } else if (overloadPercentage > thresholdHigh || requestToAvailabilityRatio > ratioHigh) {
       level = TensionLevel.HIGH;
-    } else if (overloadPercentage > 30 || requestToAvailabilityRatio > 0.3) {
+    } else if (overloadPercentage > thresholdModerate || requestToAvailabilityRatio > ratioModerate) {
       level = TensionLevel.MODERATE;
     }
 
-    // 4. Sauvegarder le snapshot
+    // 5. Sauvegarder le snapshot
     await this.tensionRepository.create({
       teamId,
       level,
       metrics,
     });
 
-    // 5. Émettre événement
+    // 6. Émettre événement
     const computedEvent: TeamTensionComputedEvent = {
         eventName: 'TeamTensionComputed',
         occurredAt: new Date(),
@@ -77,5 +83,10 @@ export class CalculateTensionUseCase {
       };
       await eventBus.publish(criticalEvent);
     }
+  }
+
+  private async getSettingValue(key: string, defaultValue: any): Promise<any> {
+    const setting = await this.settingRepository.findByKey(key);
+    return setting ? setting.value : defaultValue;
   }
 }
