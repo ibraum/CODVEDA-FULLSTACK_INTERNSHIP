@@ -7,8 +7,37 @@ const userRepository = new UserRepository();
 
 export class AuthController {
   /**
-   * POST /api/auth/register
-   * Inscription d'un nouvel utilisateur
+   * @swagger
+   * /auth/register:
+   *   post:
+   *     summary: Register a new user
+   *     tags: [Auth]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             required: [email, password, firstName, lastName]
+   *             properties:
+   *               email:
+   *                 type: string
+   *                 format: email
+   *               password:
+   *                 type: string
+   *                 minLength: 8
+   *               firstName:
+   *                 type: string
+   *               lastName:
+   *                 type: string
+   *               role:
+   *                 type: string
+   *                 enum: [MANAGER, COLLABORATOR, ADMIN_RH]
+   *     responses:
+   *       201:
+   *         description: User created successfully
+   *       400:
+   *         description: Validation error or Email already exists
    */
   static async register(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -22,8 +51,45 @@ export class AuthController {
   }
 
   /**
-   * POST /api/auth/login
-   * Connexion utilisateur
+   * @swagger
+   * /auth/login:
+   *   post:
+   *     summary: Login user and get token
+   *     tags: [Auth]
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             required: [email, password]
+   *             properties:
+   *               email:
+   *                 type: string
+   *                 format: email
+   *               password:
+   *                 type: string
+   *     responses:
+   *       200:
+   *         description: Login successful
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 user:
+   *                   type: object
+   *                   properties:
+   *                     id:
+   *                       type: string
+   *                     email:
+   *                       type: string
+   *                     role:
+   *                       type: string
+   *                 token:
+   *                   type: string
+   *       401:
+   *         description: Invalid credentials
    */
   static async login(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {

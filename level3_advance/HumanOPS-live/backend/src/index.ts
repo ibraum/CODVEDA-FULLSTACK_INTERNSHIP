@@ -3,6 +3,11 @@ import express from 'express';
 import { createServer } from 'http';
 import cors from 'cors';
 import morgan from 'morgan';
+import helmet from 'helmet';
+import compression from 'compression';
+import { rateLimit } from 'express-rate-limit';
+import swaggerUi from 'swagger-ui-express';
+import { swaggerSpec } from './config/swagger';
 import { config } from './config';
 import routes from './infrastructure/http/routes';
 import { errorHandler } from './infrastructure/http/middlewares/error.middleware';
@@ -20,6 +25,17 @@ const httpServer = createServer(app);
 // MIDDLEWARES
 // ============================================
 
+app.use(helmet());
+app.use(compression());
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  limit: 100, // Limit each IP to 100 requests per `window` (here, per 15 minutes)
+  standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
+  legacyHeaders: false, // Disable the `X-RateLimit-*` headers
+});
+app.use(limiter);
+
 app.use(cors(config.cors));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -28,6 +44,9 @@ app.use(morgan('dev'));
 // ============================================
 // ROUTES
 // ============================================
+
+// Documentation API
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.get('/health', (req, res) => {
   res.status(200).json({

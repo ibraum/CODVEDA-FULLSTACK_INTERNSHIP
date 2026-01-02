@@ -1,4 +1,4 @@
-import { PrismaClient } from '../generated/prisma/client';
+import { PrismaClient } from '../src/generated/prisma';
 import { PrismaPg } from '@prisma/adapter-pg';
 import bcrypt from 'bcrypt';
 import 'dotenv/config';
@@ -8,238 +8,312 @@ const adapter = new PrismaPg({ connectionString });
 const prisma = new PrismaClient({ adapter });
 
 async function main() {
-  console.log('🌱 Seeding database...');
+  console.log('Seeding database...');
 
-  // Nettoyer les données existantes (optionnel)
+  // 1. Cleaning up existing data
+  console.log('Cleaning up existing data...');
+  await prisma.reinforcementResponseModel.deleteMany();
+  await prisma.reinforcementRequest.deleteMany();
+  await prisma.alert.deleteMany();
+  await prisma.tensionLevelSnapshot.deleteMany();
+  await prisma.reliabilityScore.deleteMany();
+  await prisma.collaboratorSkill.deleteMany();
+  await prisma.collaboratorProfile.deleteMany();
+  await prisma.teamMember.deleteMany();
+  await prisma.skill.deleteMany();
   await prisma.humanStateHistory.deleteMany();
   await prisma.humanState.deleteMany();
-  await prisma.teamMember.deleteMany();
   await prisma.team.deleteMany();
+  await prisma.rHSettingHistory.deleteMany();
+  await prisma.rHSetting.deleteMany();
   await prisma.user.deleteMany();
 
-  // Créer des utilisateurs
-  const adminPassword = await bcrypt.hash('admin123', 10);
-  const managerPassword = await bcrypt.hash('manager123', 10);
-  const collabPassword = await bcrypt.hash('collab123', 10);
+  // 2. Creating Users
+  console.log('Creating users...');
+  
+  const passwordHash = await bcrypt.hash('password123', 10);
 
-  const admin = await prisma.user.create({
+  // Admin
+  await prisma.user.create({
     data: {
       email: 'admin@humanops.com',
-      passwordHash: adminPassword,
+      passwordHash,
       role: 'ADMIN_RH',
       isActive: true,
+      profile: {
+        create: {
+          preferences: { theme: 'dark', notifications: true }
+        }
+      }
     },
   });
 
-  const manager = await prisma.user.create({
+  // Managers
+  const managerFrontend = await prisma.user.create({
     data: {
-      email: 'manager@humanops.com',
-      passwordHash: managerPassword,
+      email: 'sarah.mitchell@humanops.com',
+      passwordHash,
       role: 'MANAGER',
       isActive: true,
+      profile: {
+        create: {
+          preferences: { theme: 'light', notifications: true }
+        }
+      }
     },
   });
 
-  const collab1 = await prisma.user.create({
+  const managerBackend = await prisma.user.create({
     data: {
-      email: 'alice@humanops.com',
-      passwordHash: collabPassword,
+      email: 'david.chen@humanops.com',
+      passwordHash,
+      role: 'MANAGER',
+      isActive: true,
+      profile: {
+        create: {
+          preferences: { theme: 'dark', notifications: true }
+        }
+      }
+    },
+  });
+
+  // Collaborators - Frontend
+  const dev1 = await prisma.user.create({
+    data: {
+      email: 'alice.dupont@humanops.com',
+      passwordHash,
       role: 'COLLABORATOR',
       isActive: true,
+      reliability: { create: { score: 0.95 } },
+      profile: {
+        create: {
+          preferences: { workingHours: '09:00-18:00' }
+        }
+      }
     },
   });
 
-  const collab2 = await prisma.user.create({
+  const dev2 = await prisma.user.create({
     data: {
-      email: 'bob@humanops.com',
-      passwordHash: collabPassword,
+      email: 'bob.martin@humanops.com',
+      passwordHash,
       role: 'COLLABORATOR',
       isActive: true,
+      reliability: { create: { score: 0.88 } },
+      profile: {
+        create: {
+          preferences: { workingHours: '10:00-19:00' }
+        }
+      }
     },
   });
 
-  const collab3 = await prisma.user.create({
+  // Collaborators - Backend
+  const dev3 = await prisma.user.create({
     data: {
-      email: 'charlie@humanops.com',
-      passwordHash: collabPassword,
+      email: 'charlie.davis@humanops.com',
+      passwordHash,
       role: 'COLLABORATOR',
       isActive: true,
+      reliability: { create: { score: 0.92 } },
+      profile: {
+        create: {
+          preferences: { workingHours: '08:00-17:00' }
+        }
+      }
     },
   });
 
-  console.log('✅ Users created');
-
-  // Créer une équipe
-  const team = await prisma.team.create({
+  const dev4 = await prisma.user.create({
     data: {
-      name: 'Équipe Développement',
-      managerId: manager.id,
+      email: 'diana.ross@humanops.com',
+      passwordHash,
+      role: 'COLLABORATOR',
+      isActive: true,
+      reliability: { create: { score: 0.98 } },
+      profile: {
+        create: {
+          preferences: { workingHours: '09:00-17:00' }
+        }
+      }
     },
   });
 
-  console.log('✅ Team created');
+  console.log('Users created.');
 
-  // Ajouter des membres à l'équipe
-  await prisma.teamMember.create({
+  // 3. Creating Skills
+  console.log('Creating skills...');
+  const skillsData = [
+    { name: 'React' },
+    { name: 'Vue.js' },
+    { name: 'TypeScript' },
+    { name: 'Node.js' },
+    { name: 'Python' },
+    { name: 'Docker' },
+    { name: 'AWS' },
+    { name: 'PostgreSQL' },
+    { name: 'Communication' },
+    { name: 'Leadership' }
+  ];
+
+  const skills = {};
+  for (const s of skillsData) {
+    skills[s.name] = await prisma.skill.create({ data: s });
+  }
+
+  // Assign skills to collaborators
+  const assignSkill = async (userId: string, skillNames: string[]) => {
+    const profile = await prisma.collaboratorProfile.findUnique({ where: { userId } });
+    if (!profile) return;
+    
+    for (const name of skillNames) {
+      if (skills[name]) {
+        await prisma.collaboratorSkill.create({
+          data: {
+            collaboratorId: profile.id,
+            skillId: skills[name].id
+          }
+        });
+      }
+    }
+  };
+
+  await assignSkill(dev1.id, ['React', 'TypeScript', 'Communication']);
+  await assignSkill(dev2.id, ['Vue.js', 'TypeScript', 'Docker']);
+  await assignSkill(dev3.id, ['Node.js', 'PostgreSQL', 'AWS']);
+  await assignSkill(dev4.id, ['Python', 'Docker', 'Leadership']);
+
+  console.log('Skills created and assigned.');
+
+  // 4. Creating Teams
+  console.log('Creating teams...');
+
+  const teamFrontend = await prisma.team.create({
     data: {
-      userId: collab1.id,
-      teamId: team.id,
-    },
+      name: 'Frontend Squad',
+      managerId: managerFrontend.id,
+      members: {
+        create: [
+          { userId: dev1.id },
+          { userId: dev2.id }
+        ]
+      }
+    }
   });
 
-  await prisma.teamMember.create({
+  const teamBackend = await prisma.team.create({
     data: {
-      userId: collab2.id,
-      teamId: team.id,
-    },
+      name: 'Backend Squad',
+      managerId: managerBackend.id,
+      members: {
+        create: [
+          { userId: dev3.id },
+          { userId: dev4.id }
+        ]
+      }
+    }
   });
 
-  await prisma.teamMember.create({
-    data: {
-      userId: collab3.id,
-      teamId: team.id,
-    },
-  });
+  console.log('Teams created.');
 
-  console.log('✅ Team members added');
+  // 5. Creating Human States
+  console.log('Setting human states...');
 
-  // Créer des états humains pour les collaborateurs
   await prisma.humanState.create({
     data: {
-      userId: collab1.id,
+      userId: dev1.id,
       workload: 'NORMAL',
-      availability: 'AVAILABLE',
-    },
+      availability: 'AVAILABLE'
+    }
   });
 
   await prisma.humanState.create({
     data: {
-      userId: collab2.id,
+      userId: dev2.id,
       workload: 'HIGH',
-      availability: 'MOBILISABLE',
-    },
+      availability: 'MOBILISABLE'
+    }
   });
 
   await prisma.humanState.create({
     data: {
-      userId: collab3.id,
+      userId: dev3.id,
       workload: 'LOW',
-      availability: 'AVAILABLE',
-    },
+      availability: 'AVAILABLE'
+    }
   });
 
-  console.log('✅ Human states created');
-
-  // Créer des profils collaborateurs
-  await prisma.collaboratorProfile.create({
+  await prisma.humanState.create({
     data: {
-      userId: collab1.id,
-      preferences: {
-        notifications: true,
-        workingHours: '9h-18h',
-      },
-    },
+      userId: dev4.id,
+      workload: 'NORMAL',
+      availability: 'UNAVAILABLE' // Maybe in a meeting
+    }
   });
 
-  await prisma.collaboratorProfile.create({
+  console.log('Human states set.');
+
+  // 6. Creating Tension Snapshots
+  console.log('Creating tension snapshots...');
+
+  await prisma.tensionLevelSnapshot.create({
     data: {
-      userId: collab2.id,
-      preferences: {
-        notifications: true,
-        workingHours: '10h-19h',
-      },
-    },
+      teamId: teamFrontend.id,
+      level: 'MODERATE',
+      metrics: {
+        deadlines: 'tight',
+        mood: 'focused'
+      }
+    }
   });
 
-  await prisma.collaboratorProfile.create({
+  await prisma.tensionLevelSnapshot.create({
     data: {
-      userId: collab3.id,
-      preferences: {
-        notifications: false,
-        workingHours: '8h-17h',
-      },
-    },
+      teamId: teamBackend.id,
+      level: 'LOW',
+      metrics: {
+        deadlines: 'comfortable',
+        mood: 'relaxed'
+      }
+    }
   });
 
-  console.log('✅ Collaborator profiles created');
+  // 7. Creating Alerts
+  console.log('Creating alerts...');
 
-  // Créer des compétences
-  const skillJS = await prisma.skill.create({
-    data: { name: 'JavaScript' },
+  await prisma.alert.create({
+    data: {
+      type: 'TENSION_HIGH',
+      userId: managerFrontend.id,
+      isRead: false,
+      payload: {
+        message: 'Frontend Squad is experiencing high workload.',
+        teamId: teamFrontend.id
+      }
+    }
   });
 
-  const skillTS = await prisma.skill.create({
-    data: { name: 'TypeScript' },
+  await prisma.alert.create({
+    data: {
+      type: 'RELIABILITY_DROP',
+      targetRole: 'ADMIN_RH',
+      isRead: false,
+      payload: {
+        message: 'Global reliability score dropped slightly.'
+      }
+    }
   });
 
-  const skillReact = await prisma.skill.create({
-    data: { name: 'React' },
-  });
-
-  const skillNode = await prisma.skill.create({
-    data: { name: 'Node.js' },
-  });
-
-  console.log('✅ Skills created');
-
-  // Assigner des compétences aux collaborateurs
-  const aliceProfile = await prisma.collaboratorProfile.findUnique({
-    where: { userId: collab1.id },
-  });
-
-  const bobProfile = await prisma.collaboratorProfile.findUnique({
-    where: { userId: collab2.id },
-  });
-
-  const charlieProfile = await prisma.collaboratorProfile.findUnique({
-    where: { userId: collab3.id },
-  });
-
-  if (aliceProfile) {
-    await prisma.collaboratorSkill.createMany({
-      data: [
-        { collaboratorId: aliceProfile.id, skillId: skillJS.id },
-        { collaboratorId: aliceProfile.id, skillId: skillReact.id },
-      ],
-    });
-  }
-
-  if (bobProfile) {
-    await prisma.collaboratorSkill.createMany({
-      data: [
-        { collaboratorId: bobProfile.id, skillId: skillTS.id },
-        { collaboratorId: bobProfile.id, skillId: skillNode.id },
-      ],
-    });
-  }
-
-  if (charlieProfile) {
-    await prisma.collaboratorSkill.createMany({
-      data: [
-        { collaboratorId: charlieProfile.id, skillId: skillJS.id },
-        { collaboratorId: charlieProfile.id, skillId: skillTS.id },
-        { collaboratorId: charlieProfile.id, skillId: skillNode.id },
-      ],
-    });
-  }
-
-  console.log('✅ Skills assigned to collaborators');
+  console.log('Alerts created.');
 
   console.log('');
-  console.log('🎉 Seeding completed successfully!');
+  console.log('Seeding completed successfully!');
   console.log('');
-  console.log('📝 Test accounts:');
-  console.log('  Admin RH:');
-  console.log('    Email: admin@humanops.com');
-  console.log('    Password: admin123');
-  console.log('');
-  console.log('  Manager:');
-  console.log('    Email: manager@humanops.com');
-  console.log('    Password: manager123');
-  console.log('');
-  console.log('  Collaborateurs:');
-  console.log('    Email: alice@humanops.com / bob@humanops.com / charlie@humanops.com');
-  console.log('    Password: collab123');
+  console.log('Test Accounts:');
+  console.log('  Admin:   admin@humanops.com / password123');
+  console.log('  Manager: sarah.mitchell@humanops.com / password123');
+  console.log('  Manager: david.chen@humanops.com / password123');
+  console.log('  Devs:    alice.dupont@humanops.com (and others) / password123');
   console.log('');
 }
 

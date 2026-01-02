@@ -11,8 +11,28 @@ const userRepository = new UserRepository();
 
 export class TeamController {
   /**
-   * POST /api/teams
-   * Créer une nouvelle équipe
+   * @swagger
+   * /teams:
+   *   post:
+   *     summary: Create a new team
+   *     tags: [Teams]
+   *     security:
+   *       - bearerAuth: []
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             required: [name, managerId]
+   *             properties:
+   *               name:
+   *                 type: string
+   *               managerId:
+   *                 type: string
+   *     responses:
+   *       201:
+   *         description: Team created
    */
   static async create(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -26,8 +46,22 @@ export class TeamController {
   }
 
   /**
-   * GET /api/teams
-   * Lister les équipes
+   * @swagger
+   * /teams:
+   *   get:
+   *     summary: List teams
+   *     tags: [Teams]
+   *     security:
+   *       - bearerAuth: []
+   *     parameters:
+   *       - in: query
+   *         name: managerId
+   *         schema:
+   *           type: string
+   *         description: Filter by manager ID
+   *     responses:
+   *       200:
+   *         description: List of teams
    */
   static async list(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -42,8 +76,32 @@ export class TeamController {
   }
 
   /**
-   * POST /api/teams/:id/members
-   * Ajouter un membre à une équipe
+   * @swagger
+   * /teams/{id}/members:
+   *   post:
+   *     summary: Add a member to a team
+   *     tags: [Teams]
+   *     security:
+   *       - bearerAuth: []
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             required: [userId]
+   *             properties:
+   *               userId:
+   *                 type: string
+   *     responses:
+   *       200:
+   *         description: Member added
    */
   static async addMember(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -59,8 +117,27 @@ export class TeamController {
   }
 
   /**
-   * DELETE /api/teams/:id/members/:userId
-   * Retirer un membre d'une équipe
+   * @swagger
+   * /teams/{id}/members/{userId}:
+   *   delete:
+   *     summary: Remove a member from a team
+   *     tags: [Teams]
+   *     security:
+   *       - bearerAuth: []
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *       - in: path
+   *         name: userId
+   *         required: true
+   *         schema:
+   *           type: string
+   *     responses:
+   *       204:
+   *         description: Member removed
    */
   static async removeMember(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {

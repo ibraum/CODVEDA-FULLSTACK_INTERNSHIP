@@ -9,8 +9,26 @@ const userRepository = new UserRepository();
 
 export class UserController {
   /**
-   * GET /api/users
-   * Lister les utilisateurs (filtres optionnels)
+   * @swagger
+   * /users:
+   *   get:
+   *     summary: List users
+   *     tags: [Users]
+   *     security:
+   *       - bearerAuth: []
+   *     parameters:
+   *       - in: query
+   *         name: role
+   *         schema:
+   *           type: string
+   *           enum: [MANAGER, COLLABORATOR, ADMIN_RH]
+   *       - in: query
+   *         name: isActive
+   *         schema:
+   *           type: boolean
+   *     responses:
+   *       200:
+   *         description: List of users
    */
   static async list(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -30,8 +48,36 @@ export class UserController {
   }
 
   /**
-   * PUT /api/users/:id
-   * Mettre à jour un utilisateur
+   * @swagger
+   * /users/{id}:
+   *   put:
+   *     summary: Update user details
+   *     tags: [Users]
+   *     security:
+   *       - bearerAuth: []
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               firstName:
+   *                 type: string
+   *               lastName:
+   *                 type: string
+   *               role:
+   *                 type: string
+   *                 enum: [MANAGER, COLLABORATOR, ADMIN_RH]
+   *     responses:
+   *       200:
+   *         description: User updated
    */
   static async update(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -46,8 +92,22 @@ export class UserController {
   }
 
   /**
-   * DELETE /api/users/:id
-   * Supprimer (soft delete) un utilisateur
+   * @swagger
+   * /users/{id}:
+   *   delete:
+   *     summary: Soft delete a user
+   *     tags: [Users]
+   *     security:
+   *       - bearerAuth: []
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *     responses:
+   *       204:
+   *         description: User deleted
    */
   static async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {

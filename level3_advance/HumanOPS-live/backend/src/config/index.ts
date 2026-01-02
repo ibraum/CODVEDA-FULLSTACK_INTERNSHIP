@@ -6,6 +6,10 @@ export const config = {
     url: process.env.DATABASE_URL || '',
   },
   
+  redis: {
+    url: process.env.REDIS_URL, // Optionnel, si présent -> active Redis Adapter
+  },
+  
   jwt: {
     secret: process.env.JWT_SECRET || 'your-secret-key-change-in-production',
     expiresIn: process.env.JWT_EXPIRES_IN || '24h',

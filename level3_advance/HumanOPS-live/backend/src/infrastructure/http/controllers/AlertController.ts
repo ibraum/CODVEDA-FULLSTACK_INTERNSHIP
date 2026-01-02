@@ -8,8 +8,22 @@ const alertRepository = new AlertRepository();
 
 export class AlertController {
   /**
-   * GET /api/alerts
-   * Récupérer mes alertes
+   * @swagger
+   * /alerts:
+   *   get:
+   *     summary: Get current user's alerts
+   *     tags: [Alerts]
+   *     security:
+   *       - bearerAuth: []
+   *     parameters:
+   *       - in: query
+   *         name: unreadOnly
+   *         schema:
+   *           type: boolean
+   *         description: Filter by unread status
+   *     responses:
+   *       200:
+   *         description: List of alerts
    */
   static async getMyAlerts(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -31,8 +45,22 @@ export class AlertController {
   }
 
   /**
-   * PUT /api/alerts/:id/read
-   * Marquer une alerte comme lue
+   * @swagger
+   * /alerts/{id}/read:
+   *   put:
+   *     summary: Mark an alert as read
+   *     tags: [Alerts]
+   *     security:
+   *       - bearerAuth: []
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: Alert marked as read
    */
   static async markAsRead(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {

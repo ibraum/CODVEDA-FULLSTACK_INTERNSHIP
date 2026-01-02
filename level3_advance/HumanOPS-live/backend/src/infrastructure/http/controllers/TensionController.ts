@@ -25,8 +25,26 @@ const calculateTensionUseCase = new CalculateTensionUseCase(
 
 export class TensionController {
   /**
-   * GET /api/tensions/team/:teamId
-   * Récupérer l'historique de tension d'une équipe
+   * @swagger
+   * /tensions/team/{teamId}:
+   *   get:
+   *     summary: Get team tension history
+   *     tags: [Tension]
+   *     security:
+   *       - bearerAuth: []
+   *     parameters:
+   *       - in: path
+   *         name: teamId
+   *         required: true
+   *         schema:
+   *           type: string
+   *       - in: query
+   *         name: limit
+   *         schema:
+   *           type: integer
+   *     responses:
+   *       200:
+   *         description: Tension history retrieved
    */
   static async getTeamHistory(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -48,8 +66,22 @@ export class TensionController {
   }
 
   /**
-   * POST /api/tensions/team/:teamId/calculate
-   * Forcer le recalcul de la tension (Debug ou Manuel)
+   * @swagger
+   * /tensions/team/{teamId}/calculate:
+   *   post:
+   *     summary: Force tension calculation
+   *     tags: [Tension]
+   *     security:
+   *       - bearerAuth: []
+   *     parameters:
+   *       - in: path
+   *         name: teamId
+   *         required: true
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: Calculation triggered
    */
   static async calculateNow(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {

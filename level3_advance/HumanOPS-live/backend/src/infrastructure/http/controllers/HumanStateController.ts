@@ -7,8 +7,31 @@ const humanStateRepository = new HumanStateRepository();
 
 export class HumanStateController {
   /**
-   * PUT /api/human-states/me
-   * Mise à jour de l'état humain du collaborateur connecté
+   * @swagger
+   * /human-states/me:
+   *   put:
+   *     summary: Update current user's human state
+   *     tags: [HumanState]
+   *     security:
+   *       - bearerAuth: []
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               workload:
+   *                 type: string
+   *                 enum: [LOW, NORMAL, HIGH]
+   *               availability:
+   *                 type: string
+   *                 enum: [AVAILABLE, MOBILISABLE, UNAVAILABLE]
+   *     responses:
+   *       200:
+   *         description: State updated successfully
+   *       401:
+   *         description: Unauthorized
    */
   static async updateMyState(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -27,8 +50,18 @@ export class HumanStateController {
   }
 
   /**
-   * GET /api/human-states/me
-   * Récupération de l'état humain du collaborateur connecté
+   * @swagger
+   * /human-states/me:
+   *   get:
+   *     summary: Get current user's human state
+   *     tags: [HumanState]
+   *     security:
+   *       - bearerAuth: []
+   *     responses:
+   *       200:
+   *         description: Current user state
+   *       404:
+   *         description: State not found
    */
   static async getMyState(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -51,8 +84,24 @@ export class HumanStateController {
   }
 
   /**
-   * GET /api/human-states/team/:teamId
-   * Récupération des états humains d'une équipe (Manager/RH uniquement)
+   * @swagger
+   * /human-states/team/{teamId}:
+   *   get:
+   *     summary: Get human states for a specific team (Manager/Admin only)
+   *     tags: [HumanState]
+   *     security:
+   *       - bearerAuth: []
+   *     parameters:
+   *       - in: path
+   *         name: teamId
+   *         required: true
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: List of team members states
+   *       403:
+   *         description: Insufficient permissions
    */
   static async getTeamStates(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {

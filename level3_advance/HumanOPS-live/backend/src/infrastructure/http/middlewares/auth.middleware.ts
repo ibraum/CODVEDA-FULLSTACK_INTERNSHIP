@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { config } from '../../config';
-import { Role } from '../../domain/value-objects/enums';
+import { config } from '../../../config';
+import { Role } from '../../../domain/value-objects/enums';
 
 export interface AuthRequest extends Request {
   user?: {

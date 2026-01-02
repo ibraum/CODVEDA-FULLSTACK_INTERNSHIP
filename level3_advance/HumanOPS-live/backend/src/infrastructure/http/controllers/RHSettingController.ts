@@ -8,8 +8,16 @@ const settingRepository = new RHSettingRepository();
 
 export class RHSettingController {
   /**
-   * GET /api/settings
-   * Récupérer tous les paramètres
+   * @swagger
+   * /settings:
+   *   get:
+   *     summary: Get all RH settings
+   *     tags: [Settings]
+   *     security:
+   *       - bearerAuth: []
+   *     responses:
+   *       200:
+   *         description: List of settings
    */
   static async getAll(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -23,8 +31,22 @@ export class RHSettingController {
   }
 
   /**
-   * GET /api/settings/:key
-   * Récupérer un paramètre spécifique
+   * @swagger
+   * /settings/{key}:
+   *   get:
+   *     summary: Get a specific setting by key
+   *     tags: [Settings]
+   *     security:
+   *       - bearerAuth: []
+   *     parameters:
+   *       - in: path
+   *         name: key
+   *         required: true
+   *         schema:
+   *           type: string
+   *     responses:
+   *       200:
+   *         description: Setting value
    */
   static async getByKey(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -42,8 +64,32 @@ export class RHSettingController {
   }
 
   /**
-   * PUT /api/settings/:key
-   * Mettre à jour un paramètre
+   * @swagger
+   * /settings/{key}:
+   *   put:
+   *     summary: Update a setting
+   *     tags: [Settings]
+   *     security:
+   *       - bearerAuth: []
+   *     parameters:
+   *       - in: path
+   *         name: key
+   *         required: true
+   *         schema:
+   *           type: string
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             required: [value]
+   *             properties:
+   *               value:
+   *                 type: object
+   *     responses:
+   *       200:
+   *         description: Setting updated
    */
   static async update(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {

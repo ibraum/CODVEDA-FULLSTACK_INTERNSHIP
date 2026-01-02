@@ -11,8 +11,16 @@ const skillRepository = new SkillRepository();
 
 export class ProfileController {
   /**
-   * GET /api/profiles/me
-   * Récupérer son propre profil
+   * @swagger
+   * /profiles/me:
+   *   get:
+   *     summary: Get current user's profile
+   *     tags: [Profile]
+   *     security:
+   *       - bearerAuth: []
+   *     responses:
+   *       200:
+   *         description: User profile with skills
    */
   static async getMe(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -28,8 +36,25 @@ export class ProfileController {
   }
 
   /**
-   * PUT /api/profiles/me
-   * Mettre à jour ses préférences
+   * @swagger
+   * /profiles/me:
+   *   put:
+   *     summary: Update profile preferences
+   *     tags: [Profile]
+   *     security:
+   *       - bearerAuth: []
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               preferences:
+   *                 type: object
+   *     responses:
+   *       200:
+   *         description: Profile updated
    */
   static async updateMe(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -45,8 +70,26 @@ export class ProfileController {
   }
 
   /**
-   * POST /api/profiles/me/skills
-   * Ajouter une compétence
+   * @swagger
+   * /profiles/me/skills:
+   *   post:
+   *     summary: Add a skill to profile
+   *     tags: [Profile]
+   *     security:
+   *       - bearerAuth: []
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             required: [skillName]
+   *             properties:
+   *               skillName:
+   *                 type: string
+   *     responses:
+   *       200:
+   *         description: Skill added
    */
   static async addSkill(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {

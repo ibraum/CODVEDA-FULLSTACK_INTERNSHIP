@@ -11,8 +11,30 @@ const responseRepository = new ReinforcementResponseRepository();
 
 export class ReinforcementController {
   /**
-   * POST /api/reinforcements
-   * Créer une demande de renfort (Manager uniquement)
+   * @swagger
+   * /reinforcements:
+   *   post:
+   *     summary: Create a reinforcement request (Manager only)
+   *     tags: [Reinforcement]
+   *     security:
+   *       - bearerAuth: []
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             required: [teamId, requiredSkills, urgencyLevel]
+   *             properties:
+   *               teamId:
+   *                 type: string
+   *               requiredSkills:
+   *                 type: object
+   *               urgencyLevel:
+   *                 type: integer
+   *     responses:
+   *       201:
+   *         description: Request created
    */
   static async create(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {
@@ -40,8 +62,33 @@ export class ReinforcementController {
   }
 
   /**
-   * POST /api/reinforcements/:id/respond
-   * Répondre à une demande (Collaborateur)
+   * @swagger
+   * /reinforcements/{id}/respond:
+   *   post:
+   *     summary: Respond to a reinforcement request
+   *     tags: [Reinforcement]
+   *     security:
+   *       - bearerAuth: []
+   *     parameters:
+   *       - in: path
+   *         name: id
+   *         required: true
+   *         schema:
+   *           type: string
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             required: [response]
+   *             properties:
+   *               response:
+   *                 type: string
+   *                 enum: [ACCEPTED, REFUSED]
+   *     responses:
+   *       200:
+   *         description: Response recorded
    */
   static async respond(req: AuthRequest, res: Response, next: NextFunction): Promise<void> {
     try {

@@ -1,5 +1,7 @@
 import { Server as HTTPServer } from 'http';
 import { Server as SocketIOServer, Socket } from 'socket.io';
+import { createAdapter } from '@socket.io/redis-adapter';
+import { createClient } from 'redis';
 import jwt from 'jsonwebtoken';
 import { config } from '../../config';
 import { eventBus } from '../event-bus/EventBus';
@@ -20,6 +22,21 @@ export class SocketAdapter {
     this.io = new SocketIOServer(httpServer, {
       cors: config.socket.cors,
     });
+
+    if (config.redis?.url) {
+      console.log('Initializing Redis Adapter for Socket.io...');
+      const pubClient = createClient({ url: config.redis.url });
+      const subClient = pubClient.duplicate();
+
+      Promise.all([pubClient.connect(), subClient.connect()])
+        .then(() => {
+          this.io.adapter(createAdapter(pubClient, subClient));
+          console.log('Redis Adapter initialized');
+        })
+        .catch((err) => {
+          console.error('Failed to connect to Redis:', err);
+        });
+    }
 
     this.setupAuthentication();
     this.setupEventListeners();
@@ -78,6 +95,24 @@ export class SocketAdapter {
       });
     });
 
+    // Événement : Tension calculée (même si non critique)
+    eventBus.on('TeamTensionComputed', (event) => {
+      const { teamId, level, metrics } = event.payload;
+
+      // Diffuser aux managers et RH pour affichage temps réel de la jauge
+      this.io.to('role:MANAGER').emit('tension:updated', {
+        teamId,
+        level,
+        metrics,
+      });
+
+      this.io.to('role:ADMIN_RH').emit('tension:updated', {
+        teamId,
+        level,
+        metrics,
+      });
+    });
+
     // Événement : Tension critique détectée
     eventBus.on('CriticalTensionDetected', (event) => {
       const { teamId, metrics } = event.payload;
@@ -92,6 +127,22 @@ export class SocketAdapter {
         teamId,
         metrics,
       });
+    });
+
+    // Événement : Membre ajouté à une équipe
+    eventBus.on('TeamMemberAdded', (event) => {
+      const { teamId, userId } = event.payload;
+      
+      this.io.to('role:MANAGER').emit('team:member_added', { teamId, userId });
+      this.io.to(`user:${userId}`).emit('team:joined', { teamId });
+    });
+
+    // Événement : Membre retiré d'une équipe
+    eventBus.on('TeamMemberRemoved', (event) => {
+      const { teamId, userId } = event.payload;
+      
+      this.io.to('role:MANAGER').emit('team:member_removed', { teamId, userId });
+      this.io.to(`user:${userId}`).emit('team:left', { teamId });
     });
 
     // Événement : Demande de renfort
@@ -113,6 +164,17 @@ export class SocketAdapter {
 
       // Notifier les managers
       this.io.to('role:MANAGER').emit('reinforcement:accepted', {
+        requestId,
+        userId,
+      });
+    });
+
+    // Événement : Renfort refusé
+    eventBus.on('ReinforcementRefused', (event) => {
+      const { requestId, userId } = event.payload;
+
+      // Notifier les managers (optionnel : uniquement le manager de l'équipe demanderesse si on filtrait par team)
+      this.io.to('role:MANAGER').emit('reinforcement:refused', {
         requestId,
         userId,
       });

@@ -39,6 +39,23 @@ export interface CriticalTensionDetectedEvent extends DomainEvent {
   };
 }
 
+// Événements liés à la gestion d'équipe
+export interface TeamMemberAddedEvent extends DomainEvent {
+  eventName: 'TeamMemberAdded';
+  payload: {
+    teamId: string;
+    userId: string;
+  };
+}
+
+export interface TeamMemberRemovedEvent extends DomainEvent {
+  eventName: 'TeamMemberRemoved';
+  payload: {
+    teamId: string;
+    userId: string;
+  };
+}
+
 // Événements liés aux renforts
 export interface ReinforcementRequestedEvent extends DomainEvent {
   eventName: 'ReinforcementRequested';
@@ -89,6 +106,8 @@ export type AllDomainEvents =
   | HumanStateUpdatedEvent
   | TeamTensionComputedEvent
   | CriticalTensionDetectedEvent
+  | TeamMemberAddedEvent
+  | TeamMemberRemovedEvent
   | ReinforcementRequestedEvent
   | ReinforcementAcceptedEvent
   | ReinforcementRefusedEvent
