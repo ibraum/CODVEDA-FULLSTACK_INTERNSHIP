@@ -1,5 +1,5 @@
 generator client {
-  provider = "prisma-client"
+  provider = "prisma-client-js"
   output   = "../generated/prisma"
 }
 
@@ -7,18 +7,204 @@ datasource db {
   provider = "postgresql"
 }
 
-model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
-  posts Post[]
+enum Role {
+  ADMIN_RH
+  MANAGER
+  COLLABORATOR
 }
 
-model Post {
-  id        Int     @id @default(autoincrement())
-  title     String
-  content   String?
-  published Boolean @default(false)
-  author    User    @relation(fields: [authorId], references: [id])
-  authorId  Int
+enum Workload {
+  LOW
+  NORMAL
+  HIGH
+}
+
+enum Availability {
+  AVAILABLE
+  MOBILISABLE
+  UNAVAILABLE
+}
+
+enum TensionLevel {
+  LOW
+  MODERATE
+  HIGH
+  CRITICAL
+}
+
+enum ReinforcementStatus {
+  OPEN
+  CLOSED
+  EXPIRED
+}
+
+enum ReinforcementResponse {
+  ACCEPTED
+  REFUSED
+  NO_RESPONSE
+}
+
+model User {
+  id           String  @id @default(uuid())
+  email        String  @unique
+  passwordHash String
+  role         Role
+  isActive     Boolean @default(true)
+
+  profile           CollaboratorProfile?
+  teamMember        TeamMember?
+  managedTeams      Team[]                       @relation("TeamManager")
+  humanState        HumanState?                  @relation(fields: [humanStateId], references: [id])
+  humanStateHistory HumanStateHistory[]
+  reliability       ReliabilityScore?
+  responses         ReinforcementResponseModel[]
+
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  humanStateId String?
+}
+
+model Team {
+  id        String @id @default(uuid())
+  name      String
+  managerId String
+
+  manager User @relation("TeamManager", fields: [managerId], references: [id])
+
+  members  TeamMember[]
+  tensions TensionLevelSnapshot[]
+  requests ReinforcementRequest[]
+
+  createdAt DateTime @default(now())
+}
+
+model TeamMember {
+  id     String @id @default(uuid())
+  userId String @unique
+  teamId String
+
+  user User @relation(fields: [userId], references: [id])
+  team Team @relation(fields: [teamId], references: [id])
+
+  joinedAt DateTime @default(now())
+}
+
+model CollaboratorProfile {
+  id          String @id @default(uuid())
+  userId      String @unique
+  preferences Json?
+
+  user   User                @relation(fields: [userId], references: [id])
+  skills CollaboratorSkill[]
+
+  createdAt DateTime @default(now())
+}
+
+model Skill {
+  id   String @id @default(uuid())
+  name String @unique
+
+  collaborators CollaboratorSkill[]
+}
+
+model CollaboratorSkill {
+  id             String @id @default(uuid())
+  collaboratorId String
+  skillId        String
+
+  collaborator CollaboratorProfile @relation(fields: [collaboratorId], references: [id])
+  skill        Skill               @relation(fields: [skillId], references: [id])
+
+  @@unique([collaboratorId, skillId])
+}
+
+model HumanState {
+  id           String       @id @default(uuid())
+  userId       String       @unique
+  workload     Workload
+  availability Availability
+
+  history HumanStateHistory[]
+
+  updatedAt DateTime @updatedAt
+  users     User[]
+}
+
+model HumanStateHistory {
+  id           String @id @default(uuid())
+  userId       String
+  humanStateId String
+
+  previousState Json
+  newState      Json
+
+  user       User       @relation(fields: [userId], references: [id])
+  humanState HumanState @relation(fields: [humanStateId], references: [id])
+
+  changedAt DateTime @default(now())
+}
+
+model ReliabilityScore {
+  id     String @id @default(uuid())
+  userId String @unique
+  score  Float
+
+  user User @relation(fields: [userId], references: [id])
+
+  calculatedAt DateTime @default(now())
+}
+
+model ReinforcementRequest {
+  id             String              @id @default(uuid())
+  teamId         String
+  requiredSkills Json
+  urgencyLevel   Int
+  status         ReinforcementStatus @default(OPEN)
+
+  team      Team                         @relation(fields: [teamId], references: [id])
+  responses ReinforcementResponseModel[]
+
+  createdAt DateTime @default(now())
+}
+
+model ReinforcementResponseModel {
+  id        String                @id @default(uuid())
+  requestId String
+  userId    String
+  response  ReinforcementResponse
+
+  request ReinforcementRequest @relation(fields: [requestId], references: [id])
+  user    User                 @relation(fields: [userId], references: [id])
+
+  respondedAt DateTime @default(now())
+
+  @@unique([requestId, userId])
+}
+
+model TensionLevelSnapshot {
+  id      String       @id @default(uuid())
+  teamId  String
+  level   TensionLevel
+  metrics Json
+
+  team Team @relation(fields: [teamId], references: [id])
+
+  calculatedAt DateTime @default(now())
+}
+
+model Alert {
+  id         String @id @default(uuid())
+  type       String
+  targetRole Role
+  payload    Json
+
+  createdAt DateTime @default(now())
+}
+
+model RHSetting {
+  id    String @id @default(uuid())
+  key   String @unique
+  value Json
+
+  updatedAt DateTime @updatedAt
 }
