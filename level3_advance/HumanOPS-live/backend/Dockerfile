@@ -10,6 +10,10 @@ WORKDIR /usr/src/app
 ################################################################################
 # Dependencies (prod only)
 FROM base as deps
+
+# Nettoyage cache npm (sécurité)
+RUN npm cache clean --force
+
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
@@ -19,6 +23,9 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 # Build
 FROM deps as build
 
+# Nettoyage cache npm avant build
+RUN npm cache clean --force && rm -rf /root/.npm
+
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
@@ -26,6 +33,9 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 
 # Copier le code source
 COPY . .
+
+# Nettoyage Prisma (évite client obsolète)
+RUN rm -rf node_modules/.prisma
 
 # Générer Prisma Client
 RUN npx prisma generate
@@ -51,7 +61,7 @@ COPY --from=build /usr/src/app/dist ./dist
 # Prisma Client runtime
 COPY --from=build /usr/src/app/src/generated ./dist/generated
 
-# Copier le schema Prisma
+# Schema Prisma
 COPY --from=build /usr/src/app/prisma ./prisma
 
 EXPOSE 3000
