@@ -18,6 +18,8 @@ import { SocketAdapter } from './infrastructure/ws/SocketAdapter.js';
  * Architecture Hexagonale + Event-Driven + WebSockets
  */
 
+console.log("DATABASE_URL =", process.env.DATABASE_URL);
+
 const app = express();
 const httpServer = createServer(app);
 
