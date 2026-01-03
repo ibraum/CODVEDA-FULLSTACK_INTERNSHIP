@@ -51,6 +51,9 @@ COPY --from=build /usr/src/app/dist ./dist
 # Prisma Client runtime
 COPY --from=build /usr/src/app/src/generated ./dist/generated
 
+# Copier le schema Prisma
+COPY --from=build /usr/src/app/prisma ./prisma
+
 EXPOSE 3000
 
 CMD ["sh", "-c", "npx prisma migrate deploy && node dist/index.js"]
