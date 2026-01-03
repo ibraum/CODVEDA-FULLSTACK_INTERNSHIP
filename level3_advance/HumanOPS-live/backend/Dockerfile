@@ -53,4 +53,4 @@ COPY --from=build /usr/src/app/src/generated ./dist/generated
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/index.js"]
+CMD ["node", "dist/index.js", "sh", "-c", "npx prisma migrate deploy && node dist/index.js"]
