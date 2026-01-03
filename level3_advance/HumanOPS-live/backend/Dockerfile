@@ -27,7 +27,7 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 # Copier le code source
 COPY . .
 
-# 👉 IMPORTANT : générer Prisma Client
+# Générer Prisma Client
 RUN npx prisma generate
 
 # Compiler TypeScript
@@ -56,4 +56,5 @@ COPY --from=build /usr/src/app/prisma ./prisma
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/index.js"]
+RUN npx prisma migrate deploy
+CMD ["node", "dist/index.js"]
