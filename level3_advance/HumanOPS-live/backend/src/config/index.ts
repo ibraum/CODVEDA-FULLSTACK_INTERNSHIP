@@ -1,9 +1,6 @@
 import { SignOptions } from 'jsonwebtoken';
 
-const corsOrigins = process.env.CORS_ORIGIN
-  ?.split(',')
-  .map(origin => origin.trim())
-  .filter(Boolean);
+const corsOrigins = process.env.CORS_ORIGIN?.split(',').map(origin => origin.trim()).filter(Boolean);
 
 export const config = {
   port: process.env.PORT || 3000,
