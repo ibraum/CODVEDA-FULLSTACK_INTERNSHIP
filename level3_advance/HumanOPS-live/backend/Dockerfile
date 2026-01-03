@@ -48,8 +48,11 @@ COPY --from=deps /usr/src/app/node_modules ./node_modules
 # Code compilé
 COPY --from=build /usr/src/app/dist ./dist
 
-# 👉 Prisma Client runtime
+# Prisma Client runtime
 COPY --from=build /usr/src/app/src/generated ./dist/generated
+
+# Copier le schema Prisma
+COPY --from=build /usr/src/app/prisma ./prisma
 
 EXPOSE 3000
 
