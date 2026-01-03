@@ -1,5 +1,10 @@
 import { SignOptions } from 'jsonwebtoken';
 
+const corsOrigins = process.env.CORS_ORIGIN
+  ?.split(',')
+  .map(origin => origin.trim())
+  .filter(Boolean);
+
 export const config = {
   port: process.env.PORT || 3000,
   nodeEnv: process.env.NODE_ENV || 'development',
@@ -18,13 +23,13 @@ export const config = {
   },
 
   cors: {
-    origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+    origin: corsOrigins || 'http://localhost:5173',
     credentials: true,
   },
 
   socket: {
     cors: {
-      origin: process.env.CORS_ORIGIN || 'http://localhost:5173',
+      origin: corsOrigins || 'http://localhost:5173',
       credentials: true,
     },
   },
