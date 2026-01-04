@@ -3,7 +3,7 @@ const Hero = () => {
     <>
       <div className="w-full h-screen bg-[url('/src/assets/hero-bg.png')] bg-cover bg-center bg-no-repeat">
         <div className="max-w-[900px] w-full h-full mx-auto flex flex-col items-center justify-end pb-30 gap-5">
-          <div className="dm-sans-medium md:text-8xl text-5xl font-bold mt-50 text-center text-transparent bg-clip-text bg-[linear-gradient(-150deg,white,white,#7a7a7a)]">
+          <div className="dm-sans-medium md:text-8xl text-4xl font-bold mt-50 text-center text-transparent bg-clip-text bg-[linear-gradient(-150deg,white,white,#7a7a7a)]">
             Operational people management for modern teams
           </div>
           <div className="md:text-xl text-lg dm-sans-medium text-white text-center">HumanOps Live connects people, skills, and operations in one intelligent system.</div>
