@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import { AuthProvider } from "./features/auth/context/AuthContext";
 import { ToastProvider } from "./context/ToastContext";
