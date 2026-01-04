@@ -8,7 +8,7 @@ const Hero = () => {
           </div>
           <div className="md:text-xl text-lg dm-sans-medium text-white text-center">HumanOps Live connects people, skills, and operations in one intelligent system.</div>
           <div className="mt-4">
-            <button className="dm-sans-medium md:text-xl text-md text-black bg-white md:px-10 px-5 md:py-4 py-2 rounded-full hover:shadow-md hover:shadow-white/40 duration-300 cursor-pointer">Get Started</button>
+            <button className="dm-sans-medium md:text-xl text-sm text-black bg-white md:px-10 px-5 md:py-4 py-2 rounded-full hover:shadow-md hover:shadow-white/40 duration-300 cursor-pointer">Get Started</button>
           </div>
         </div>
       </div>
