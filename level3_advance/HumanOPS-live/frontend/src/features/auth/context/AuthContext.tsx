@@ -9,6 +9,7 @@ import {
   type User,
   login as loginApi,
   logout as logoutApi,
+  register as registerApi,
 } from "../services/authService";
 
 interface AuthContextType {
@@ -16,6 +17,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   isLoading: boolean;
   login: (email: string, password: string) => Promise<void>;
+  register: (data: Partial<User>) => Promise<void>;
   logout: () => void;
 }
 
@@ -28,9 +30,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (token) {
-      // Here we should ideally validate the token or fetch user me
-      // For now, we'll simulate a restored user if token exists, strictly for MVP flow
-      // In real app, call /auth/me
+      // Restore session from token (simulated for MVP until /auth/me is ready)
+      setUser({
+        id: "presumed-valid",
+        email: "user@humanops.live",
+        role: "COLLABORATOR",
+        password: "", // Not needed for frontend state usually
+        firstName: "Returning",
+        lastName: "User",
+      });
     }
     setIsLoading(false);
   }, []);
@@ -45,13 +53,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     }
   };
 
-  const register = async (
-    email: string,
-    password: string,
-    role: "MANAGER" | "COLLABORATOR" | "RH",
-    firstname: string,
-    lastname: string
-  ) => {};
+  const register = async (userData: Partial<User>) => {
+    setIsLoading(true);
+    try {
+      await registerApi(userData);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const logout = () => {
     logoutApi();

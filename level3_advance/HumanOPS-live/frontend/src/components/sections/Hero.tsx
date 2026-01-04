@@ -1,15 +1,21 @@
-import React from 'react'
+import React from "react";
 
 const Hero = () => {
   return (
     <>
       <div className="w-full h-screen bg-[url('/src/assets/hero-bg.png')] bg-cover bg-center bg-no-repeat">
-        <div className="max-w-[700px] w-full h-full mx-auto flex items-center justify-center">
-          <div className="font-inter text-8xl font-bold text-white mt-10">HumanOps-Live</div>
+        <div className="max-w-[900px] w-full h-full mx-auto flex flex-col items-center justify-end pb-30 gap-5">
+          <div className="dm-sans-medium text-8xl font-bold mt-50 text-center text-transparent bg-clip-text bg-[linear-gradient(-150deg,white,white,#7a7a7a)]">
+            Operational people management for modern teams
+          </div>
+          <div className="text-xl dm-sans-medium text-white">HumanOps Live connects people, skills, and operations in one intelligent system.</div>
+          <div className="mt-4">
+            <button className="dm-sans-medium text-xl text-black bg-white px-10 py-4 rounded-full hover:shadow-md hover:shadow-white/40 duration-300 cursor-pointer">Get Started</button>
+          </div>
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default Hero
+export default Hero;

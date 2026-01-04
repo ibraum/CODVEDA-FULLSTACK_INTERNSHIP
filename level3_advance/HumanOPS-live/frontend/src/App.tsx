@@ -1,39 +1,42 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Layout from "./components/layout/Layout";
 import { AuthProvider } from "./features/auth/context/AuthContext";
+import { ToastProvider } from "./context/ToastContext";
+import ProtectedRoute from "./features/auth/components/ProtectedRoute";
+import PublicRoute from "./features/auth/components/PublicRoute";
 import LoginPage from "./features/auth/components/LoginPage";
 import Home from "./features/landing/components/Home";
+import SignupPage from "./features/auth/components/SignupPage";
+import Dashboard from "./features/dashboard/components/Dashboard";
+import NotFound from "./components/pages/NotFound";
 
-// Placeholder pages (we will create these properly next)
-const Dashboard = () => (
-  <div className="p-8">
-    <h1 className="text-3xl font-bold">Dashboard</h1>
-    <p>Welcome to HumanOps Live</p>
-  </div>
-);
-const NotFound = () => (
-  <div className="p-8">
-    <h1 className="text-3xl font-bold">404 Not Found</h1>
-  </div>
-);
+// Placeholder pages
 
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/" element={<Home />} />
+      <ToastProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />} />
 
-          {/* Protected Routes Wrapper could go here */}
-          <Route element={<Layout />}>
-            <Route path="/dashboard" element={<Dashboard />} />
-            {/* Add more routes here */}
-          </Route>
+            {/* Public Routes (only for non-authenticated users) */}
+            <Route element={<PublicRoute />}>
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/signup" element={<SignupPage />} />
+            </Route>
 
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
+            {/* Protected Routes */}
+            <Route element={<ProtectedRoute />}>
+              <Route element={<Layout />}>
+                <Route path="/dashboard" element={<Dashboard />} />
+              </Route>
+            </Route>
+
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </ToastProvider>
     </AuthProvider>
   );
 }

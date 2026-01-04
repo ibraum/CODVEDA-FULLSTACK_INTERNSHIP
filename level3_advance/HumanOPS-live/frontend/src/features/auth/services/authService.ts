@@ -5,7 +5,7 @@ export interface User {
   id: string;
   email: string;
   role: "ADMIN" | "MANAGER" | "COLLABORATOR";
-  password: string
+  password: string;
   teamId?: string;
   firstName?: string;
   lastName?: string;
@@ -38,11 +38,10 @@ export const login = async (
   return response.data;
 };
 
-export const register = async (data: Partial<CreateUser>): Promise<Partial<User>>  =>  {
-
-  const response = await apiClient.post<Partial<User>>("/auth/register", data)
+export const register = async (data: Partial<User>): Promise<Partial<User>> => {
+  const response = await apiClient.post<Partial<User>>("/auth/register", data);
   return response.data;
-}
+};
 
 export const logout = () => {
   localStorage.removeItem("token");

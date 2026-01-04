@@ -1,6 +1,15 @@
-import { Outlet, Link } from "react-router-dom";
+import { Outlet, Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../features/auth/context/AuthContext";
 
 const Layout = () => {
+  const { logout } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login");
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-neutral-900 text-white">
       <header className="border-b border-neutral-800 p-4">
@@ -8,13 +17,19 @@ const Layout = () => {
           <Link to="/" className="text-xl font-bold text-blue-400">
             HumanOps Live
           </Link>
-          <nav className="space-x-4">
-            <Link to="/dashboard" className="hover:text-blue-300">
+          <nav className="space-x-4 flex items-center">
+            <Link
+              to="/dashboard"
+              className="hover:text-blue-300 transition-colors"
+            >
               Dashboard
             </Link>
-            <Link to="/login" className="hover:text-blue-300">
+            <button
+              onClick={handleLogout}
+              className="hover:text-blue-300 transition-colors cursor-pointer"
+            >
               Logout
-            </Link>
+            </button>
           </nav>
         </div>
       </header>
