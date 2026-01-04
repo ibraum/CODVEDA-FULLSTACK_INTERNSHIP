@@ -111,9 +111,9 @@ const LoginPage = () => {
           </p>
         </div>
       </div>
-      <div className="hidden lg:block relative bg-neutral-900 md:order-2 order-1">
+      <div className="lg:block relative bg-neutral-900 md:order-2 order-1">
         <div className="absolute inset-0 bg-[url('/src/assets/login-bg.png')] bg-cover bg-center bg-no-repeat opacity-100 mix-blend-"></div>
-        <div className="relative z-10 flex flex-col justify-between h-full md:p-10 p-5 text-white md:h-full h-[200px]">
+        <div className="relative z-10 flex flex-col justify-between h-full md:p-10 p-5 text-white md:h-full h-[150px]">
           <div className="text-lg font-medium tracking-tight">
             HumanOps Live
           </div>
