@@ -27,7 +27,7 @@ const LoginPage = () => {
 
   return (
     <div className="w-full h-screen grid grid-cols-1 lg:grid-cols-[1fr_500px] font-sans">
-      <div className="flex items-center justify-center p-8 bg-white text-neutral-900">
+      <div className="flex items-center justify-center p-8 bg-white text-neutral-900 md:order-1 order-2">
         <div className="w-full max-w-[400px] space-y-6">
           <div className="flex flex-col space-y-2 text-center">
             <h1 className="text-3xl font-bold tracking-tight dm-sans-bold">
@@ -111,9 +111,9 @@ const LoginPage = () => {
           </p>
         </div>
       </div>
-      <div className="hidden lg:block relative bg-neutral-900">
+      <div className="hidden lg:block relative bg-neutral-900 md:order-2 order-1">
         <div className="absolute inset-0 bg-[url('/src/assets/login-bg.png')] bg-cover bg-center bg-no-repeat opacity-100 mix-blend-"></div>
-        <div className="relative z-10 flex flex-col justify-between h-full p-10 text-white">
+        <div className="relative z-10 flex flex-col justify-between h-full md:p-10 p-5 text-white md:h-full h-[200px]">
           <div className="text-lg font-medium tracking-tight">
             HumanOps Live
           </div>
