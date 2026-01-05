@@ -1,13 +1,38 @@
-import { Outlet, Link, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../features/auth/context/AuthContext";
+import { useState } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "../ui/alert-dialog";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerDescription,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "../ui/drawer";
 
 const Layout = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
+  const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
 
   const handleLogout = () => {
+    setIsLogoutDialogOpen(true);
+  };
+
+  const confirmLogout = () => {
     logout();
     navigate("/login");
+    setIsLogoutDialogOpen(false);
   };
 
   return (
@@ -15,26 +40,55 @@ const Layout = () => {
       <header className="bg-neutral-100 py-6 px-12 flex justify-between items-center ">
         <div className="w-full max-w-[750px] h-full flex flex-col justify-between items-start">
           <div className="flex items-center gap-4">
-            <div className="h-14 w-14 rounded-full bg-white flex items-center justify-center shadow cursor-pointer">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"
-                />
-              </svg>
-            </div>
-            <div
-              onClick={handleLogout}
-              className="h-14 w-14 rounded-full bg-black"
-            ></div>
+            <Drawer direction="left">
+              <DrawerTrigger asChild>
+                <div className="menu h-14 w-14 rounded-full bg-white flex items-center justify-center shadow cursor-pointer">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"
+                    />
+                  </svg>
+                </div>
+              </DrawerTrigger>
+              <DrawerContent className="h-full w-[300px] mt-0 rounded-none inset-y-0 left-0 right-auto bg-white border-r">
+                <DrawerHeader>
+                  <DrawerTitle className="text-2xl font-bold">Menu</DrawerTitle>
+                  <DrawerDescription>
+                    Accédez aux différentes sections de l'application.
+                  </DrawerDescription>
+                </DrawerHeader>
+                <div className="flex flex-col gap-4 mt-8 px-4">
+                  <Link
+                    to="/dashboard"
+                    className="text-lg font-medium hover:text-neutral-600 transition-colors"
+                  >
+                    Dashboard
+                  </Link>
+                  <Link
+                    to="/"
+                    className="text-lg font-medium hover:text-neutral-600 transition-colors"
+                  >
+                    Accueil
+                  </Link>
+                  <button
+                    onClick={handleLogout}
+                    className="text-lg font-medium text-left hover:text-red-600 transition-colors"
+                  >
+                    Se déconnecter
+                  </button>
+                </div>
+              </DrawerContent>
+            </Drawer>
+            <div className="h-14 w-14 rounded-full bg-black"></div>
             <div className="h-14 pt-1">
               <div className="text-lg">HumanOps-Live</div>
               <div className="text-sm text-neutral-500">Dashboard</div>
@@ -192,7 +246,10 @@ const Layout = () => {
                       />
                     </svg>
                   </div>
-                  <div onClick={handleLogout} className="h-20 w-20 rounded-full border border-neutral-300 flex items-center justify-center cursor-pointer hover:bg-red-700 bg-red-500 duration-300 group-hover:flex hidden">
+                  <div
+                    onClick={handleLogout}
+                    className="h-20 w-20 rounded-full border border-neutral-300 flex items-center justify-center cursor-pointer hover:bg-red-700 bg-red-500 duration-300 group-hover:flex hidden"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       fill="none"
@@ -217,6 +274,32 @@ const Layout = () => {
       <main className="w-full mx-auto py-4 px-12">
         <Outlet />
       </main>
+
+      <AlertDialog
+        open={isLogoutDialogOpen}
+        onOpenChange={setIsLogoutDialogOpen}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              Êtes-vous sûr de vouloir vous déconnecter ?
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Cette action vous déconnectera de votre compte. Vous devrez vous
+              reconnecter pour accéder à votre tableau de bord.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={confirmLogout}
+              className="bg-red-600 hover:bg-red-700"
+            >
+              Se déconnecter
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
