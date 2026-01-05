@@ -24,6 +24,7 @@ const Layout = () => {
   const { logout } = useAuth();
   const navigate = useNavigate();
   const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
+  const [isAlertPanelOpen, setIsAlertPanelOpen] = useState(false);
 
   const handleLogout = () => {
     setIsLogoutDialogOpen(true);
@@ -36,8 +37,13 @@ const Layout = () => {
   };
 
   return (
-    <div className="min-h-screen grid grid-rows-[280px_2fr] bg-white">
-      <header className="bg-neutral-100 py-6 px-12 flex justify-between items-center ">
+    <div
+      className={`min-h-screen grid grid-rows-[280px_2fr] bg-white transition-all duration-300 ease-in-out ${
+        isAlertPanelOpen ? "grid-cols-[1fr_400px]" : "grid-cols-[1fr]"
+      }`}
+    >
+      <div className="w-full h-full grid grid-rows-[280px_2fr]">
+              <header className="bg-neutral-100 py-6 px-12 flex justify-between items-center col-start-1">
         <div className="w-full max-w-[750px] h-full flex flex-col justify-between items-start">
           <div className="flex items-center gap-4">
             <Drawer direction="left">
@@ -103,24 +109,47 @@ const Layout = () => {
               <div className="">January</div>
             </div>
             <div className="h-10 w-[1px] bg-neutral-300"></div>
-            <button className="cursor-pointer text-white text-sm h-12 px-8 bg-black hover:bg-neutral-700 duration-300 rounded-full flex items-center gap-2">
-              Show my Teams{" "}
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
-                />
-              </svg>
-            </button>
-            <button className="cursor-pointer text-white h-12 w-12 border border-neutral-300 rounded-full flex items-center justify-center relative text-black">
+            <Drawer>
+              <DrawerTrigger asChild>
+                <button className="cursor-pointer text-white text-sm h-12 px-8 bg-black hover:bg-neutral-700 duration-300 rounded-full flex items-center gap-2">
+                  Show my Teams{" "}
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-4"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
+                    />
+                  </svg>
+                </button>
+              </DrawerTrigger>
+              <DrawerContent className="h-[calc(100vh-100px)] mt-0 rounded-t-3xl bg-white">
+                <DrawerHeader>
+                  <DrawerTitle>Mes Équipes</DrawerTitle>
+                  <DrawerDescription>
+                    Visualisez et gérez vos équipes ici.
+                  </DrawerDescription>
+                </DrawerHeader>
+                <div className="p-4">
+                  <div className="flex flex-col gap-4">
+                    {/* Placeholder for teams content */}
+                    <div className="h-20 w-full bg-neutral-100 rounded-lg animate-pulse"></div>
+                    <div className="h-20 w-full bg-neutral-100 rounded-lg animate-pulse"></div>
+                    <div className="h-20 w-full bg-neutral-100 rounded-lg animate-pulse"></div>
+                  </div>
+                </div>
+              </DrawerContent>
+            </Drawer>
+            <button
+              onClick={() => setIsAlertPanelOpen(!isAlertPanelOpen)}
+              className="alert-button cursor-pointer text-white h-12 w-12 border border-neutral-300 rounded-full flex items-center justify-center relative text-black"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -142,7 +171,7 @@ const Layout = () => {
         <div className="w-full max-w-[750px] h-full flex flex-col justify-between items-start">
           <div className="w-full flex items-center justify-between gap-6">
             <div className="flex items-center gap-6">
-              <div className="h-14 w-14 rounded-full border border-neutral-300 flex items-center justify-center cursor-pointer">
+              <div className="parametre-profil h-14 w-14 rounded-full border border-neutral-300 flex items-center justify-center cursor-pointer">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -271,9 +300,98 @@ const Layout = () => {
           </div>
         </div>
       </header>
-      <main className="w-full mx-auto py-4 px-12">
+      <main className="w-full mx-auto py-4 px-12 col-start-1">
         <Outlet />
       </main>
+      </div>
+      <div
+        className={`row-span-2 col-start-2 bg-neutral-100 border-l border-neutral-200 h-full overflow-hidden transition-all duration-500 ease-in-out ${
+          isAlertPanelOpen
+            ? "opacity-100 translate-x-0 "
+            : "opacity-0 translate-x-full hidden"
+        }`}
+      >
+        <div className="h-full p-2 w-full bg-white rounded-xl">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="text-2xl font-bold dm-sans-bold">Notifications</h2>
+            <button
+              onClick={() => setIsAlertPanelOpen(false)}
+              className="p-2 hover:bg-neutral-100 rounded-full transition-colors"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="size-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M6 18 18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+          </div>
+          <div className="flex flex-col gap-4">vv
+            <div className="p-4 bg-neutral-50 rounded-xl border border-neutral-100">
+              <div className="flex gap-4">
+                <div className="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-sm">New Message</h4>
+                  <p className="text-sm text-neutral-500 mt-1">
+                    You have a new message from the HR team.
+                  </p>
+                  <p className="text-xs text-neutral-400 mt-2">2 mins ago</p>
+                </div>
+              </div>
+            </div>
+            <div className="p-4 bg-neutral-50 rounded-xl border border-neutral-100">
+              <div className="flex gap-4">
+                <div className="h-10 w-10 rounded-full bg-green-100 flex items-center justify-center text-green-600">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth={1.5}
+                    stroke="currentColor"
+                    className="size-5"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h4 className="font-semibold text-sm">Task Completed</h4>
+                  <p className="text-sm text-neutral-500 mt-1">
+                    Project "Alpha" has been marked as complete.
+                  </p>
+                  <p className="text-xs text-neutral-400 mt-2">1 hour ago</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <AlertDialog
         open={isLogoutDialogOpen}
