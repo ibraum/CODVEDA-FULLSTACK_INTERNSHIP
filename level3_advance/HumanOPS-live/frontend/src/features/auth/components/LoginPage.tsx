@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -91,6 +91,16 @@ const LoginPage = () => {
               Sign In
             </button>
           </form>
+
+          <p className="px-8 text-center text-sm text-neutral-500 dm-sans-regular">
+            Don't have an account?{" "}
+            <Link
+              to="/signup"
+              className="underline underline-offset-4 hover:text-neutral-900"
+            >
+              Sign up
+            </Link>
+          </p>
 
           <p className="px-8 text-center text-sm text-neutral-500 dm-sans-regular">
             By clicking continue, you agree to our{" "}
