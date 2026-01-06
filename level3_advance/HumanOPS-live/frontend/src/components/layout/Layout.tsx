@@ -1,6 +1,6 @@
 import { Outlet, useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../features/auth/context/AuthContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -51,6 +51,23 @@ const Layout = () => {
   const [drawerTab, setDrawerTab] = useState<"team" | "requests" | "history">(
     "team"
   );
+
+  // Settings Form State
+  const [settingsFirstName, setSettingsFirstName] = useState("");
+  const [settingsLastName, setSettingsLastName] = useState("");
+  const [settingsEmail, setSettingsEmail] = useState("");
+  const [settingsNotifications, setSettingsNotifications] = useState(true); // Default reflected from backend analysis (preferences.notifications)
+  const [settingsWorkingHours, setSettingsWorkingHours] =
+    useState("09:00 - 17:00"); // Default from backend analysis
+
+  useEffect(() => {
+    if (user) {
+      setSettingsFirstName(user.firstName || "");
+      setSettingsLastName(user.lastName || "");
+      setSettingsEmail(user.email || "");
+      // In a real implementation, we would fetch profile preferences here
+    }
+  }, [user]);
 
   const filteredAlerts =
     activeTab === "all" ? alerts : alerts.filter((a) => !a.isRead);
@@ -398,27 +415,128 @@ const Layout = () => {
                     </div>
                     <div className="p-8 flex-1 overflow-y-auto bg-white">
                       <div className="max-w-4xl mx-auto space-y-8">
-                        {/* Placeholder Content */}
+                        {/* Profile Section */}
                         <div className="space-y-4">
-                          <h3 className="text-lg font-semibold border-b pb-2">
-                            Profil Public
+                          <h3 className="text-lg font-semibold border-b border-neutral-100 pb-2 text-neutral-900">
+                            Informations Personnelles
                           </h3>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div className="h-12 bg-neutral-100 rounded-lg w-full animate-pulse"></div>
-                            <div className="h-12 bg-neutral-100 rounded-lg w-full animate-pulse"></div>
+                            <div className="space-y-2">
+                              <label className="text-sm font-medium text-neutral-700">
+                                Prénom
+                              </label>
+                              <input
+                                type="text"
+                                value={settingsFirstName}
+                                onChange={(e) =>
+                                  setSettingsFirstName(e.target.value)
+                                }
+                                className="flex h-10 w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <label className="text-sm font-medium text-neutral-700">
+                                Nom
+                              </label>
+                              <input
+                                type="text"
+                                value={settingsLastName}
+                                onChange={(e) =>
+                                  setSettingsLastName(e.target.value)
+                                }
+                                className="flex h-10 w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                              />
+                            </div>
+                            <div className="space-y-2 md:col-span-2">
+                              <label className="text-sm font-medium text-neutral-700">
+                                Email
+                              </label>
+                              <input
+                                type="email"
+                                value={settingsEmail}
+                                onChange={(e) =>
+                                  setSettingsEmail(e.target.value)
+                                }
+                                className="flex h-10 w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                              />
+                            </div>
+                            <div className="space-y-2 md:col-span-2">
+                              <label className="text-sm font-medium text-neutral-700">
+                                Rôle (Non modifiable)
+                              </label>
+                              <input
+                                type="text"
+                                value={userRole}
+                                disabled
+                                className="flex h-10 w-full rounded-md border border-neutral-200 bg-neutral-100 px-3 py-2 text-sm text-neutral-500 cursor-not-allowed"
+                              />
+                            </div>
                           </div>
                         </div>
+
+                        {/* Preferences Section - Reflected from Backend CollaboratorProfile */}
                         <div className="space-y-4">
-                          <h3 className="text-lg font-semibold border-b pb-2">
-                            Notifications
+                          <h3 className="text-lg font-semibold border-b border-neutral-100 pb-2 text-neutral-900">
+                            Préférences & Disponibilité
                           </h3>
-                          <div className="h-24 bg-neutral-100 rounded-lg w-full animate-pulse"></div>
+                          <div className="space-y-6">
+                            <div className="flex items-center justify-between rounded-lg border border-neutral-200 p-4">
+                              <div className="space-y-0.5">
+                                <label className="text-base font-medium text-neutral-900">
+                                  Notifications
+                                </label>
+                                <div className="text-sm text-neutral-500">
+                                  Recevoir des alertes pour les demandes de
+                                  renfort.
+                                </div>
+                              </div>
+                              <div
+                                className={`h-6 w-11 rounded-full cursor-pointer transition-colors relative ${
+                                  settingsNotifications
+                                    ? "bg-black"
+                                    : "bg-neutral-200"
+                                }`}
+                                onClick={() =>
+                                  setSettingsNotifications(
+                                    !settingsNotifications
+                                  )
+                                }
+                              >
+                                <div
+                                  className={`absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${
+                                    settingsNotifications
+                                      ? "translate-x-[20px]"
+                                      : "translate-x-0"
+                                  }`}
+                                ></div>
+                              </div>
+                            </div>
+
+                            <div className="space-y-2">
+                              <label className="text-sm font-medium text-neutral-700">
+                                Heures de travail préférentielles
+                              </label>
+                              <input
+                                type="text"
+                                value={settingsWorkingHours}
+                                onChange={(e) =>
+                                  setSettingsWorkingHours(e.target.value)
+                                }
+                                placeholder="Example: 09:00 - 18:00"
+                                className="flex h-10 w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                              />
+                              <p className="text-[0.8rem] text-neutral-500">
+                                Indiquez vos créneaux de disponibilité habituels
+                                (Données profil).
+                              </p>
+                            </div>
+                          </div>
                         </div>
-                        <div className="space-y-4">
-                          <h3 className="text-lg font-semibold border-b pb-2">
-                            Sécurité
-                          </h3>
-                          <div className="h-32 bg-neutral-100 rounded-lg w-full animate-pulse"></div>
+
+                        <div className="flex justify-end pt-4">
+                          <button className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-11 px-8 bg-neutral-900 text-neutral-50 hover:bg-neutral-900/90 shadow-md">
+                            Sauvegarder les modifications
+                          </button>
                         </div>
                       </div>
                     </div>

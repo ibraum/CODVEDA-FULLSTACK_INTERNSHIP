@@ -1,5 +1,5 @@
-import { Router } from 'express';
-import { AuthController } from '../controllers/AuthController.js';
+import { Router } from "express";
+import { AuthController } from "../controllers/AuthController.js";
 
 const router = Router();
 
@@ -41,7 +41,7 @@ const router = Router();
  *       400:
  *         description: Bad request
  */
-router.post('/register', AuthController.register);
+router.post("/register", AuthController.register);
 
 /**
  * @swagger
@@ -77,6 +77,27 @@ router.post('/register', AuthController.register);
  *       401:
  *         description: Invalid credentials
  */
-router.post('/login', AuthController.login);
+router.post("/login", AuthController.login);
+
+/**
+ * @swagger
+ * /auth/me:
+ *   get:
+ *     summary: Get current authenticated user
+ *     tags: [Auth]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Current user details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/User'
+ *       401:
+ *         description: Unauthorized
+ */
+import { authMiddleware } from "../middlewares/auth.middleware.js";
+router.get("/me", authMiddleware, AuthController.getMe);
 
 export default router;

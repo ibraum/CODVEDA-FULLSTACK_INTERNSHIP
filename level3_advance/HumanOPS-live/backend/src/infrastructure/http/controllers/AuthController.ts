@@ -1,7 +1,7 @@
-import { Request, Response, NextFunction } from 'express';
-import { AuthenticateUserUseCase } from '../../../application/use-cases/AuthenticateUserUseCase.js';
-import { CreateUserUseCase } from '../../../application/use-cases/CreateUserUseCase.js';
-import { UserRepository } from '../../persistence/UserRepository.js';
+import { Request, Response, NextFunction } from "express";
+import { AuthenticateUserUseCase } from "../../../application/use-cases/AuthenticateUserUseCase.js";
+import { CreateUserUseCase } from "../../../application/use-cases/CreateUserUseCase.js";
+import { UserRepository } from "../../persistence/UserRepository.js";
 
 const userRepository = new UserRepository();
 
@@ -39,11 +39,15 @@ export class AuthController {
    *       400:
    *         description: Validation error or Email already exists
    */
-  static async register(req: Request, res: Response, next: NextFunction): Promise<void> {
+  static async register(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
       const createUserUseCase = new CreateUserUseCase(userRepository);
       const user = await createUserUseCase.execute(req.body);
-      
+
       res.status(201).json({ user });
     } catch (error) {
       next(error);
@@ -91,12 +95,75 @@ export class AuthController {
    *       401:
    *         description: Invalid credentials
    */
-  static async login(req: Request, res: Response, next: NextFunction): Promise<void> {
+  static async login(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
     try {
-      const authenticateUserUseCase = new AuthenticateUserUseCase(userRepository);
+      const authenticateUserUseCase = new AuthenticateUserUseCase(
+        userRepository
+      );
       const result = await authenticateUserUseCase.execute(req.body);
-      
+
       res.status(200).json(result);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @swagger
+   * /auth/me:
+   *   get:
+   *     summary: Get current authenticated user
+   *     tags: [Auth]
+   *     security:
+   *       - bearerAuth: []
+   *     responses:
+   *       200:
+   *         description: Current user details
+   *         content:
+   *           application/json:
+   *             schema:
+   *               type: object
+   *               properties:
+   *                 id:
+   *                   type: string
+   *                 email:
+   *                   type: string
+   *                 firstName:
+   *                   type: string
+   *                 lastName:
+   *                   type: string
+   *                 role:
+   *                   type: string
+   *       401:
+   *         description: Not authenticated
+   */
+  static async getMe(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      // Cast request to any to access user property added by middleware
+      const userId = (req as any).user?.userId;
+
+      if (!userId) {
+        res.status(401).json({ error: "Not authenticated" });
+        return;
+      }
+
+      const user = await userRepository.findById(userId);
+
+      if (!user) {
+        res.status(404).json({ error: "User not found" });
+        return;
+      }
+
+      const { passwordHash, ...userWithoutPassword } = user;
+      res.status(200).json(userWithoutPassword);
     } catch (error) {
       next(error);
     }

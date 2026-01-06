@@ -10,6 +10,7 @@ import {
   login as loginApi,
   logout as logoutApi,
   register as registerApi,
+  getMe as getMeApi,
 } from "../services/authService";
 
 interface AuthContextType {
@@ -28,18 +29,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      // Restore session from token (simulated for MVP until /auth/me is ready)
-      setUser({
-        id: "presumed-valid",
-        email: "user@humanops.live",
-        role: "COLLABORATOR",
-        firstName: "Returning",
-        lastName: "User",
-      });
-    }
-    setIsLoading(false);
+    const initializeAuth = async () => {
+      const token = localStorage.getItem("token");
+      if (token) {
+        try {
+          const userData = await getMeApi();
+          setUser(userData);
+        } catch (error) {
+          console.error("Failed to restore session:", error);
+          localStorage.removeItem("token");
+        }
+      }
+      setIsLoading(false);
+    };
+
+    initializeAuth();
   }, []);
 
   const login = async (email: string, password: string) => {
