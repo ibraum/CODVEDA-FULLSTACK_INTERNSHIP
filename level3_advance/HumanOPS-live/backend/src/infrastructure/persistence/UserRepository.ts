@@ -1,34 +1,44 @@
-import bcrypt from 'bcrypt';
-import { IUserRepository } from '../../domain/repositories/IUserRepository.js';
-import { User, CreateUserDTO, UpdateUserDTO, UserWithoutPassword } from '../../domain/entities/User.js';
-import { prisma } from './prisma.js';
+import bcrypt from "bcrypt";
+import { IUserRepository } from "../../domain/repositories/IUserRepository.js";
+import {
+  User,
+  CreateUserDTO,
+  UpdateUserDTO,
+  UserWithoutPassword,
+} from "../../domain/entities/User.js";
+import { prisma } from "./prisma.js";
 
 export class UserRepository implements IUserRepository {
   async create(data: CreateUserDTO): Promise<User> {
     const passwordHash = await bcrypt.hash(data.password, 10);
-    
-    return await prisma.user.create({
+
+    return (await prisma.user.create({
       data: {
         email: data.email,
         passwordHash,
+        firstName: data.firstName,
+        lastName: data.lastName,
         role: data.role,
       },
-    }) as User;
+    })) as User;
   }
 
   async findById(id: string): Promise<User | null> {
-    return await prisma.user.findUnique({
+    return (await prisma.user.findUnique({
       where: { id },
-    }) as User | null;
+    })) as User | null;
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    return await prisma.user.findUnique({
+    return (await prisma.user.findUnique({
       where: { email },
-    }) as User | null;
+    })) as User | null;
   }
 
-  async findAll(filters?: { role?: string; isActive?: boolean }): Promise<UserWithoutPassword[]> {
+  async findAll(filters?: {
+    role?: string;
+    isActive?: boolean;
+  }): Promise<UserWithoutPassword[]> {
     const users = await prisma.user.findMany({
       where: {
         ...(filters?.role && { role: filters.role as any }),
@@ -38,6 +48,8 @@ export class UserRepository implements IUserRepository {
       select: {
         id: true,
         email: true,
+        firstName: true,
+        lastName: true,
         role: true,
         isActive: true,
         deletedAt: true,
@@ -45,15 +57,15 @@ export class UserRepository implements IUserRepository {
         updatedAt: true,
       },
     });
-    
+
     return users as UserWithoutPassword[];
   }
 
   async update(id: string, data: UpdateUserDTO): Promise<User> {
-    return await prisma.user.update({
+    return (await prisma.user.update({
       where: { id },
       data,
-    }) as User;
+    })) as User;
   }
 
   async softDelete(id: string): Promise<void> {

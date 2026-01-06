@@ -35,7 +35,6 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         id: "presumed-valid",
         email: "user@humanops.live",
         role: "COLLABORATOR",
-        password: "", // Not needed for frontend state usually
         firstName: "Returning",
         lastName: "User",
       });

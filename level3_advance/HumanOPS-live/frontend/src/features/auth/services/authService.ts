@@ -4,8 +4,8 @@ import { connectSocket, disconnectSocket } from "../../../lib/socket";
 export interface User {
   id: string;
   email: string;
-  role: "ADMIN" | "MANAGER" | "COLLABORATOR";
-  password: string;
+  role: "ADMIN_RH" | "MANAGER" | "COLLABORATOR";
+  password?: string;
   teamId?: string;
   firstName?: string;
   lastName?: string;

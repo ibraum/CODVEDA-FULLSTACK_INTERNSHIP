@@ -48,6 +48,8 @@ model User {
   id           String    @id @default(uuid())
   email        String    @unique
   passwordHash String
+  firstName    String?
+  lastName     String?
   role         Role
   isActive     Boolean   @default(true)
   deletedAt    DateTime? // Soft delete
