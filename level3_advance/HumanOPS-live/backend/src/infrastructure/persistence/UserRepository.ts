@@ -62,9 +62,16 @@ export class UserRepository implements IUserRepository {
   }
 
   async update(id: string, data: UpdateUserDTO): Promise<User> {
+    const { password, ...rest } = data;
+    const updateData: any = { ...rest };
+
+    if (password) {
+      updateData.passwordHash = await bcrypt.hash(password, 10);
+    }
+
     return (await prisma.user.update({
       where: { id },
-      data,
+      data: updateData,
     })) as User;
   }
 

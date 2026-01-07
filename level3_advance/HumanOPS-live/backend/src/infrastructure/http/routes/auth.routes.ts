@@ -99,5 +99,6 @@ router.post("/login", AuthController.login);
  */
 import { authMiddleware } from "../middlewares/auth.middleware.js";
 router.get("/me", authMiddleware, AuthController.getMe);
+router.put("/me", authMiddleware, AuthController.updateMe);
 
 export default router;

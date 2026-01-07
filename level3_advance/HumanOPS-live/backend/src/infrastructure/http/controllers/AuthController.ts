@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { AuthenticateUserUseCase } from "../../../application/use-cases/AuthenticateUserUseCase.js";
 import { CreateUserUseCase } from "../../../application/use-cases/CreateUserUseCase.js";
+import { UpdateUserUseCase } from "../../../application/use-cases/UpdateUserUseCase.js";
 import { UserRepository } from "../../persistence/UserRepository.js";
 
 const userRepository = new UserRepository();
@@ -164,6 +165,66 @@ export class AuthController {
 
       const { passwordHash, ...userWithoutPassword } = user;
       res.status(200).json(userWithoutPassword);
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  /**
+   * @swagger
+   * /auth/me:
+   *   put:
+   *     summary: Update current authenticated user details
+   *     tags: [Auth]
+   *     security:
+   *       - bearerAuth: []
+   *     requestBody:
+   *       required: true
+   *       content:
+   *         application/json:
+   *           schema:
+   *             type: object
+   *             properties:
+   *               firstName:
+   *                 type: string
+   *               lastName:
+   *                 type: string
+   *               email:
+   *                 type: string
+   *                 format: email
+   *     responses:
+   *       200:
+   *         description: User updated successfully
+   *       400:
+   *         description: Validation error
+   *       401:
+   *         description: Not authenticated
+   */
+  static async updateMe(
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ): Promise<void> {
+    try {
+      // Cast request to any to access user property added by middleware
+      const userId = (req as any).user?.userId;
+
+      if (!userId) {
+        res.status(401).json({ error: "Not authenticated" });
+        return;
+      }
+
+      const { firstName, lastName, email, password } = req.body;
+      const updateUserUseCase = new UpdateUserUseCase(userRepository);
+
+      const updatedUser = await updateUserUseCase.execute(userId, {
+        firstName,
+        lastName,
+        email,
+        password,
+      });
+
+      res.status(200).json(updatedUser);
     } catch (error) {
       next(error);
     }

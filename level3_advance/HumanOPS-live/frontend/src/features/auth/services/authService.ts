@@ -11,6 +11,16 @@ export interface User {
   lastName?: string;
 }
 
+export interface Profile {
+  id: string;
+  userId: string;
+  preferences: {
+    notifications: boolean;
+    workingHours?: string;
+    [key: string]: any;
+  };
+}
+
 export interface LoginResponse {
   user: User;
   token: string;
@@ -51,5 +61,38 @@ export const logout = () => {
 
 export const getMe = async (): Promise<User> => {
   const response = await apiClient.get<User>("/auth/me"); // Assuming an endpoint exists or we rely on stored user
+  return response.data;
+};
+
+export const updateMe = async (data: Partial<User>): Promise<User> => {
+  const response = await apiClient.put<User>("/auth/me", data);
+  return response.data;
+};
+
+export const getProfile = async (): Promise<Profile> => {
+  const response = await apiClient.get<Profile>("/profiles/me");
+  return response.data;
+};
+
+export const updateProfile = async (data: {
+  preferences: any;
+}): Promise<Profile> => {
+  const response = await apiClient.put<{ profile: Profile }>(
+    "/profiles/me",
+    data
+  );
+  return response.data.profile;
+};
+
+export const addSkill = async (skillName: string): Promise<void> => {
+  await apiClient.post("/profiles/me/skills", { skillName });
+};
+
+export const getAllSkills = async (): Promise<
+  { id: string; name: string }[]
+> => {
+  const response = await apiClient.get<{ id: string; name: string }[]>(
+    "/profiles/skills"
+  );
   return response.data;
 };

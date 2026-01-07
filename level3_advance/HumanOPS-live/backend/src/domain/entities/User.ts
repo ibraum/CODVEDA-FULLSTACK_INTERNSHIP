@@ -27,6 +27,7 @@ export interface UpdateUserDTO {
   lastName?: string;
   role?: Role;
   isActive?: boolean;
+  password?: string;
 }
 
 export interface UserWithoutPassword extends Omit<User, "passwordHash"> {}

@@ -1,5 +1,10 @@
 import { Outlet, useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../features/auth/context/AuthContext";
+import {
+  updateMe,
+  getProfile,
+  updateProfile,
+} from "../../features/auth/services/authService";
 import { useState, useEffect } from "react";
 import {
   AlertDialog,
@@ -29,6 +34,17 @@ import {
 } from "../ui/dialog";
 import { useAlerts } from "../../hooks/useAlerts";
 import { formatTimeAgo } from "../../lib/utils";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "../ui/tooltip";
+
+import AddSkillDialog from "../../features/dashboard/components/AddSkillDialog";
+import TeamTab from "../../features/team/components/TeamTab";
+import RequestsTab from "../../features/team/components/RequestsTab";
+import HistoryTab from "../../features/team/components/HistoryTab";
 
 const Layout = () => {
   const { logout, user } = useAuth();
@@ -45,6 +61,7 @@ const Layout = () => {
   const userRole = user?.role ? user.role.replace("_", " ") : "";
   const navigate = useNavigate();
   const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
+  const [isAddSkillDialogOpen, setIsAddSkillDialogOpen] = useState(false);
   const [isAlertPanelOpen, setIsAlertPanelOpen] = useState(false);
   const { alerts, markAllAsRead, unreadCount, markAsRead } = useAlerts();
   const [activeTab, setActiveTab] = useState<"all" | "unread">("all");
@@ -56,24 +73,103 @@ const Layout = () => {
   const [settingsFirstName, setSettingsFirstName] = useState("");
   const [settingsLastName, setSettingsLastName] = useState("");
   const [settingsEmail, setSettingsEmail] = useState("");
+  const [settingsPassword, setSettingsPassword] = useState("");
+  const [settingsConfirmPassword, setSettingsConfirmPassword] = useState("");
   const [settingsNotifications, setSettingsNotifications] = useState(true); // Default reflected from backend analysis (preferences.notifications)
   const [settingsWorkingHours, setSettingsWorkingHours] =
     useState("09:00 - 17:00"); // Default from backend analysis
+
+  const [isSaving, setIsSaving] = useState(false);
+  const [isSavingPassword, setIsSavingPassword] = useState(false);
 
   useEffect(() => {
     if (user) {
       setSettingsFirstName(user.firstName || "");
       setSettingsLastName(user.lastName || "");
       setSettingsEmail(user.email || "");
-      // In a real implementation, we would fetch profile preferences here
+      setSettingsPassword(""); // Reset password field
+      setSettingsConfirmPassword("");
+
+      getProfile()
+        .then((profile) => {
+          if (profile && profile.preferences) {
+            setSettingsNotifications(profile.preferences.notifications ?? true);
+            setSettingsWorkingHours(
+              profile.preferences.workingHours || "09:00 - 17:00"
+            );
+          }
+        })
+        .catch((err) => console.error("Failed to fetch profile settings", err));
     }
   }, [user]);
+
+  const handleSaveSettings = async () => {
+    setIsSaving(true);
+    try {
+      const updateData: any = {
+        firstName: settingsFirstName,
+        lastName: settingsLastName,
+        email: settingsEmail,
+      };
+
+      await updateMe(updateData);
+
+      await updateProfile({
+        preferences: {
+          notifications: settingsNotifications,
+          workingHours: settingsWorkingHours,
+        },
+      });
+
+      // Simple reload to refresh user context for MVP
+      window.location.reload();
+    } catch (error) {
+      console.error("Failed to save settings", error);
+      alert("Failed to save settings");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleChangePassword = async () => {
+    if (!settingsPassword) return;
+
+    if (settingsPassword !== settingsConfirmPassword) {
+      alert("Les mots de passe ne correspondent pas.");
+      return;
+    }
+
+    if (settingsPassword.length < 6) {
+      alert("Le mot de passe doit contenir au moins 6 caractères.");
+      return;
+    }
+
+    setIsSavingPassword(true);
+    try {
+      await updateMe({
+        password: settingsPassword,
+      });
+
+      setSettingsPassword("");
+      setSettingsConfirmPassword("");
+      alert("Mot de passe modifié avec succès !");
+    } catch (error) {
+      console.error("Failed to change password", error);
+      alert("Erreur lors du changement de mot de passe.");
+    } finally {
+      setIsSavingPassword(false);
+    }
+  };
 
   const filteredAlerts =
     activeTab === "all" ? alerts : alerts.filter((a) => !a.isRead);
 
   const handleLogout = () => {
     setIsLogoutDialogOpen(true);
+  };
+
+  const handleAddSkill = () => {
+    setIsAddSkillDialogOpen(true);
   };
 
   const confirmLogout = () => {
@@ -92,56 +188,114 @@ const Layout = () => {
         <header className="bg-neutral-100 py-6 px-4 lg:px-12 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 lg:gap-0 col-start-1 h-auto lg:h-full">
           <div className="w-full max-w-[750px] h-full flex flex-col justify-between items-start">
             <div className="flex items-center gap-4">
-              <Drawer direction="left">
-                <DrawerTrigger asChild>
-                  <div className="menu h-14 w-14 rounded-full bg-white flex items-center justify-center shadow cursor-pointer">
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="size-6"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"
-                      />
-                    </svg>
-                  </div>
-                </DrawerTrigger>
-                <DrawerContent className="h-full w-[300px] mt-0 rounded-none inset-y-0 left-0 right-auto bg-white border-r">
-                  <DrawerHeader>
-                    <DrawerTitle className="text-2xl font-bold">
-                      Menu
-                    </DrawerTitle>
-                    <DrawerDescription>
-                      Accédez aux différentes sections de l'application.
-                    </DrawerDescription>
-                  </DrawerHeader>
-                  <div className="flex flex-col gap-4 mt-8 px-4">
-                    <Link
-                      to="/dashboard"
-                      className="text-lg font-medium hover:text-neutral-600 transition-colors"
-                    >
-                      Dashboard
-                    </Link>
-                    <Link
-                      to="/"
-                      className="text-lg font-medium hover:text-neutral-600 transition-colors"
-                    >
-                      Accueil
-                    </Link>
-                    <button
-                      onClick={handleLogout}
-                      className="text-lg font-medium text-left hover:text-red-600 transition-colors"
-                    >
-                      Se déconnecter
-                    </button>
-                  </div>
-                </DrawerContent>
-              </Drawer>
+              {user?.role !== "COLLABORATOR" && (
+                <Drawer direction="left">
+                  <DrawerTrigger asChild>
+                    <div className="menu h-14 w-14 rounded-full bg-white flex items-center justify-center shadow cursor-pointer hover:bg-neutral-50 transition-colors">
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        strokeWidth={1.5}
+                        stroke="currentColor"
+                        className="size-6"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"
+                        />
+                      </svg>
+                    </div>
+                  </DrawerTrigger>
+                  <DrawerContent className="h-full w-[350px] mt-0 rounded-r-[32px] rounded-l-none inset-y-0 left-0 right-auto bg-white border-r border-neutral-100 shadow-2xl p-0 overflow-hidden flex flex-col">
+                    <div className="p-8 border-b border-neutral-100 flex items-center justify-between">
+                      <DrawerHeader className="p-0 text-left">
+                        <DrawerTitle className="text-3xl font-bold dm-sans-bold text-neutral-900">
+                          Menu
+                        </DrawerTitle>
+                        <DrawerDescription className="text-neutral-500 mt-1">
+                          Navigation principale
+                        </DrawerDescription>
+                      </DrawerHeader>
+                    </div>
+
+                    <div className="flex-1 overflow-y-auto py-8 px-6">
+                      <nav className="flex flex-col gap-2">
+                        <Link
+                          to="/dashboard"
+                          className="flex items-center gap-4 px-4 py-4 rounded-xl text-lg font-medium text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 transition-all group"
+                        >
+                          <div className="h-10 w-10 rounded-full bg-neutral-100 flex items-center justify-center group-hover:bg-white group-hover:shadow-sm transition-all">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-5"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"
+                              />
+                            </svg>
+                          </div>
+                          Dashboard
+                        </Link>
+                        <Link
+                          to="/"
+                          className="flex items-center gap-4 px-4 py-4 rounded-xl text-lg font-medium text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 transition-all group"
+                        >
+                          <div className="h-10 w-10 rounded-full bg-neutral-100 flex items-center justify-center group-hover:bg-white group-hover:shadow-sm transition-all">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-5"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
+                              />
+                            </svg>
+                          </div>
+                          Accueil
+                        </Link>
+                      </nav>
+                    </div>
+
+                    <div className="p-6 border-t border-neutral-100 bg-neutral-50/50">
+                      <button
+                        onClick={handleLogout}
+                        className="flex items-center gap-4 w-full px-4 py-4 rounded-xl text-lg font-medium text-red-600 hover:bg-red-50 transition-all group"
+                      >
+                        <div className="h-10 w-10 rounded-full bg-red-100 flex items-center justify-center group-hover:bg-red-200 transition-all">
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={1.5}
+                            stroke="currentColor"
+                            className="size-5"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25"
+                            />
+                          </svg>
+                        </div>
+                        Se déconnecter
+                      </button>
+                    </div>
+                  </DrawerContent>
+                </Drawer>
+              )}
               <div className="h-14 w-14 rounded-full bg-black"></div>
               <div className="h-14 pt-1">
                 <div className="text-lg">HumanOps-Live</div>
@@ -247,112 +401,9 @@ const Layout = () => {
                     </div>
                   </DrawerHeader>
                   <div className="flex-1 overflow-y-auto p-6 bg-neutral-50/50">
-                    {drawerTab === "team" && (
-                      <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                        <div className="flex items-center justify-between">
-                          <h3 className="text-lg font-medium">
-                            Membres de l'équipe
-                          </h3>
-                        </div>
-                        {/* Placeholder for teams content */}
-                        <div className="h-24 w-full bg-white border border-neutral-200 rounded-xl p-4 flex items-center gap-4">
-                          <div className="h-12 w-12 rounded-full bg-neutral-100 animate-pulse"></div>
-                          <div className="flex flex-col gap-2 w-full">
-                            <div className="h-4 w-1/3 bg-neutral-100 rounded animate-pulse"></div>
-                            <div className="h-3 w-1/4 bg-neutral-100 rounded animate-pulse"></div>
-                          </div>
-                        </div>
-                        <div className="h-24 w-full bg-white border border-neutral-200 rounded-xl p-4 flex items-center gap-4">
-                          <div className="h-12 w-12 rounded-full bg-neutral-100 animate-pulse"></div>
-                          <div className="flex flex-col gap-2 w-full">
-                            <div className="h-4 w-1/3 bg-neutral-100 rounded animate-pulse"></div>
-                            <div className="h-3 w-1/4 bg-neutral-100 rounded animate-pulse"></div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
-
-                    {drawerTab === "requests" && (
-                      <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                        <div className="flex items-center justify-between">
-                          <h3 className="text-lg font-medium">
-                            Demandes de renfort
-                          </h3>
-                        </div>
-                        <div className="p-8 border border-dashed border-neutral-300 rounded-xl flex flex-col items-center justify-center text-center">
-                          <div className="h-12 w-12 rounded-full bg-neutral-100 flex items-center justify-center mb-4 text-neutral-400">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth={1.5}
-                              stroke="currentColor"
-                              className="size-6"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 0 0 2.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 0 0-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25ZM6.75 12h.008v.008H6.75V12Zm0 3h.008v.008H6.75V15Zm0 3h.008v.008H6.75V18Z"
-                              />
-                            </svg>
-                          </div>
-                          <p className="text-neutral-600 font-medium">
-                            Aucune demande en cours
-                          </p>
-                          <p className="text-neutral-400 text-sm mt-1">
-                            Les notifications apparaîtront ici.
-                          </p>
-                        </div>
-                      </div>
-                    )}
-
-                    {drawerTab === "history" && (
-                      <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-300">
-                        <div className="flex items-center justify-between">
-                          <h3 className="text-lg font-medium">
-                            Historique d'état
-                          </h3>
-                        </div>
-                        <div className="space-y-6 relative before:absolute before:inset-0 before:ml-5 before:-translate-x-px md:before:mx-auto md:before:translate-x-0 before:h-full before:w-0.5 before:bg-gradient-to-b before:from-transparent before:via-neutral-200 before:to-transparent">
-                          <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group is-active">
-                            <div className="flex items-center justify-center w-10 h-10 rounded-full border border-white bg-neutral-100 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
-                              <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                            </div>
-                            <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-xl border border-neutral-200 bg-white shadow-sm">
-                              <div className="flex items-center justify-between space-x-2 mb-1">
-                                <span className="font-bold text-neutral-900">
-                                  Disponible
-                                </span>
-                                <time className="font-caveat font-medium text-neutral-500 text-sm">
-                                  Maintenant
-                                </time>
-                              </div>
-                              <div className="text-neutral-500 text-sm">
-                                État mis à jour automatiquement.
-                              </div>
-                            </div>
-                          </div>
-                          <div className="relative flex items-center justify-between md:justify-normal md:odd:flex-row-reverse group">
-                            <div className="flex items-center justify-center w-10 h-10 rounded-full border border-white bg-neutral-100 shadow shrink-0 md:order-1 md:group-odd:-translate-x-1/2 md:group-even:translate-x-1/2">
-                              <div className="w-3 h-3 bg-orange-500 rounded-full"></div>
-                            </div>
-                            <div className="w-[calc(100%-4rem)] md:w-[calc(50%-2.5rem)] p-4 rounded-xl border border-neutral-200 bg-white shadow-sm opacity-60">
-                              <div className="flex items-center justify-between space-x-2 mb-1">
-                                <span className="font-bold text-neutral-900">
-                                  Mobilisable
-                                </span>
-                                <time className="font-caveat font-medium text-neutral-500 text-sm">
-                                  Il y a 2h
-                                </time>
-                              </div>
-                              <div className="text-neutral-500 text-sm">
-                                Charge de travail modérée.
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
+                    {drawerTab === "team" && <TeamTab />}
+                    {drawerTab === "requests" && <RequestsTab />}
+                    {drawerTab === "history" && <HistoryTab />}
                   </div>
                 </DrawerContent>
               </Drawer>
@@ -474,74 +525,75 @@ const Layout = () => {
                           </div>
                         </div>
 
-                        {/* Preferences Section - Reflected from Backend CollaboratorProfile */}
-                        <div className="space-y-4">
-                          <h3 className="text-lg font-semibold border-b border-neutral-100 pb-2 text-neutral-900">
-                            Préférences & Disponibilité
-                          </h3>
-                          <div className="space-y-6">
-                            <div className="flex items-center justify-between rounded-lg border border-neutral-200 p-4">
-                              <div className="space-y-0.5">
-                                <label className="text-base font-medium text-neutral-900">
-                                  Notifications
-                                </label>
-                                <div className="text-sm text-neutral-500">
-                                  Recevoir des alertes pour les demandes de
-                                  renfort.
-                                </div>
-                              </div>
-                              <div
-                                className={`h-6 w-11 rounded-full cursor-pointer transition-colors relative ${
-                                  settingsNotifications
-                                    ? "bg-black"
-                                    : "bg-neutral-200"
-                                }`}
-                                onClick={() =>
-                                  setSettingsNotifications(
-                                    !settingsNotifications
-                                  )
-                                }
-                              >
-                                <div
-                                  className={`absolute top-0.5 left-0.5 h-5 w-5 rounded-full bg-white shadow transition-transform ${
-                                    settingsNotifications
-                                      ? "translate-x-[20px]"
-                                      : "translate-x-0"
-                                  }`}
-                                ></div>
-                              </div>
-                            </div>
-
-                            <div className="space-y-2">
-                              <label className="text-sm font-medium text-neutral-700">
-                                Heures de travail préférentielles
-                              </label>
-                              <input
-                                type="text"
-                                value={settingsWorkingHours}
-                                onChange={(e) =>
-                                  setSettingsWorkingHours(e.target.value)
-                                }
-                                placeholder="Example: 09:00 - 18:00"
-                                className="flex h-10 w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                              />
-                              <p className="text-[0.8rem] text-neutral-500">
-                                Indiquez vos créneaux de disponibilité habituels
-                                (Données profil).
-                              </p>
-                            </div>
-                          </div>
+                        <div className="flex justify-end pt-4 pb-4 border-b border-neutral-100">
+                          <button
+                            onClick={handleSaveSettings}
+                            disabled={isSaving}
+                            className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-11 px-8 bg-neutral-900 text-neutral-50 hover:bg-neutral-900/90 shadow-md"
+                          >
+                            {isSaving
+                              ? "Sauvegarde..."
+                              : "Sauvegarder les modifications"}
+                          </button>
                         </div>
 
-                        <div className="flex justify-end pt-4">
-                          <button className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-11 px-8 bg-neutral-900 text-neutral-50 hover:bg-neutral-900/90 shadow-md">
-                            Sauvegarder les modifications
-                          </button>
+                        {/* Password Change Section */}
+                        <div className="space-y-4">
+                          <h3 className="text-lg font-semibold border-b border-neutral-100 pb-2 text-neutral-900">
+                            Changer le mot de passe
+                          </h3>
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                              <label className="text-sm font-medium text-neutral-700">
+                                Entrer le mot de passe
+                              </label>
+                              <input
+                                type="password"
+                                value={settingsPassword}
+                                onChange={(e) =>
+                                  setSettingsPassword(e.target.value)
+                                }
+                                maxLength={20}
+                                placeholder="••••••••"
+                                className="flex h-10 w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <label className="text-sm font-medium text-neutral-700">
+                                Confirmer le mot de passe
+                              </label>
+                              <input
+                                type="password"
+                                value={settingsConfirmPassword}
+                                onChange={(e) =>
+                                  setSettingsConfirmPassword(e.target.value)
+                                }
+                                maxLength={20}
+                                placeholder="••••••••"
+                                className="flex h-10 w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                              />
+                            </div>
+                          </div>
+                          <div className="flex justify-end">
+                            <button
+                              onClick={handleChangePassword}
+                              disabled={isSavingPassword || !settingsPassword}
+                              className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-6 bg-black text-white hover:bg-red-700 shadow-sm"
+                            >
+                              {isSavingPassword
+                                ? "Modification..."
+                                : "Changer le mot de passe"}
+                            </button>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </DialogContent>
                 </Dialog>
+                <AddSkillDialog
+                  open={isAddSkillDialogOpen}
+                  onOpenChange={setIsAddSkillDialogOpen}
+                />
                 <div className="h-14 w-14 rounded-full bg-black bg-[url('/src/assets/profil-bg.png')] bg-cover bg-center border border-neutral-300 shadow"></div>
                 <div className="h-14 pt-1 dm-sans-regular">
                   <div className="text-lg">{fullName}</div>
@@ -594,70 +646,106 @@ const Layout = () => {
                     />
                   </svg>
 
-                  <div className="h-20 group-hover:h-64 orverflow-hidden w-20 rounded-full grid group-hover:grid-rows-3 gap-1 cursor-pointer duration-300 group absolute top-0 group-hover:top-22 duration-300">
-                    <div className="h-20 w-20 rounded-full border border-neutral-300 flex items-center justify-center cursor-pointer hover:bg-neutral-300 duration-300 group-hover:flex hidden">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="size-6"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z"
-                        />
-                      </svg>
-                    </div>
-                    <div className="h-20 w-20 rounded-full border border-neutral-300 flex items-center justify-center cursor-pointer hover:bg-neutral-300 duration-300 group-hover:flex hidden">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="size-6"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 0 1 1.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.559.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.894.149c-.424.07-.764.383-.929.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 0 1-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.398.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 0 1-.12-1.45l.527-.737c.25-.35.272-.806.108-1.204-.165-.397-.506-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.108-1.204l-.526-.738a1.125 1.125 0 0 1 .12-1.45l.773-.773a1.125 1.125 0 0 1 1.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894Z"
-                        />
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
-                        />
-                      </svg>
-                    </div>
-                    <div
-                      onClick={handleLogout}
-                      className="h-20 w-20 rounded-full border border-neutral-300 flex items-center justify-center cursor-pointer hover:bg-red-700 bg-red-500 duration-300 group-hover:flex hidden"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="size-6 text-white"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25"
-                        />
-                      </svg>
-                    </div>
+                  <div
+                    className={`h-20 p-1 group-hover:bg-white group-hover:shadow-lg overflow-hidden rounded-full grid gap-1 cursor-pointer duration-300 group absolute top-0 z-[1000] ${
+                      user?.role === "ADMIN_RH"
+                        ? "group-hover:h-[256px] group-hover:grid-rows-3 group-hover:top-[-168px]"
+                        : "group-hover:h-[172px] group-hover:grid-rows-2 group-hover:top-[-84px]"
+                    }`}
+                  >
+                    <TooltipProvider delayDuration={0}>
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <div
+                            onClick={handleAddSkill}
+                            className="h-20 w-20 rounded-full border border-neutral-300 flex items-center justify-center cursor-pointer hover:bg-neutral-300 duration-300 group-hover:flex hidden"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-6"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z"
+                              />
+                            </svg>
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent side="left">
+                          <p>Ajouter une compétence</p>
+                        </TooltipContent>
+                      </Tooltip>
+
+                      {user?.role === "ADMIN_RH" && (
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <div className="h-20 w-20 rounded-full border border-neutral-300 flex items-center justify-center cursor-pointer hover:bg-neutral-300 duration-300 group-hover:flex hidden">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                strokeWidth={1.5}
+                                stroke="currentColor"
+                                className="size-6"
+                              >
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 0 1 1.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.559.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.894.149c-.424.07-.764.383-.929.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 0 1-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.398.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 0 1-.12-1.45l.527-.737c.25-.35.272-.806.108-1.204-.165-.397-.506-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.108-1.204l-.526-.738a1.125 1.125 0 0 1 .12-1.45l.773-.773a1.125 1.125 0 0 1 1.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894Z"
+                                />
+                                <path
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+                                />
+                              </svg>
+                            </div>
+                          </TooltipTrigger>
+                          <TooltipContent side="left">
+                            <p>Paramètres RH</p>
+                          </TooltipContent>
+                        </Tooltip>
+                      )}
+
+                      <Tooltip>
+                        <TooltipTrigger asChild>
+                          <div
+                            onClick={handleLogout}
+                            className="h-20 w-20 rounded-full border border-neutral-300 flex items-center justify-center cursor-pointer hover:bg-neutral-800 bg-red-500 duration-300 group-hover:flex hidden"
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              strokeWidth={1.5}
+                              stroke="currentColor"
+                              className="size-6 text-white"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25"
+                              />
+                            </svg>
+                          </div>
+                        </TooltipTrigger>
+                        <TooltipContent side="left">
+                          <p>Se déconnecter</p>
+                        </TooltipContent>
+                      </Tooltip>
+                    </TooltipProvider>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </header>
-        <main className="w-full mx-auto py-4 px-4 lg:px-12 col-start-1 h-full overflow-y-auto">
+        <main className="w-full mx-auto pt-8 pb-4 px-4 lg:px-12 col-start-1 min-h-[calc(100vh-280px)] overflow-y-auto">
           <Outlet />
         </main>
       </div>
