@@ -182,9 +182,9 @@ const TeamTab = () => {
           Membres de l'équipe
         </h4>
         <div className="space-y-3">
-          {team.members.map((member) => (
+          {[1, 2, 3, 4, 5].map((_, index) => (
             <div
-              key={member.id}
+              key={index}
               className="flex items-center gap-4 p-3 rounded-xl hover:bg-neutral-50 transition-colors"
             >
               <div className="h-10 w-10 rounded-full bg-neutral-900 flex items-center justify-center text-white font-bold">
