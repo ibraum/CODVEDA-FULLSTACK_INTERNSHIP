@@ -53,7 +53,7 @@ const AdminDashboard = () => {
       const totalUsers = users.length;
       const totalTeams = teams.length;
       const activeRequests = requests.filter(
-        (r) => r.status === "PENDING"
+        (r) => r.status === "OPEN"
       ).length;
       const availableUsers = users.filter(
         (u) => u.humanState?.availability === "AVAILABLE"
@@ -83,12 +83,12 @@ const AdminDashboard = () => {
       }, {});
 
       setUsersByRole([
-        { name: "Admin RH", value: roleCount.ADMIN_RH || 0, color: "#ef4444" },
-        { name: "Managers", value: roleCount.MANAGER || 0, color: "#f97316" },
+        { name: "Admin RH", value: roleCount.ADMIN_RH || 0, color: "#171717" },
+        { name: "Managers", value: roleCount.MANAGER || 0, color: "#ff3300ff" },
         {
           name: "Collaborateurs",
           value: roleCount.COLLABORATOR || 0,
-          color: "#3b82f6",
+          color: "#a3a3a3",
         },
       ]);
 
@@ -125,7 +125,7 @@ const AdminDashboard = () => {
     }
   };
 
-  const COLORS = ["#22c55e", "#eab308", "#f97316", "#ef4444"];
+  const COLORS = ["#22c55e", "#ea6e08ff", "#f95616ff", "#fa3200ff"];
 
   if (loading) {
     return (
@@ -163,8 +163,8 @@ const AdminDashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
         {/* Total Users & Availability */}
-        <div className="bg-neutral-100 rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all">
-          <div className="absolute top-0 right-0 h-24 w-24 rounded-[0_0_0_100%] bg-blue-500/10 group-hover:bg-blue-500/20 transition-colors blur-xl z-0"></div>
+        <div className="border border-neutral-200 rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all">
+          <div className="absolute top-0 right-0 h-24 w-24 rounded-[0_0_0_100%] bg-blue-500/20 group-hover:bg-blue-500/30 transition-colors blur-xl z-0"></div>
           <div className="relative z-10 flex flex-col h-full justify-between">
             <div className="flex justify-between items-start mb-4">
               <div>
@@ -193,8 +193,8 @@ const AdminDashboard = () => {
         </div>
 
         {/* Teams & Status */}
-        <div className="bg-neutral-100 rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all">
-          <div className="absolute top-0 right-0 h-24 w-24 rounded-[0_0_0_100%] bg-orange-500/10 group-hover:bg-orange-500/20 transition-colors blur-xl z-0"></div>
+        <div className="border border-neutral-200 rounded-2xl p-6 relative overflow-hidden group hover:shadow transition-all">
+          <div className="absolute top-0 right-0 h-24 w-24 rounded-[0_0_0_100%] bg-orange-500/20 group-hover:bg-orange-500/30 transition-colors blur-xl z-0"></div>
           <div className="relative z-10 flex flex-col h-full justify-between">
             <div className="flex justify-between items-start mb-4">
               <div>
@@ -223,8 +223,8 @@ const AdminDashboard = () => {
         </div>
 
         {/* Requests */}
-        <div className="bg-neutral-100 rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all">
-          <div className="absolute top-0 right-0 h-24 w-24 rounded-[0_0_0_100%] bg-purple-500/10 group-hover:bg-purple-500/20 transition-colors blur-xl z-0"></div>
+        <div className="border border-neutral-200 rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all">
+          <div className="absolute top-0 right-0 h-24 w-24 rounded-[0_0_0_100%] bg-purple-500/20 group-hover:bg-purple-500/30 transition-colors blur-xl z-0"></div>
           <div className="relative z-10 flex flex-col h-full justify-between">
             <div className="flex justify-between items-start mb-4">
               <div>
@@ -315,9 +315,9 @@ const AdminDashboard = () => {
                 <Bar dataKey="value" radius={[4, 4, 0, 0]}>
                   {teamTensions.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={
-                      entry.name === "Critique" ? "#ef4444" :
-                        entry.name === "Élevée" ? "#f97316" :
-                          entry.name === "Modérée" ? "#eab308" : "#22c55e"
+                      entry.name === "Critique" ? "#171717" :
+                        entry.name === "Élevée" ? "#ea580c" :
+                          entry.name === "Modérée" ? "#fb923c" : "#e5e5e5"
                     } />
                   ))}
                 </Bar>
@@ -354,8 +354,8 @@ const AdminDashboard = () => {
                     <Cell
                       key={`cell-${index}`}
                       fill={
-                        entry.name === "Élevé" ? "#ef4444" :
-                          entry.name === "Normal" ? "#3b82f6" : "#22c55e"
+                        entry.name === "Élevé" ? "#171717" :
+                          entry.name === "Normal" ? "#f97316" : "#d4d4d4"
                       }
                     />
                   ))}

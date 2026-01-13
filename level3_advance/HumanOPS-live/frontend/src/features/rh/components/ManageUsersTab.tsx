@@ -1,8 +1,6 @@
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { StatsCard } from "../../../components/common/StatsCard";
-import { UserCard } from "../../../components/common/UserCard";
 import {
   Dialog,
   DialogContent,
@@ -20,6 +18,16 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import {
   getAllUsersWithStates,
   updateUser,
@@ -119,23 +127,16 @@ const ManageUsersTab = () => {
     setIsDeleteDialogOpen(true);
   };
 
-  const hasUsers = users.length > 0;
-
   if (loading) {
     return (
       <div className="space-y-6">
-        <Card>
-          <CardHeader>
-            <Skeleton className="h-8 w-48" />
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <Skeleton key={i} className="h-16" />
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+        <Skeleton className="h-40 w-full rounded-2xl" />
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <Skeleton className="h-32 rounded-2xl" />
+          <Skeleton className="h-32 rounded-2xl" />
+          <Skeleton className="h-32 rounded-2xl" />
+        </div>
+        <Skeleton className="h-[400px] w-full rounded-2xl" />
       </div>
     );
   }
@@ -162,148 +163,256 @@ const ManageUsersTab = () => {
   ).length;
 
   return (
-    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
-      {/* Overview Stats */}
-      <Card>
-        <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle className="text-2xl">Gestion des utilisateurs</CardTitle>
-            <button
-              onClick={() => setIsAddDialogOpen(true)}
-              className="bg-neutral-900 text-white text-sm font-medium px-4 py-2 rounded-lg hover:bg-neutral-800 transition-colors flex items-center gap-2"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-4"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 4.5v15m7.5-7.5h-15"
-                />
-              </svg>
-              Ajouter un utilisateur
-            </button>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-3 gap-4">
-            <StatsCard
-              title="Utilisateurs"
-              value={totalUsers}
-              variant="default"
-              color="neutral"
-            />
-            <StatsCard
-              title="Disponibles"
-              value={availableUsers}
-              variant="default"
-              color="green"
-            />
-            <StatsCard
-              title="Surchargés"
-              value={overloadedUsers}
-              variant="default"
-              color="red"
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Users List */}
-      <div className="space-y-4">
-        <h3 className="text-xl font-semibold dm-sans-bold text-neutral-900">
-          Liste des utilisateurs
-        </h3>
-        {!hasUsers ? (
-          <div className="bg-white p-8 rounded-2xl border border-dashed border-neutral-300 text-center flex flex-col items-center justify-center">
-            <div className="h-12 w-12 rounded-full bg-neutral-100 flex items-center justify-center mb-4 text-neutral-400">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-6"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"
-                />
-              </svg>
-            </div>
-            <h3 className="text-lg font-medium text-neutral-900">
-              Aucun utilisateur trouvé
-            </h3>
-            <p className="text-neutral-500 text-sm mt-1">
-              Commencez par ajouter votre premier utilisateur
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-neutral-900 to-neutral-800 rounded-2xl p-8 text-white shadow-lg relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-110 transition-transform duration-700"></div>
+        <div className="relative z-10 w-full flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold mb-2 dm-sans-bold">
+              Gestion de l'Effectif
+            </h1>
+            <p className="text-neutral-300">
+              Administrez les profils et les accès collaborateurs
             </p>
           </div>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {users.map((user) => (
-              <UserCard
-                key={user.id}
-                user={user}
-                actions={
-                  <div className="flex items-center gap-2">
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleEditUser(user);
-                      }}
-                      className="flex-1 bg-neutral-900 text-white text-sm font-medium px-3 py-2 rounded-lg hover:bg-neutral-800 transition-colors flex items-center justify-center gap-2"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="size-4"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
-                        />
-                      </svg>
-                      Modifier
-                    </button>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        openDeleteDialog(user);
-                      }}
-                      className="bg-red-50 text-red-600 text-sm font-medium px-3 py-2 rounded-lg hover:bg-red-100 transition-colors"
-                    >
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="size-4"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                        />
-                      </svg>
-                    </button>
-                  </div>
-                }
+          <button
+            onClick={() => setIsAddDialogOpen(true)}
+            className="hidden md:flex bg-white text-neutral-900 text-sm font-bold px-5 py-3 rounded-xl hover:bg-neutral-100 transition-colors items-center gap-2 shadow-sm"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="size-4"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 4.5v15m7.5-7.5h-15"
               />
-            ))}
-          </div>
-        )}
+            </svg>
+            Ajouter un membre
+          </button>
+        </div>
       </div>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {/* Total Users */}
+        <div className="border border-neutral-200 rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all">
+          <div className="absolute top-0 right-0 h-24 w-24 rounded-[0_0_0_100%] bg-neutral-900/10 group-hover:bg-neutral-900/15 transition-colors blur-xl z-0"></div>
+          <div className="relative z-10">
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <p className="text-sm font-medium text-neutral-500 uppercase tracking-wide">
+                  Total Membres
+                </p>
+                <div className="text-4xl font-bold dm-sans-bold text-neutral-900 mt-1">
+                  {totalUsers}
+                </div>
+              </div>
+              <div className="h-10 w-10 bg-white rounded-full flex items-center justify-center border border-neutral-200 shadow-sm">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-5 text-neutral-700"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Available Users */}
+        <div className="border border-neutral-200 rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all">
+          <div className="absolute top-0 right-0 h-24 w-24 rounded-[0_0_0_100%] bg-green-500/10 group-hover:bg-green-500/20 transition-colors blur-xl z-0"></div>
+          <div className="relative z-10">
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <p className="text-sm font-medium text-neutral-500 uppercase tracking-wide">
+                  Disponibles
+                </p>
+                <div className="text-4xl font-bold dm-sans-bold text-neutral-900 mt-1">
+                  {availableUsers}
+                </div>
+              </div>
+              <div className="h-10 w-10 bg-white rounded-full flex items-center justify-center border border-neutral-200 shadow-sm">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-5 text-green-600"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div className="w-full bg-neutral-100 h-1.5 rounded-full overflow-hidden mt-2">
+              <div
+                className="h-full bg-green-500 rounded-full"
+                style={{
+                  width: `${(availableUsers / (totalUsers || 1)) * 100}%`,
+                }}
+              ></div>
+            </div>
+          </div>
+        </div>
+
+        {/* Overloaded Users */}
+        <div className="border border-neutral-200 rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all">
+          <div className="absolute top-0 right-0 h-24 w-24 rounded-[0_0_0_100%] bg-red-500/10 group-hover:bg-red-500/20 transition-colors blur-xl z-0"></div>
+          <div className="relative z-10">
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <p className="text-sm font-medium text-neutral-500 uppercase tracking-wide">
+                  Surchargés
+                </p>
+                <div className="text-4xl font-bold dm-sans-bold text-neutral-900 mt-1">
+                  {overloadedUsers}
+                </div>
+              </div>
+              <div className="h-10 w-10 bg-white rounded-full flex items-center justify-center border border-neutral-200 shadow-sm">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-5 text-red-600"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z"
+                  />
+                </svg>
+              </div>
+            </div>
+            <div className="w-full bg-neutral-100 h-1.5 rounded-full overflow-hidden mt-2">
+              <div
+                className="h-full bg-red-500 rounded-full show-tooltip" // Added show-tooltip just in case, though handled by css usually
+                style={{
+                  width: `${(overloadedUsers / (totalUsers || 1)) * 100}%`,
+                }}
+              ></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Users DataTable */}
+      <Card>
+        <CardHeader className="border-b border-neutral-100 pb-4">
+          <div className="flex items-center justify-between">
+            <CardTitle className="text-lg">Annuaire des Utilisateurs</CardTitle>
+            <div className="flex gap-2">
+              {/* Place for filters if needed later */}
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader className="bg-neutral-50/50">
+              <TableRow>
+                <TableHead className="w-[80px]">Avatar</TableHead>
+                <TableHead>Identité</TableHead>
+                <TableHead>Email</TableHead>
+                <TableHead>Rôle</TableHead>
+                <TableHead className="text-center">Statut</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {users.map((user) => (
+                <TableRow key={user.id} className="hover:bg-neutral-50/50 transition-colors">
+                  <TableCell>
+                    <Avatar className="h-10 w-10 border border-neutral-100">
+                      <AvatarFallback className="bg-neutral-900 text-white font-medium text-xs">
+                        {(user.firstName?.[0] || user.email[0]).toUpperCase()}
+                        {(user.lastName?.[0] || "").toUpperCase()}
+                      </AvatarFallback>
+                    </Avatar>
+                  </TableCell>
+                  <TableCell>
+                    <div>
+                      <div className="font-semibold text-neutral-900">
+                        {user.firstName ? `${user.firstName} ${user.lastName}` : "Sans nom"}
+                      </div>
+                      <div className="text-xs text-neutral-500">
+                        ID: {user.id.substring(0, 8)}...
+                      </div>
+                    </div>
+                  </TableCell>
+                  <TableCell className="text-neutral-600">{user.email}</TableCell>
+                  <TableCell>
+                    <Badge variant="outline" className="font-normal bg-white">
+                      {user.role === "ADMIN_RH" ? "Admin RH" : user.role === "MANAGER" ? "Manager" : "Collaborateur"}
+                    </Badge>
+                  </TableCell>
+                  <TableCell className="text-center">
+                    {user.humanState ? (
+                      <Badge
+                        variant="secondary"
+                        className={
+                          user.humanState.availability === "AVAILABLE"
+                            ? "bg-green-100 text-green-700 hover:bg-green-100"
+                            : user.humanState.availability === "MOBILISABLE"
+                              ? "bg-orange-100 text-orange-700 hover:bg-orange-100"
+                              : "bg-red-100 text-red-700 hover:bg-red-100"
+                        }
+                      >
+                        {user.humanState.availability === "AVAILABLE" ? "Disponible" :
+                          user.humanState.availability === "MOBILISABLE" ? "Mobilisable" : "Indisponible"}
+                      </Badge>
+                    ) : (
+                      <span className="text-neutral-400">-</span>
+                    )}
+                  </TableCell>
+                  <TableCell className="text-right">
+                    <div className="flex items-center justify-end gap-2">
+                      <button
+                        onClick={() => handleEditUser(user)}
+                        className="p-2 hover:bg-neutral-100 rounded-lg text-neutral-500 hover:text-neutral-900 transition-colors"
+                        title="Modifier"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
+                        </svg>
+                      </button>
+                      <button
+                        onClick={() => openDeleteDialog(user)}
+                        className="p-2 hover:bg-red-50 rounded-lg text-neutral-400 hover:text-red-600 transition-colors"
+                        title="Supprimer"
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                        </svg>
+                      </button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
 
       {/* Edit User Dialog */}
       <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>

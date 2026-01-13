@@ -63,6 +63,7 @@ export class UserRepository implements IUserRepository {
         deletedAt: true,
         createdAt: true,
         updatedAt: true,
+        humanState: true,
       },
     });
 

@@ -26,7 +26,23 @@ export class TeamRepository implements ITeamRepository {
   }
 
   async findAll(): Promise<Team[]> {
-    return (await prisma.team.findMany()) as Team[];
+    const teams = await prisma.team.findMany({
+      include: {
+        _count: {
+          select: { members: true },
+        },
+        tensions: {
+          orderBy: { calculatedAt: "desc" },
+          take: 1,
+        },
+      },
+    });
+
+    return teams.map((t) => ({
+      ...t,
+      memberCount: t._count.members,
+      currentTension: t.tensions[0] || null,
+    })) as unknown as Team[];
   }
 
   async update(id: string, data: UpdateTeamDTO): Promise<Team> {
