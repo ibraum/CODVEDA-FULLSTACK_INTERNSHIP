@@ -178,7 +178,7 @@ const ManageUsersTab = () => {
           </div>
           <button
             onClick={() => setIsAddDialogOpen(true)}
-            className="hidden md:flex bg-white text-neutral-900 text-sm font-bold px-5 py-3 rounded-xl hover:bg-neutral-100 transition-colors items-center gap-2 shadow-sm"
+            className="hidden md:flex bg-orange-600 text-white text-sm font-bold px-5 py-3 rounded-xl hover:bg-orange-700 cursor-pointer transition-colors items-center gap-2 shadow-sm"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

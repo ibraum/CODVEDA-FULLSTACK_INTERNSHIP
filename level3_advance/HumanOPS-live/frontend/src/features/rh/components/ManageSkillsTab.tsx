@@ -2,6 +2,31 @@ import { useEffect, useState } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import {
   getAllSkillsWithCount,
   createSkill,
   deleteSkill,
@@ -14,6 +39,8 @@ const ManageSkillsTab = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isAdding, setIsAdding] = useState(false);
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
+  const [skillToDelete, setSkillToDelete] = useState<Skill | null>(null);
 
   useEffect(() => {
     fetchSkills();
@@ -41,6 +68,7 @@ const ManageSkillsTab = () => {
       await createSkill(newSkillName.trim());
       await fetchSkills(); // Refresh the list
       setNewSkillName("");
+      setIsAddDialogOpen(false);
     } catch (err: any) {
       console.error("Failed to add skill", err);
       alert("Erreur lors de l'ajout de la compétence");
@@ -49,14 +77,13 @@ const ManageSkillsTab = () => {
     }
   };
 
-  const handleDeleteSkill = async (skillId: string) => {
-    if (!confirm("Êtes-vous sûr de vouloir supprimer cette compétence ?")) {
-      return;
-    }
+  const handleDeleteSkill = async () => {
+    if (!skillToDelete) return;
 
     try {
-      await deleteSkill(skillId);
+      await deleteSkill(skillToDelete.id);
       await fetchSkills(); // Refresh the list
+      setSkillToDelete(null);
     } catch (err: any) {
       console.error("Failed to delete skill", err);
       alert("Erreur lors de la suppression de la compétence");
@@ -66,18 +93,12 @@ const ManageSkillsTab = () => {
   if (loading) {
     return (
       <div className="space-y-6">
-        <Card>
-          <CardHeader>
-            <Skeleton className="h-8 w-48" />
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-3">
-              {[1, 2, 3, 4, 5].map((i) => (
-                <Skeleton key={i} className="h-12" />
-              ))}
-            </div>
-          </CardContent>
-        </Card>
+        <Skeleton className="h-40 w-full rounded-2xl" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <Skeleton className="h-32 rounded-2xl" />
+          <Skeleton className="h-32 rounded-2xl" />
+        </div>
+        <Skeleton className="h-[400px] w-full rounded-2xl" />
       </div>
     );
   }
@@ -95,142 +116,231 @@ const ManageSkillsTab = () => {
   }
 
   return (
-    <div className="space-y-6 animate-in fade-in slide-in-from-bottom-2 duration-300">
-      {/* Overview Stats */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-2xl">Gestion des compétences</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="bg-neutral-50 rounded-xl p-4 text-center">
-              <div className="text-3xl font-bold dm-sans-bold text-neutral-900">
-                {skills.length}
-              </div>
-              <div className="text-xs text-neutral-500 mt-1 uppercase tracking-wider">
-                Compétences disponibles
-              </div>
-            </div>
-            <div className="bg-neutral-50 rounded-xl p-4 text-center">
-              <div className="text-3xl font-bold dm-sans-bold text-orange-600">
-                {skills.reduce((sum, skill) => sum + (skill.userCount || 0), 0)}
-              </div>
-              <div className="text-xs text-neutral-500 mt-1 uppercase tracking-wider">
-                Compétences déclarées
-              </div>
-            </div>
+    <div className="space-y-8 animate-in fade-in slide-in-from-bottom-2 duration-300">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-neutral-900 to-neutral-800 rounded-2xl p-8 text-white shadow-lg relative overflow-hidden group">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-110 transition-transform duration-700"></div>
+        <div className="relative z-10 w-full flex justify-between items-center">
+          <div>
+            <h1 className="text-3xl font-bold mb-2 dm-sans-bold">
+              Gestion des Compétences
+            </h1>
+            <p className="text-neutral-300">
+              Définissez les compétences clés de l'entreprise
+            </p>
           </div>
-        </CardContent>
-      </Card>
-
-      {/* Add New Skill */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Ajouter une compétence</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="flex gap-3">
-            <input
-              type="text"
-              placeholder="Nom de la compétence..."
-              value={newSkillName}
-              onChange={(e) => setNewSkillName(e.target.value)}
-              onKeyPress={(e) => e.key === "Enter" && handleAddSkill()}
-              className="flex h-10 flex-1 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
-            />
-            <button
-              onClick={handleAddSkill}
-              disabled={isAdding || !newSkillName.trim()}
-              className="inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-6 bg-neutral-900 text-white hover:bg-neutral-900/90 disabled:opacity-50 disabled:pointer-events-none"
+          <button
+            onClick={() => setIsAddDialogOpen(true)}
+            className="hidden md:flex bg-orange-600 text-white text-sm font-bold px-5 py-3 rounded-xl hover:bg-orange-700 cursor-pointer transition-colors items-center gap-2 shadow-sm"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="size-4"
             >
-              {isAdding ? "Ajout..." : "Ajouter"}
-            </button>
-          </div>
-        </CardContent>
-      </Card>
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 4.5v15m7.5-7.5h-15"
+              />
+            </svg>
+            Ajouter une compétence
+          </button>
+        </div>
+      </div>
 
-      {/* Skills List */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="text-lg">Liste des compétences</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-2">
-            {skills.length === 0 ? (
-              <div className="text-center text-neutral-500 py-8">
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Total Skills */}
+        <div className="border border-neutral-200 rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all">
+          <div className="absolute top-0 right-0 h-24 w-24 rounded-[0_0_0_100%] bg-neutral-900/10 group-hover:bg-neutral-900/15 transition-colors blur-xl z-0"></div>
+          <div className="relative z-10">
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <p className="text-sm font-medium text-neutral-500 uppercase tracking-wide">
+                  Compétences disponibles
+                </p>
+                <div className="text-4xl font-bold dm-sans-bold text-neutral-900 mt-1">
+                  {skills.length}
+                </div>
+              </div>
+              <div className="h-10 w-10 bg-white rounded-full flex items-center justify-center border border-neutral-200 shadow-sm">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="w-12 h-12 mx-auto mb-3 text-neutral-300"
+                  className="size-5 text-neutral-700"
                 >
                   <path
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z"
+                    d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25"
                   />
                 </svg>
-                <p className="font-medium">Aucune compétence disponible</p>
               </div>
-            ) : (
-              skills.map((skill) => (
-                <div
-                  key={skill.id}
-                  className="flex items-center justify-between p-4 rounded-xl hover:bg-neutral-50 transition-colors border border-neutral-100"
-                >
-                  <div className="flex items-center gap-3">
-                    <div className="h-10 w-10 rounded-full bg-neutral-900 flex items-center justify-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="w-5 h-5 text-white"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z"
-                        />
-                      </svg>
-                    </div>
-                    <div>
-                      <div className="font-semibold text-neutral-900">
-                        {skill.name}
-                      </div>
-                      <div className="text-xs text-neutral-500">
-                        {skill.userCount || 0} utilisateur(s)
-                      </div>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => handleDeleteSkill(skill.id)}
-                    className="h-9 w-9 rounded-full hover:bg-red-50 flex items-center justify-center transition-colors group"
-                  >
-                    <svg
-                      xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth={1.5}
-                      stroke="currentColor"
-                      className="w-5 h-5 text-neutral-400 group-hover:text-red-600"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
-                      />
-                    </svg>
-                  </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Total Declared */}
+        <div className="border border-neutral-200 rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all">
+          <div className="absolute top-0 right-0 h-24 w-24 rounded-[0_0_0_100%] bg-orange-500/10 group-hover:bg-orange-500/20 transition-colors blur-xl z-0"></div>
+          <div className="relative z-10">
+            <div className="flex justify-between items-start mb-4">
+              <div>
+                <p className="text-sm font-medium text-neutral-500 uppercase tracking-wide">
+                  Compétences déclarées
+                </p>
+                <div className="text-4xl font-bold dm-sans-bold text-neutral-900 mt-1">
+                  {skills.reduce((sum, skill) => sum + (skill.userCount || 0), 0)}
                 </div>
-              ))
-            )}
+              </div>
+              <div className="h-10 w-10 bg-white rounded-full flex items-center justify-center border border-neutral-200 shadow-sm">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-5 text-orange-600"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                  />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Skills List Table */}
+      <Card>
+        <CardHeader className="border-b border-neutral-100 pb-4">
+          <CardTitle className="text-lg">Répertoire des compétences</CardTitle>
+        </CardHeader>
+        <CardContent className="p-0">
+          <div className="max-h-[600px] overflow-y-auto">
+            <Table>
+              <TableHeader className="bg-neutral-50/50 sticky top-0 bg-white z-10">
+                <TableRow>
+                  <TableHead className="w-2/3">Nom</TableHead>
+                  <TableHead className="text-center">Utilisateurs</TableHead>
+                  <TableHead className="text-right">Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {skills.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={3} className="h-32 text-center text-neutral-500">
+                      Aucune compétence trouvée. Ajoutez-en une pour commencer.
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  skills.map((skill) => (
+                    <TableRow key={skill.id} className="hover:bg-neutral-50/50 transition-colors">
+                      <TableCell className="font-medium text-neutral-900">
+                        <div className="flex items-center gap-3">
+                          <div className="h-8 w-8 rounded-full bg-neutral-900/5 flex items-center justify-center text-neutral-600">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
+                              <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
+                            </svg>
+                          </div>
+                          {skill.name}
+                        </div>
+                      </TableCell>
+                      <TableCell className="text-center">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-neutral-100 text-neutral-800">
+                          {skill.userCount || 0}
+                        </span>
+                      </TableCell>
+                      <TableCell className="text-right">
+                        <button
+                          onClick={() => setSkillToDelete(skill)}
+                          className="p-2 hover:bg-red-50 rounded-lg text-neutral-400 hover:text-red-600 transition-colors"
+                          title="Supprimer"
+                        >
+                          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
+                            <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                          </svg>
+                        </button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
           </div>
         </CardContent>
       </Card>
+
+      {/* Add Skill Dialog */}
+      <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="text-2xl dm-sans-bold">Ajouter une compétence</DialogTitle>
+            <DialogDescription>
+              Ajoutez une nouvelle compétence au répertoire de l'entreprise.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="py-4">
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-neutral-700">Nom de la compétence</label>
+                <input
+                  type="text"
+                  placeholder="Ex: React.js, Gestion de projet..."
+                  value={newSkillName}
+                  onChange={(e) => setNewSkillName(e.target.value)}
+                  onKeyPress={(e) => e.key === "Enter" && handleAddSkill()}
+                  className="flex h-10 w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
+                />
+              </div>
+            </div>
+          </div>
+          <div className="flex justify-end gap-3">
+            <button
+              onClick={() => setIsAddDialogOpen(false)}
+              className="px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors"
+            >
+              Annuler
+            </button>
+            <button
+              onClick={handleAddSkill}
+              disabled={isAdding || !newSkillName.trim()}
+              className="px-4 py-2 text-sm font-medium bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 transition-colors disabled:opacity-50"
+            >
+              {isAdding ? "Ajout..." : "Ajouter"}
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete Confirmation Dialog */}
+      <AlertDialog open={!!skillToDelete} onOpenChange={(open) => !open && setSkillToDelete(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Êtes-vous sûr ?</AlertDialogTitle>
+            <AlertDialogDescription>
+              Voulez-vous vraiment supprimer la compétence <span className="font-bold text-neutral-900">{skillToDelete?.name}</span> ?
+              Cette action est irréversible et retirera cette compétence de tous les profils utilisateurs.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteSkill} className="bg-red-600 hover:bg-red-700">
+              Supprimer
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };
