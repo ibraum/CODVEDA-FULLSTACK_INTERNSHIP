@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { getStateHistory } from "../../team/services/teamService";
 import type { HumanStateHistory } from "../../team/services/teamService";
 import {
   LineChart,
@@ -13,21 +12,16 @@ import {
 
 const HistoryTab = () => {
   const [history, setHistory] = useState<HumanStateHistory[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  // Note: The /api/human-states/history endpoint doesn't exist yet
+  // The backend has the repository but no controller/route for it
+  // For now, we'll show an informative message
 
   useEffect(() => {
-    const fetchHistory = async () => {
-      try {
-        const data = await getStateHistory(20);
-        setHistory(data);
-      } catch (error) {
-        console.error("Failed to fetch state history", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchHistory();
+    // Endpoint not available yet
+    setLoading(false);
+    setHistory([]);
   }, []);
 
   if (loading) {
@@ -206,8 +200,13 @@ const HistoryTab = () => {
                 d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
               />
             </svg>
-            <p className="text-neutral-500 font-medium">
-              Aucun historique disponible
+            <p className="text-neutral-700 font-medium mb-2">
+              Historique d'état
+            </p>
+            <p className="text-neutral-500 text-sm max-w-md mx-auto">
+              Cette fonctionnalité sera bientôt disponible. L'historique de vos
+              changements d'état (disponibilité et charge de travail) sera
+              affiché ici.
             </p>
           </div>
         ) : (

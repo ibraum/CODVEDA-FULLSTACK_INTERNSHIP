@@ -4,6 +4,8 @@ import {
   updateMe,
   getProfile,
   updateProfile,
+  getAllSkills,
+  addSkill,
 } from "../../features/auth/services/authService";
 import { useState, useEffect } from "react";
 import {
@@ -19,7 +21,6 @@ import {
 import {
   Drawer,
   DrawerContent,
-  DrawerDescription,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
@@ -33,6 +34,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { useAlerts } from "../../hooks/useAlerts";
+import { useRealtimeNotifications } from "../../hooks/useRealtimeNotifications";
 import { formatTimeAgo } from "../../lib/utils";
 import {
   Tooltip,
@@ -41,13 +43,18 @@ import {
   TooltipTrigger,
 } from "../ui/tooltip";
 
-import AddSkillDialog from "../../features/dashboard/components/AddSkillDialog";
 import TeamTab from "../../features/team/components/TeamTab";
 import RequestsTab from "../../features/team/components/RequestsTab";
 import HistoryTab from "../../features/team/components/HistoryTab";
+import TeamsTab from "../../features/rh/components/TeamsTab";
+import ManageUsersTab from "../../features/rh/components/ManageUsersTab";
+import ManageSkillsTab from "../../features/rh/components/ManageSkillsTab";
 
 const Layout = () => {
   const { logout, user } = useAuth();
+
+  // Enable real-time notifications
+  useRealtimeNotifications();
 
   const today = new Date();
   const dayNumber = today.getDate().toString().padStart(2, "0");
@@ -61,13 +68,12 @@ const Layout = () => {
   const userRole = user?.role ? user.role.replace("_", " ") : "";
   const navigate = useNavigate();
   const [isLogoutDialogOpen, setIsLogoutDialogOpen] = useState(false);
-  const [isAddSkillDialogOpen, setIsAddSkillDialogOpen] = useState(false);
   const [isAlertPanelOpen, setIsAlertPanelOpen] = useState(false);
   const { alerts, markAllAsRead, unreadCount, markAsRead } = useAlerts();
   const [activeTab, setActiveTab] = useState<"all" | "unread">("all");
-  const [drawerTab, setDrawerTab] = useState<"team" | "requests" | "history">(
-    "team"
-  );
+  const [drawerTab, setDrawerTab] = useState<
+    "team" | "requests" | "history" | "teams" | "users" | "skills"
+  >(user?.role === "ADMIN_RH" ? "teams" : "team");
 
   // Settings Form State
   const [settingsFirstName, setSettingsFirstName] = useState("");
@@ -75,9 +81,14 @@ const Layout = () => {
   const [settingsEmail, setSettingsEmail] = useState("");
   const [settingsPassword, setSettingsPassword] = useState("");
   const [settingsConfirmPassword, setSettingsConfirmPassword] = useState("");
-  const [settingsNotifications, setSettingsNotifications] = useState(true); // Default reflected from backend analysis (preferences.notifications)
+  const [settingsNotifications, setSettingsNotifications] = useState(true);
   const [settingsWorkingHours, setSettingsWorkingHours] =
-    useState("09:00 - 17:00"); // Default from backend analysis
+    useState("09:00 - 17:00");
+
+  // Skills State
+  const [skills, setSkills] = useState<any[]>([]);
+  const [newSkill, setNewSkill] = useState("");
+  const [isLoadingSkills, setIsLoadingSkills] = useState(false);
 
   const [isSaving, setIsSaving] = useState(false);
   const [isSavingPassword, setIsSavingPassword] = useState(false);
@@ -100,8 +111,31 @@ const Layout = () => {
           }
         })
         .catch((err) => console.error("Failed to fetch profile settings", err));
+
+      // Fetch skills
+      getAllSkills()
+        .then((skillsData) => {
+          setSkills(skillsData);
+        })
+        .catch((err) => console.error("Failed to fetch skills", err));
     }
   }, [user]);
+
+  const handleAddSkill = async () => {
+    if (!newSkill.trim()) return;
+
+    setIsLoadingSkills(true);
+    try {
+      await addSkill(newSkill);
+      const updatedSkills = await getAllSkills();
+      setSkills(updatedSkills);
+      setNewSkill("");
+    } catch (error) {
+      console.error("Failed to add skill", error);
+    } finally {
+      setIsLoadingSkills(false);
+    }
+  };
 
   const handleSaveSettings = async () => {
     setIsSaving(true);
@@ -168,10 +202,6 @@ const Layout = () => {
     setIsLogoutDialogOpen(true);
   };
 
-  const handleAddSkill = () => {
-    setIsAddSkillDialogOpen(true);
-  };
-
   const confirmLogout = () => {
     logout();
     navigate("/login");
@@ -188,114 +218,6 @@ const Layout = () => {
         <header className="bg-neutral-100 py-6 px-4 lg:px-12 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 lg:gap-0 col-start-1 h-auto lg:h-full">
           <div className="w-full max-w-[750px] h-full flex flex-col justify-between items-start">
             <div className="flex items-center gap-4">
-              {user?.role !== "COLLABORATOR" && (
-                <Drawer direction="left">
-                  <DrawerTrigger asChild>
-                    <div className="menu h-14 w-14 rounded-full bg-white flex items-center justify-center shadow cursor-pointer hover:bg-neutral-50 transition-colors">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={1.5}
-                        stroke="currentColor"
-                        className="size-6"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25H12"
-                        />
-                      </svg>
-                    </div>
-                  </DrawerTrigger>
-                  <DrawerContent className="h-full w-[350px] mt-0 rounded-r-[32px] rounded-l-none inset-y-0 left-0 right-auto bg-white border-r border-neutral-100 shadow-2xl p-0 overflow-hidden flex flex-col">
-                    <div className="p-8 border-b border-neutral-100 flex items-center justify-between">
-                      <DrawerHeader className="p-0 text-left">
-                        <DrawerTitle className="text-3xl font-bold dm-sans-bold text-neutral-900">
-                          Menu
-                        </DrawerTitle>
-                        <DrawerDescription className="text-neutral-500 mt-1">
-                          Navigation principale
-                        </DrawerDescription>
-                      </DrawerHeader>
-                    </div>
-
-                    <div className="flex-1 overflow-y-auto py-8 px-6">
-                      <nav className="flex flex-col gap-2">
-                        <Link
-                          to="/dashboard"
-                          className="flex items-center gap-4 px-4 py-4 rounded-xl text-lg font-medium text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 transition-all group"
-                        >
-                          <div className="h-10 w-10 rounded-full bg-neutral-100 flex items-center justify-center group-hover:bg-white group-hover:shadow-sm transition-all">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth={1.5}
-                              stroke="currentColor"
-                              className="size-5"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"
-                              />
-                            </svg>
-                          </div>
-                          Dashboard
-                        </Link>
-                        <Link
-                          to="/"
-                          className="flex items-center gap-4 px-4 py-4 rounded-xl text-lg font-medium text-neutral-600 hover:text-neutral-900 hover:bg-neutral-50 transition-all group"
-                        >
-                          <div className="h-10 w-10 rounded-full bg-neutral-100 flex items-center justify-center group-hover:bg-white group-hover:shadow-sm transition-all">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              fill="none"
-                              viewBox="0 0 24 24"
-                              strokeWidth={1.5}
-                              stroke="currentColor"
-                              className="size-5"
-                            >
-                              <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
-                              />
-                            </svg>
-                          </div>
-                          Accueil
-                        </Link>
-                      </nav>
-                    </div>
-
-                    <div className="p-6 border-t border-neutral-100 bg-neutral-50/50">
-                      <button
-                        onClick={handleLogout}
-                        className="flex items-center gap-4 w-full px-4 py-4 rounded-xl text-lg font-medium text-red-600 hover:bg-red-50 transition-all group"
-                      >
-                        <div className="h-10 w-10 rounded-full bg-red-100 flex items-center justify-center group-hover:bg-red-200 transition-all">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={1.5}
-                            stroke="currentColor"
-                            className="size-5"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15M12 9l3 3m0 0-3 3m3-3H2.25"
-                            />
-                          </svg>
-                        </div>
-                        Se déconnecter
-                      </button>
-                    </div>
-                  </DrawerContent>
-                </Drawer>
-              )}
               <div className="h-14 w-14 rounded-full bg-black"></div>
               <div className="h-14 pt-1">
                 <div className="text-lg">HumanOps-Live</div>
@@ -313,9 +235,11 @@ const Layout = () => {
               <div className="h-10 w-[1px] bg-neutral-300 hidden lg:block"></div>
               <Drawer>
                 <DrawerTrigger asChild>
-                  <button className="cursor-pointer text-white text-sm h-12 px-8 bg-black hover:bg-neutral-700 duration-300 rounded-full flex items-center gap-2">
+                  <button className="cursor-pointer text-white text-sm h-12 px-8 bg-orange-600 hover:bg-orange-700 duration-300 rounded-full flex items-center gap-2">
                     {user?.role === "COLLABORATOR"
                       ? "My Team"
+                      : user?.role === "ADMIN_RH"
+                      ? "Manage Plateform"
                       : "Show All Teams"}
                     {user?.role === "COLLABORATOR" ? (
                       <svg
@@ -355,55 +279,149 @@ const Layout = () => {
                   <DrawerHeader className="shrink-0 border-b border-neutral-100 pb-0">
                     <div className="flex items-center justify-between mb-4">
                       <DrawerTitle className="text-2xl font-semibold dm-sans-bold">
-                        Espace Collaborateur
+                        {user?.role === "COLLABORATOR"
+                          ? "Espace Collaborateur"
+                          : user?.role === "ADMIN_RH"
+                          ? "Espace Admin RH"
+                          : "Espace Manager"}
                       </DrawerTitle>
                     </div>
                     <div className="flex items-center gap-8">
-                      <button
-                        onClick={() => setDrawerTab("team")}
-                        className={`pb-4 text-sm font-medium transition-all relative ${
-                          drawerTab === "team"
-                            ? "text-neutral-900"
-                            : "text-neutral-400 hover:text-neutral-600"
-                        }`}
-                      >
-                        Mon équipe
-                        {drawerTab === "team" && (
-                          <div className="absolute bottom-0 left-0 w-full h-[2px] bg-neutral-900 rounded-t-full"></div>
-                        )}
-                      </button>
-                      <button
-                        onClick={() => setDrawerTab("requests")}
-                        className={`pb-4 text-sm font-medium transition-all relative ${
-                          drawerTab === "requests"
-                            ? "text-neutral-900"
-                            : "text-neutral-400 hover:text-neutral-600"
-                        }`}
-                      >
-                        Les demandes
-                        {drawerTab === "requests" && (
-                          <div className="absolute bottom-0 left-0 w-full h-[2px] bg-neutral-900 rounded-t-full"></div>
-                        )}
-                      </button>
-                      <button
-                        onClick={() => setDrawerTab("history")}
-                        className={`pb-4 text-sm font-medium transition-all relative ${
-                          drawerTab === "history"
-                            ? "text-neutral-900"
-                            : "text-neutral-400 hover:text-neutral-600"
-                        }`}
-                      >
-                        Mon Historique d'état
-                        {drawerTab === "history" && (
-                          <div className="absolute bottom-0 left-0 w-full h-[2px] bg-neutral-900 rounded-t-full"></div>
-                        )}
-                      </button>
+                      {user?.role === "ADMIN_RH" ? (
+                        <>
+                          <button
+                            onClick={() => setDrawerTab("teams")}
+                            className={`pb-4 text-sm font-medium transition-all relative ${
+                              drawerTab === "teams"
+                                ? "text-neutral-900"
+                                : "text-neutral-400 hover:text-neutral-600"
+                            }`}
+                          >
+                            Les équipes
+                            {drawerTab === "teams" && (
+                              <div className="absolute bottom-0 left-0 w-full h-[2px] bg-neutral-900 rounded-t-full"></div>
+                            )}
+                          </button>
+                          <button
+                            onClick={() => setDrawerTab("users")}
+                            className={`pb-4 text-sm font-medium transition-all relative ${
+                              drawerTab === "users"
+                                ? "text-neutral-900"
+                                : "text-neutral-400 hover:text-neutral-600"
+                            }`}
+                          >
+                            Manage Users
+                            {drawerTab === "users" && (
+                              <div className="absolute bottom-0 left-0 w-full h-[2px] bg-neutral-900 rounded-t-full"></div>
+                            )}
+                          </button>
+                          <button
+                            onClick={() => setDrawerTab("skills")}
+                            className={`pb-4 text-sm font-medium transition-all relative ${
+                              drawerTab === "skills"
+                                ? "text-neutral-900"
+                                : "text-neutral-400 hover:text-neutral-600"
+                            }`}
+                          >
+                            Manage Skills
+                            {drawerTab === "skills" && (
+                              <div className="absolute bottom-0 left-0 w-full h-[2px] bg-neutral-900 rounded-t-full"></div>
+                            )}
+                          </button>
+                        </>
+                      ) : user?.role === "COLLABORATOR" ? (
+                        <>
+                          <button
+                            onClick={() => setDrawerTab("team")}
+                            className={`pb-4 text-sm font-medium transition-all relative ${
+                              drawerTab === "team"
+                                ? "text-neutral-900"
+                                : "text-neutral-400 hover:text-neutral-600"
+                            }`}
+                          >
+                            Mon équipe
+                            {drawerTab === "team" && (
+                              <div className="absolute bottom-0 left-0 w-full h-[2px] bg-neutral-900 rounded-t-full"></div>
+                            )}
+                          </button>
+                          <button
+                            onClick={() => setDrawerTab("history")}
+                            className={`pb-4 text-sm font-medium transition-all relative ${
+                              drawerTab === "history"
+                                ? "text-neutral-900"
+                                : "text-neutral-400 hover:text-neutral-600"
+                            }`}
+                          >
+                            Mon Historique d'état
+                            {drawerTab === "history" && (
+                              <div className="absolute bottom-0 left-0 w-full h-[2px] bg-neutral-900 rounded-t-full"></div>
+                            )}
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button
+                            onClick={() => setDrawerTab("team")}
+                            className={`pb-4 text-sm font-medium transition-all relative ${
+                              drawerTab === "team"
+                                ? "text-neutral-900"
+                                : "text-neutral-400 hover:text-neutral-600"
+                            }`}
+                          >
+                            Mon équipe
+                            {drawerTab === "team" && (
+                              <div className="absolute bottom-0 left-0 w-full h-[2px] bg-neutral-900 rounded-t-full"></div>
+                            )}
+                          </button>
+                          <button
+                            onClick={() => setDrawerTab("requests")}
+                            className={`pb-4 text-sm font-medium transition-all relative ${
+                              drawerTab === "requests"
+                                ? "text-neutral-900"
+                                : "text-neutral-400 hover:text-neutral-600"
+                            }`}
+                          >
+                            Les demandes
+                            {drawerTab === "requests" && (
+                              <div className="absolute bottom-0 left-0 w-full h-[2px] bg-neutral-900 rounded-t-full"></div>
+                            )}
+                          </button>
+                          <button
+                            onClick={() => setDrawerTab("history")}
+                            className={`pb-4 text-sm font-medium transition-all relative ${
+                              drawerTab === "history"
+                                ? "text-neutral-900"
+                                : "text-neutral-400 hover:text-neutral-600"
+                            }`}
+                          >
+                            Mon Historique d'état
+                            {drawerTab === "history" && (
+                              <div className="absolute bottom-0 left-0 w-full h-[2px] bg-neutral-900 rounded-t-full"></div>
+                            )}
+                          </button>
+                        </>
+                      )}
                     </div>
                   </DrawerHeader>
-                  <div className="flex-1 overflow-y-auto p-6 bg-neutral-50/50">
-                    {drawerTab === "team" && <TeamTab />}
-                    {drawerTab === "requests" && <RequestsTab />}
-                    {drawerTab === "history" && <HistoryTab />}
+                  <div className="flex-1 overflow-y-auto scrollbar p-6 bg-neutral-50/50">
+                    {user?.role === "ADMIN_RH" ? (
+                      <>
+                        {drawerTab === "teams" && <TeamsTab />}
+                        {drawerTab === "users" && <ManageUsersTab />}
+                        {drawerTab === "skills" && <ManageSkillsTab />}
+                      </>
+                    ) : user?.role === "COLLABORATOR" ? (
+                      <>
+                        {drawerTab === "team" && <TeamTab />}
+                        {drawerTab === "history" && <HistoryTab />}
+                      </>
+                    ) : (
+                      <>
+                        {drawerTab === "team" && <TeamTab />}
+                        {drawerTab === "requests" && <RequestsTab />}
+                        {drawerTab === "history" && <HistoryTab />}
+                      </>
+                    )}
                   </div>
                 </DrawerContent>
               </Drawer>
@@ -453,7 +471,7 @@ const Layout = () => {
                       </svg>
                     </div>
                   </DialogTrigger>
-                  <DialogContent className="w-[90vw] h-[90vh] max-w-none rounded-3xl p-0 overflow-hidden flex flex-col">
+                  <DialogContent className="w-[70vw] h-[90vh] max-w-none rounded-4xl p-0 overflow-hidden flex flex-col">
                     <div className="bg-neutral-50 px-8 py-6 border-b border-neutral-100 flex items-center justify-between">
                       <DialogHeader className="text-left">
                         <DialogTitle className="text-2xl font-bold dm-sans-bold">
@@ -464,7 +482,7 @@ const Layout = () => {
                         </DialogDescription>
                       </DialogHeader>
                     </div>
-                    <div className="p-8 flex-1 overflow-y-auto bg-white">
+                    <div className="p-8 flex-1 overflow-y-auto scrollbar bg-white">
                       <div className="max-w-4xl mx-auto space-y-8">
                         {/* Profile Section */}
                         <div className="space-y-4">
@@ -586,14 +604,52 @@ const Layout = () => {
                             </button>
                           </div>
                         </div>
+
+                        {/* Skills Section */}
+                        <div className="space-y-4">
+                          <h3 className="text-lg font-semibold border-b border-neutral-100 pb-2 text-neutral-900">
+                            Mes Compétences
+                          </h3>
+                          <div className="flex flex-wrap gap-2 min-h-[40px]">
+                            {skills.length === 0 ? (
+                              <p className="text-neutral-500 text-sm">
+                                Aucune compétence ajoutée
+                              </p>
+                            ) : (
+                              skills.map((skill) => (
+                                <span
+                                  key={skill.id}
+                                  className="inline-flex items-center rounded-md bg-neutral-100 px-3 py-1 text-sm font-medium text-neutral-900"
+                                >
+                                  {skill.name}
+                                </span>
+                              ))
+                            )}
+                          </div>
+                          <div className="flex gap-2">
+                            <input
+                              type="text"
+                              placeholder="Ajouter une compétence..."
+                              value={newSkill}
+                              onChange={(e) => setNewSkill(e.target.value)}
+                              onKeyPress={(e) =>
+                                e.key === "Enter" && handleAddSkill()
+                              }
+                              className="flex h-10 flex-1 rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
+                            />
+                            <button
+                              onClick={handleAddSkill}
+                              disabled={isLoadingSkills || !newSkill.trim()}
+                              className="inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-6 bg-neutral-900 text-white hover:bg-neutral-900/90 disabled:opacity-50 disabled:pointer-events-none"
+                            >
+                              {isLoadingSkills ? "..." : "Ajouter"}
+                            </button>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </DialogContent>
                 </Dialog>
-                <AddSkillDialog
-                  open={isAddSkillDialogOpen}
-                  onOpenChange={setIsAddSkillDialogOpen}
-                />
                 <div className="h-14 w-14 rounded-full bg-black bg-[url('/src/assets/profil-bg.png')] bg-cover bg-center border border-neutral-300 shadow"></div>
                 <div className="h-14 pt-1 dm-sans-regular">
                   <div className="text-lg">{fullName}</div>
@@ -745,7 +801,7 @@ const Layout = () => {
             </div>
           </div>
         </header>
-        <main className="w-full mx-auto pt-8 pb-4 px-4 lg:px-12 col-start-1 min-h-[calc(100vh-280px)] overflow-y-auto">
+        <main className="w-full mx-auto pt-8 pb-4 px-4 lg:px-12 col-start-1 min-h-[calc(100vh-280px)] overflow-y-auto scrollbar">
           <Outlet />
         </main>
       </div>

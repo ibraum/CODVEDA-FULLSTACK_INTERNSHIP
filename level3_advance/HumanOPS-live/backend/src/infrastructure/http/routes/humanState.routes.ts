@@ -1,7 +1,7 @@
-import { Router } from 'express';
-import { HumanStateController } from '../controllers/HumanStateController.js';
-import { authMiddleware, requireRole } from '../middlewares/auth.middleware.js';
-import { Role } from '../../../domain/value-objects/enums.js';
+import { Router } from "express";
+import { HumanStateController } from "../controllers/HumanStateController.js";
+import { authMiddleware, requireRole } from "../middlewares/auth.middleware.js";
+import { Role } from "../../../domain/value-objects/enums.js";
 
 const router = Router();
 
@@ -9,12 +9,13 @@ const router = Router();
 router.use(authMiddleware);
 
 // Collaborateur : gérer son propre état
-router.get('/me', HumanStateController.getMyState);
-router.put('/me', HumanStateController.updateMyState);
+router.get("/me", HumanStateController.getMyState);
+router.put("/me", HumanStateController.updateMyState);
+router.get("/history", HumanStateController.getMyHistory);
 
 // Manager/RH : voir les états d'une équipe
 router.get(
-  '/team/:teamId',
+  "/team/:teamId",
   requireRole(Role.MANAGER, Role.ADMIN_RH),
   HumanStateController.getTeamStates
 );

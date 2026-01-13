@@ -85,7 +85,7 @@ const StateDeclarationWidget = () => {
             Charge de travail
           </label>
 
-          <div className="bg-neutral-100 p-1 rounded-xl flex gap-1 relative">
+          <div className="bg-neutral-100 p-1 rounded-full flex gap-1 relative">
             <LayoutGroup id="workload">
               {[
                 { value: "LOW", label: "Faible", Icon: SunIcon },
@@ -99,7 +99,7 @@ const StateDeclarationWidget = () => {
                     key={option.value}
                     onClick={() => handleUpdate("workload", option.value)}
                     className={cn(
-                      "flex-1 relative isolate overflow-hidden flex flex-col items-center justify-center py-2.5 rounded-lg transition-colors duration-200",
+                      "flex-1 relative isolate overflow-hidden flex flex-col items-center justify-center py-2.5 rounded-full transition-colors duration-200",
                       isActive
                         ? "text-white"
                         : "text-neutral-500 hover:text-neutral-900 hover:bg-white/50"
@@ -108,7 +108,7 @@ const StateDeclarationWidget = () => {
                     {isActive && (
                       <motion.div
                         layoutId="workload-bg"
-                        className="absolute inset-0 bg-neutral-900 rounded-lg shadow-sm"
+                        className="absolute inset-0 bg-neutral-900 rounded-full shadow-sm"
                         transition={{
                           type: "spring",
                           stiffness: 500,
@@ -136,7 +136,7 @@ const StateDeclarationWidget = () => {
             Disponibilité
           </label>
 
-          <div className="bg-neutral-100 p-1 rounded-xl flex gap-1 relative">
+          <div className="bg-neutral-100 p-1 rounded-full flex gap-1 relative">
             <LayoutGroup id="availability">
               {[
                 {
@@ -166,7 +166,7 @@ const StateDeclarationWidget = () => {
                     key={option.value}
                     onClick={() => handleUpdate("availability", option.value)}
                     className={cn(
-                      "flex-1 relative isolate overflow-hidden flex flex-col items-center justify-center py-2.5 rounded-lg transition-colors duration-200",
+                      "flex-1 relative isolate overflow-hidden flex flex-col items-center justify-center py-2.5 rounded-full transition-colors duration-200",
                       isActive
                         ? "text-white"
                         : "text-neutral-500 hover:text-neutral-900 hover:bg-white/50"

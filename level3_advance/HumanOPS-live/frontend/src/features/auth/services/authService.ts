@@ -96,3 +96,8 @@ export const getAllSkills = async (): Promise<
   );
   return response.data;
 };
+
+export const getAllUsers = async (): Promise<any[]> => {
+  const response = await apiClient.get<any[]>("/users");
+  return response.data;
+};

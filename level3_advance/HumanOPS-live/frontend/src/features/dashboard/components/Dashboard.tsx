@@ -1,7 +1,17 @@
 import StateDeclarationWidget from "./StateDeclarationWidget";
 import ReinforcementRequestsList from "./ReinforcementRequestsList";
+import AdminDashboard from "./AdminDashboard";
+import { useAuth } from "../../auth/context/AuthContext";
 
 const Dashboard = () => {
+  const { user } = useAuth();
+
+  // Admin RH gets a different dashboard
+  if (user?.role === "ADMIN_RH") {
+    return <AdminDashboard />;
+  }
+
+  // Collaborators and Managers get the standard dashboard
   return (
     <div className="space-y-12 mx-auto">
       {/* Top Section: State Declaration */}
