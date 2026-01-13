@@ -62,6 +62,10 @@ export interface ReinforcementRequest {
   status: string;
   expiresAt: string;
   createdAt: string;
+  team?: {
+    id: string;
+    name: string;
+  };
 }
 
 export interface HumanStateHistory {
@@ -153,4 +157,36 @@ export const getTeamDetails = async (teamId: string): Promise<TeamDetails> => {
       joinedAt: m.joinedAt,
     })),
   };
+};
+
+export const createReinforcementRequest = async (data: {
+  teamId: string;
+  urgencyLevel: number;
+  requiredSkills: Record<string, any>;
+  durationHours: number;
+}): Promise<ReinforcementRequest> => {
+  const response = await apiClient.post<{ request: ReinforcementRequest }>(
+    "/reinforcements",
+    data
+  );
+  return response.data.request;
+};
+
+export const updateReinforcementRequest = async (
+  id: string,
+  data: {
+    urgencyLevel?: number;
+    requiredSkills?: Record<string, any>;
+    status?: string;
+  }
+): Promise<ReinforcementRequest> => {
+  const response = await apiClient.put<{ request: ReinforcementRequest }>(
+    `/reinforcements/${id}`,
+    data
+  );
+  return response.data.request;
+};
+
+export const deleteReinforcementRequest = async (id: string): Promise<void> => {
+  await apiClient.delete(`/reinforcements/${id}`);
 };

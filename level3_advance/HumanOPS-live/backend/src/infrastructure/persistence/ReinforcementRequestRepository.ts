@@ -44,7 +44,8 @@ export class ReinforcementRequestRepository
         expiresAt: { gt: new Date() }, // Non expiré
       },
       orderBy: { urgencyLevel: "desc" },
-    })) as ReinforcementRequest[];
+      include: { team: true },
+    })) as unknown as ReinforcementRequest[];
   }
 
   async findExpiredRequests(): Promise<ReinforcementRequest[]> {
@@ -64,5 +65,11 @@ export class ReinforcementRequestRepository
       where: { id },
       data,
     })) as ReinforcementRequest;
+  }
+
+  async delete(id: string): Promise<void> {
+    await prisma.reinforcementRequest.delete({
+      where: { id },
+    });
   }
 }

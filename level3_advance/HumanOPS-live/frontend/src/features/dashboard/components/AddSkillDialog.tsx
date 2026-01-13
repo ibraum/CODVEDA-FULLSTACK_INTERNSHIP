@@ -73,14 +73,14 @@ const AddSkillDialog = ({ open, onOpenChange }: AddSkillDialogProps) => {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-[700px] max-h-[85vh] bg-white text-neutral-900 rounded-3xl p-0 overflow-hidden flex flex-col">
+      <DialogContent className="sm:max-w-[700px] max-h-[85vh] bg-background text-foreground rounded-3xl p-0 overflow-hidden flex flex-col border border-border">
         {/* Banner */}
-        <div className="bg-gradient-to-r from-neutral-900 to-neutral-800 px-8 py-6 text-white">
+        <div className="bg-muted px-8 py-6 border-b border-border">
           <DialogHeader>
-            <DialogTitle className="text-3xl font-bold dm-sans-bold mb-2">
+            <DialogTitle className="text-3xl font-bold dm-sans-bold mb-2 text-foreground">
               Ajouter des compétences
             </DialogTitle>
-            <DialogDescription className="text-neutral-200 text-base">
+            <DialogDescription className="text-muted-foreground text-base">
               Recherchez et ajoutez plusieurs compétences à votre profil
             </DialogDescription>
           </DialogHeader>
@@ -100,14 +100,14 @@ const AddSkillDialog = ({ open, onOpenChange }: AddSkillDialogProps) => {
                   onChange={(e) => setSearchTerm(e.target.value)}
                   onKeyPress={handleKeyPress}
                   placeholder="Ex: React, Gestion de projet, Python..."
-                  className="w-full px-4 py-3 pr-12 rounded-xl border-2 border-neutral-200 focus:outline-none focus:ring-2 focus:ring-neutral-900 focus:border-transparent transition-all"
+                  className="w-full px-4 py-3 pr-12 rounded-xl border-2 border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring focus:border-border transition-all text-foreground placeholder:text-muted-foreground"
                   autoFocus
                 />
                 <button
                   type="button"
                   onClick={handleAddSkillToList}
                   disabled={!searchTerm.trim()}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 h-9 w-9 rounded-lg bg-neutral-900 text-white hover:bg-neutral-800 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-all"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 h-9 w-9 rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center transition-all"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -128,8 +128,8 @@ const AddSkillDialog = ({ open, onOpenChange }: AddSkillDialogProps) => {
 
               {/* Suggestions */}
               {searchTerm && filteredSkills.length > 0 && (
-                <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-3 max-h-[150px] overflow-y-auto">
-                  <p className="text-xs font-semibold text-neutral-500 mb-2 uppercase tracking-wider">
+                <div className="bg-muted/50 border border-border rounded-xl p-3 max-h-[150px] overflow-y-auto">
+                  <p className="text-xs font-semibold text-muted-foreground mb-2 uppercase tracking-wider">
                     Suggestions
                   </p>
                   <div className="flex flex-wrap gap-2">
@@ -141,7 +141,7 @@ const AddSkillDialog = ({ open, onOpenChange }: AddSkillDialogProps) => {
                           setSearchTerm(skill.name);
                           handleAddSkillToList();
                         }}
-                        className="px-3 py-1 text-sm bg-white border border-neutral-300 rounded-full hover:bg-neutral-900 hover:text-white transition-all"
+                        className="px-3 py-1 text-sm bg-background border border-border rounded-full hover:bg-primary hover:text-primary-foreground transition-all cursor-pointer text-foreground"
                       >
                         {skill.name}
                       </button>
@@ -154,7 +154,7 @@ const AddSkillDialog = ({ open, onOpenChange }: AddSkillDialogProps) => {
             {/* Selected Skills */}
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <h3 className="text-sm font-bold text-neutral-900 uppercase tracking-wider">
+                <h3 className="text-sm font-bold text-foreground uppercase tracking-wider">
                   Compétences sélectionnées ({selectedSkills.length})
                 </h3>
                 {selectedSkills.length > 0 && (
@@ -169,7 +169,7 @@ const AddSkillDialog = ({ open, onOpenChange }: AddSkillDialogProps) => {
               </div>
 
               {selectedSkills.length === 0 ? (
-                <div className="border-2 border-dashed border-neutral-200 rounded-xl p-8 text-center">
+                <div className="border-2 border-dashed border-border rounded-xl p-8 text-center text-muted-foreground">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
@@ -184,26 +184,26 @@ const AddSkillDialog = ({ open, onOpenChange }: AddSkillDialogProps) => {
                       d="m3.75 13.5 10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75Z"
                     />
                   </svg>
-                  <p className="text-neutral-400 text-sm">
+                  <p className="text-muted-foreground text-sm">
                     Aucune compétence sélectionnée
                   </p>
-                  <p className="text-neutral-300 text-xs mt-1">
+                  <p className="text-muted-foreground/70 text-xs mt-1">
                     Tapez et appuyez sur Entrée ou cliquez sur +
                   </p>
                 </div>
               ) : (
-                <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-4">
+                <div className="bg-muted/30 border border-border rounded-xl p-4">
                   <div className="flex flex-wrap gap-2">
                     {selectedSkills.map((skill, index) => (
                       <div
                         key={index}
-                        className="group flex items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded-full text-sm font-medium shadow-sm hover:shadow-md transition-all"
+                        className="group flex items-center gap-2 px-4 py-2 bg-primary text-primary-foreground rounded-full text-sm font-medium shadow-sm hover:shadow-md transition-all"
                       >
                         <span>{skill}</span>
                         <button
                           type="button"
                           onClick={() => handleRemoveSkill(skill)}
-                          className="h-5 w-5 rounded-full bg-white/20 hover:bg-red-500 flex items-center justify-center transition-all"
+                          className="h-5 w-5 rounded-full bg-primary-foreground/20 hover:bg-red-500 flex items-center justify-center transition-all"
                         >
                           <svg
                             xmlns="http://www.w3.org/2000/svg"
@@ -229,18 +229,18 @@ const AddSkillDialog = ({ open, onOpenChange }: AddSkillDialogProps) => {
           </div>
 
           {/* Footer */}
-          <div className="p-6 border-t border-neutral-100 bg-neutral-50/50 flex justify-end gap-3">
+          <div className="p-6 border-t border-border bg-muted/40 flex justify-end gap-3">
             <button
               type="button"
               onClick={() => onOpenChange(false)}
-              className="px-6 py-3 text-sm font-medium text-neutral-600 hover:bg-white hover:shadow-sm rounded-xl transition-all"
+              className="px-6 py-3 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground hover:shadow-sm rounded-xl transition-all"
             >
               Annuler
             </button>
             <button
               type="submit"
               disabled={isSubmitting || selectedSkills.length === 0}
-              className="px-8 py-3 text-sm font-medium text-white bg-neutral-900 hover:bg-neutral-800 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-neutral-900/10 min-w-[140px]"
+              className="px-8 py-3 text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-primary/10 min-w-[140px]"
             >
               {isSubmitting ? "Ajout..." : `Ajouter (${selectedSkills.length})`}
             </button>

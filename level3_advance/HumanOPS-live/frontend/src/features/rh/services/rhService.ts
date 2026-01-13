@@ -34,6 +34,14 @@ export interface TeamWithDetails {
   pendingReinforcementRequests?: number;
 }
 
+export interface RHSetting {
+  id: string;
+  key: string;
+  value: any;
+  updatedBy?: string;
+  updatedAt: string;
+}
+
 // User Management
 export const getAllUsersWithStates = async (): Promise<
   UserWithHumanState[]
@@ -122,4 +130,29 @@ export const removeTeamMember = async (
   userId: string
 ): Promise<void> => {
   await apiClient.delete(`/teams/${teamId}/members/${userId}`);
+};
+
+// Settings Management
+export const getRHSettings = async (): Promise<RHSetting[]> => {
+  try {
+    const response = await apiClient.get<{ settings: RHSetting[] }>(
+      "/rh-settings"
+    );
+    return response.data.settings;
+  } catch (error) {
+    console.error("Failed to fetch RH settings", error);
+    // Return default values if fetch fails or empty array
+    return [];
+  }
+};
+
+export const updateRHSetting = async (
+  key: string,
+  value: any
+): Promise<RHSetting> => {
+  const response = await apiClient.put<{ setting: RHSetting }>(
+    `/rh-settings/${key}`,
+    { value }
+  );
+  return response.data.setting;
 };

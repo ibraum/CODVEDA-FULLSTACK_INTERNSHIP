@@ -83,8 +83,8 @@ const AdminDashboard = () => {
       }, {});
 
       setUsersByRole([
-        { name: "Admin RH", value: roleCount.ADMIN_RH || 0, color: "#171717" },
-        { name: "Managers", value: roleCount.MANAGER || 0, color: "#ff3300ff" },
+        { name: "Admin RH", value: roleCount.ADMIN_RH || 0, color: "var(--foreground)" },
+        { name: "Managers", value: roleCount.MANAGER || 0, color: "#ff3300" },
         {
           name: "Collaborateurs",
           value: roleCount.COLLABORATOR || 0,
@@ -130,7 +130,7 @@ const AdminDashboard = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="text-neutral-500">Chargement des statistiques...</div>
+        <div className="text-muted-foreground">Chargement des statistiques...</div>
       </div>
     );
   }
@@ -163,15 +163,15 @@ const AdminDashboard = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
         {/* Total Users & Availability */}
-        <div className="border border-neutral-200 rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all">
+        <div className="border border-border rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all bg-card">
           <div className="absolute top-0 right-0 h-24 w-24 rounded-[0_0_0_100%] bg-blue-500/20 group-hover:bg-blue-500/30 transition-colors blur-xl z-0"></div>
           <div className="relative z-10 flex flex-col h-full justify-between">
             <div className="flex justify-between items-start mb-4">
               <div>
-                <p className="text-sm font-medium text-neutral-500 uppercase tracking-wide">Utilisateurs</p>
-                <div className="text-4xl font-bold dm-sans-bold text-neutral-900 mt-1">{stats.totalUsers}</div>
+                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Utilisateurs</p>
+                <div className="text-4xl font-bold dm-sans-bold text-foreground mt-1">{stats.totalUsers}</div>
               </div>
-              <div className="h-10 w-10 bg-white rounded-full flex items-center justify-center border border-neutral-200 shadow-sm">
+              <div className="h-10 w-10 bg-card rounded-full flex items-center justify-center border border-border shadow-sm">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5 text-blue-600">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
                 </svg>
@@ -180,12 +180,12 @@ const AdminDashboard = () => {
 
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-neutral-600 flex items-center gap-1.5">
+                <span className="text-muted-foreground flex items-center gap-1.5">
                   <span className="h-2 w-2 rounded-full bg-green-500"></span> Disponibles
                 </span>
-                <span className="font-semibold text-neutral-900">{stats.availableUsers}</span>
+                <span className="font-semibold text-foreground">{stats.availableUsers}</span>
               </div>
-              <div className="w-full bg-neutral-200 h-1.5 rounded-full overflow-hidden">
+              <div className="w-full bg-muted h-1.5 rounded-full overflow-hidden">
                 <div className="h-full bg-green-500 rounded-full" style={{ width: `${(stats.availableUsers / (stats.totalUsers || 1)) * 100}%` }}></div>
               </div>
             </div>
@@ -193,15 +193,15 @@ const AdminDashboard = () => {
         </div>
 
         {/* Teams & Status */}
-        <div className="border border-neutral-200 rounded-2xl p-6 relative overflow-hidden group hover:shadow transition-all">
+        <div className="border border-border rounded-2xl p-6 relative overflow-hidden group hover:shadow transition-all bg-card">
           <div className="absolute top-0 right-0 h-24 w-24 rounded-[0_0_0_100%] bg-orange-500/20 group-hover:bg-orange-500/30 transition-colors blur-xl z-0"></div>
           <div className="relative z-10 flex flex-col h-full justify-between">
             <div className="flex justify-between items-start mb-4">
               <div>
-                <p className="text-sm font-medium text-neutral-500 uppercase tracking-wide">Équipes</p>
-                <div className="text-4xl font-bold dm-sans-bold text-neutral-900 mt-1">{stats.totalTeams}</div>
+                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Équipes</p>
+                <div className="text-4xl font-bold dm-sans-bold text-foreground mt-1">{stats.totalTeams}</div>
               </div>
-              <div className="h-10 w-10 bg-white rounded-full flex items-center justify-center border border-neutral-200 shadow-sm">
+              <div className="h-10 w-10 bg-card rounded-full flex items-center justify-center border border-border shadow-sm">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5 text-orange-600">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
                 </svg>
@@ -210,12 +210,12 @@ const AdminDashboard = () => {
 
             <div className="space-y-2">
               <div className="flex items-center justify-between text-sm">
-                <span className="text-neutral-600 flex items-center gap-1.5">
+                <span className="text-muted-foreground flex items-center gap-1.5">
                   <span className="h-2 w-2 rounded-full bg-red-500 animate-pulse"></span> Critique / Élevée
                 </span>
-                <span className="font-semibold text-neutral-900">{stats.criticalTeams}</span>
+                <span className="font-semibold text-foreground">{stats.criticalTeams}</span>
               </div>
-              <div className="w-full bg-neutral-200 h-1.5 rounded-full overflow-hidden">
+              <div className="w-full bg-muted h-1.5 rounded-full overflow-hidden">
                 <div className="h-full bg-red-500 rounded-full" style={{ width: `${(stats.criticalTeams / (stats.totalTeams || 1)) * 100}%` }}></div>
               </div>
             </div>
@@ -223,15 +223,15 @@ const AdminDashboard = () => {
         </div>
 
         {/* Requests */}
-        <div className="border border-neutral-200 rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all">
+        <div className="border border-border rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all bg-card">
           <div className="absolute top-0 right-0 h-24 w-24 rounded-[0_0_0_100%] bg-purple-500/20 group-hover:bg-purple-500/30 transition-colors blur-xl z-0"></div>
           <div className="relative z-10 flex flex-col h-full justify-between">
             <div className="flex justify-between items-start mb-4">
               <div>
-                <p className="text-sm font-medium text-neutral-500 uppercase tracking-wide">Renforts</p>
-                <div className="text-4xl font-bold dm-sans-bold text-neutral-900 mt-1">{stats.activeRequests}</div>
+                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Renforts</p>
+                <div className="text-4xl font-bold dm-sans-bold text-foreground mt-1">{stats.activeRequests}</div>
               </div>
-              <div className="h-10 w-10 bg-white rounded-full flex items-center justify-center border border-neutral-200 shadow-sm">
+              <div className="h-10 w-10 bg-card rounded-full flex items-center justify-center border border-border shadow-sm">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5 text-purple-600">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0M3.124 7.5A8.969 8.969 0 0 1 5.292 3m13.416 0a8.969 8.969 0 0 1 2.168 4.5" />
                 </svg>
@@ -272,12 +272,13 @@ const AdminDashboard = () => {
                 </Pie>
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "#fff",
-                    border: "none",
+                    backgroundColor: "var(--card)",
+                    borderColor: "var(--border)",
+                    color: "var(--foreground)",
                     borderRadius: "8px",
                     boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)"
                   }}
-                  itemStyle={{ color: "#171717", fontWeight: 500 }}
+                  itemStyle={{ color: "var(--foreground)", fontWeight: 500 }}
                 />
               </PieChart>
             </ResponsiveContainer>
@@ -285,7 +286,7 @@ const AdminDashboard = () => {
               {usersByRole.map((entry, index) => (
                 <div key={index} className="flex items-center gap-2 text-sm">
                   <div className="w-3 h-3 rounded-full" style={{ backgroundColor: entry.color }}></div>
-                  <span className="text-neutral-600">{entry.name}</span>
+                  <span className="text-muted-foreground">{entry.name}</span>
                 </div>
               ))}
             </div>
@@ -300,24 +301,25 @@ const AdminDashboard = () => {
           <CardContent>
             <ResponsiveContainer width="100%" height={250}>
               <BarChart data={teamTensions} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" vertical={false} />
-                <XAxis dataKey="name" stroke="#737373" fontSize={12} tickLine={false} axisLine={false} dy={10} />
-                <YAxis stroke="#737373" fontSize={12} tickLine={false} axisLine={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                <XAxis dataKey="name" stroke="var(--muted-foreground)" fontSize={12} tickLine={false} axisLine={false} dy={10} />
+                <YAxis stroke="var(--muted-foreground)" fontSize={12} tickLine={false} axisLine={false} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "#fff",
-                    border: "none",
+                    backgroundColor: "var(--card)",
+                    border: "1px solid var(--border)",
                     borderRadius: "8px",
-                    boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)"
+                    boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                    color: "var(--foreground)",
                   }}
-                  cursor={{ fill: "#f5f5f5" }}
+                  cursor={{ fill: "var(--muted)", opacity: 0.2 }}
                 />
                 <Bar dataKey="value" radius={[4, 4, 0, 0]}>
                   {teamTensions.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={
-                      entry.name === "Critique" ? "#171717" :
+                      entry.name === "Critique" ? "#ef4444" :
                         entry.name === "Élevée" ? "#ea580c" :
-                          entry.name === "Modérée" ? "#fb923c" : "#e5e5e5"
+                          entry.name === "Modérée" ? "#fb923c" : "#737373"
                     } />
                   ))}
                 </Bar>
@@ -337,25 +339,26 @@ const AdminDashboard = () => {
           <CardContent>
             <ResponsiveContainer width="100%" height={250}>
               <BarChart data={workloadDistribution} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e5e5e5" vertical={false} />
-                <XAxis dataKey="name" stroke="#737373" fontSize={12} tickLine={false} axisLine={false} dy={10} />
-                <YAxis stroke="#737373" fontSize={12} tickLine={false} axisLine={false} />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
+                <XAxis dataKey="name" stroke="var(--muted-foreground)" fontSize={12} tickLine={false} axisLine={false} dy={10} />
+                <YAxis stroke="var(--muted-foreground)" fontSize={12} tickLine={false} axisLine={false} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: "#fff",
-                    border: "none",
+                    backgroundColor: "var(--card)",
+                    border: "1px solid var(--border)",
                     borderRadius: "8px",
-                    boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)"
+                    boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
+                    color: "var(--foreground)",
                   }}
-                  cursor={{ fill: "#f5f5f5" }}
+                  cursor={{ fill: "var(--muted)", opacity: 0.2 }}
                 />
                 <Bar dataKey="value" radius={[4, 4, 0, 0]}>
                   {workloadDistribution.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
                       fill={
-                        entry.name === "Élevé" ? "#171717" :
-                          entry.name === "Normal" ? "#f97316" : "#d4d4d4"
+                        entry.name === "Élevé" ? "#ef4444" :
+                          entry.name === "Normal" ? "#f97316" : "#22c55e"
                       }
                     />
                   ))}
@@ -372,63 +375,63 @@ const AdminDashboard = () => {
           </CardHeader>
           <CardContent className="space-y-6">
             {/* Overloaded Users Detail */}
-            <div className="flex items-center justify-between p-4 bg-red-50 rounded-xl border border-red-100">
+            <div className="flex items-center justify-between p-4 bg-red-50 dark:bg-red-900/20 rounded-xl border border-red-100 dark:border-red-900/30">
               <div className="flex items-center gap-4">
-                <div className="h-10 w-10 rounded-full bg-white flex items-center justify-center border border-red-200">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5 text-red-600">
+                <div className="h-10 w-10 rounded-full bg-card flex items-center justify-center border border-red-200 dark:border-red-800">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5 text-red-600 dark:text-red-400">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
                   </svg>
                 </div>
                 <div>
-                  <div className="font-semibold text-neutral-900">Utilisateurs Surchargés</div>
-                  <div className="text-xs text-neutral-500">Besoin d'attention</div>
+                  <div className="font-semibold text-foreground">Utilisateurs Surchargés</div>
+                  <div className="text-xs text-muted-foreground">Besoin d'attention</div>
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-xl font-bold text-red-700">{stats.overloadedUsers}</div>
-                <div className="text-xs font-medium text-red-600">
+                <div className="text-xl font-bold text-red-700 dark:text-red-400">{stats.overloadedUsers}</div>
+                <div className="text-xs font-medium text-red-600 dark:text-red-300">
                   {((stats.overloadedUsers / (stats.totalUsers || 1)) * 100).toFixed(0)}%
                 </div>
               </div>
             </div>
 
             {/* Available Users Detail */}
-            <div className="flex items-center justify-between p-4 bg-green-50 rounded-xl border border-green-100">
+            <div className="flex items-center justify-between p-4 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-100 dark:border-green-900/30">
               <div className="flex items-center gap-4">
-                <div className="h-10 w-10 rounded-full bg-white flex items-center justify-center border border-green-200">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5 text-green-600">
+                <div className="h-10 w-10 rounded-full bg-card flex items-center justify-center border border-green-200 dark:border-green-800">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5 text-green-600 dark:text-green-400">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                   </svg>
                 </div>
                 <div>
-                  <div className="font-semibold text-neutral-900">Utilisateurs Disponibles</div>
-                  <div className="text-xs text-neutral-500">Prêts pour renfort</div>
+                  <div className="font-semibold text-foreground">Utilisateurs Disponibles</div>
+                  <div className="text-xs text-muted-foreground">Prêts pour renfort</div>
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-xl font-bold text-green-700">{stats.availableUsers}</div>
-                <div className="text-xs font-medium text-green-600">
+                <div className="text-xl font-bold text-green-700 dark:text-green-400">{stats.availableUsers}</div>
+                <div className="text-xs font-medium text-green-600 dark:text-green-300">
                   {((stats.availableUsers / (stats.totalUsers || 1)) * 100).toFixed(0)}%
                 </div>
               </div>
             </div>
 
             {/* Critical Teams Detail */}
-            <div className="flex items-center justify-between p-4 bg-orange-50 rounded-xl border border-orange-100">
+            <div className="flex items-center justify-between p-4 bg-orange-50 dark:bg-orange-900/20 rounded-xl border border-orange-100 dark:border-orange-900/30">
               <div className="flex items-center gap-4">
-                <div className="h-10 w-10 rounded-full bg-white flex items-center justify-center border border-orange-200">
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5 text-orange-600">
+                <div className="h-10 w-10 rounded-full bg-card flex items-center justify-center border border-orange-200 dark:border-orange-800">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5 text-orange-600 dark:text-orange-400">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 3.75h.008v.008H12v-.008Z" />
                   </svg>
                 </div>
                 <div>
-                  <div className="font-semibold text-neutral-900">Équipes Sous Tension</div>
-                  <div className="text-xs text-neutral-500">Niveaux critiques</div>
+                  <div className="font-semibold text-foreground">Équipes Sous Tension</div>
+                  <div className="text-xs text-muted-foreground">Niveaux critiques</div>
                 </div>
               </div>
               <div className="text-right">
-                <div className="text-xl font-bold text-orange-700">{stats.criticalTeams}</div>
-                <div className="text-xs font-medium text-orange-600">
+                <div className="text-xl font-bold text-orange-700 dark:text-orange-400">{stats.criticalTeams}</div>
+                <div className="text-xs font-medium text-orange-600 dark:text-orange-300">
                   {((stats.criticalTeams / (stats.totalTeams || 1)) * 100).toFixed(0)}%
                 </div>
               </div>

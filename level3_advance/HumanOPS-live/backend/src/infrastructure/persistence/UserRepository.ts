@@ -97,4 +97,36 @@ export class UserRepository implements IUserRepository {
       data: { deletedAt: null, isActive: true },
     });
   }
+
+  async findWithSkills(skills: string[]): Promise<UserWithoutPassword[]> {
+    const users = await prisma.user.findMany({
+      where: {
+        profile: {
+          skills: {
+            some: {
+              skill: {
+                name: { in: skills, mode: "insensitive" },
+              },
+            },
+          },
+        },
+        isActive: true,
+        deletedAt: null,
+      },
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        role: true,
+        isActive: true,
+        deletedAt: true,
+        createdAt: true,
+        updatedAt: true,
+        humanState: true,
+      },
+    });
+
+    return users as UserWithoutPassword[];
+  }
 }

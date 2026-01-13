@@ -63,17 +63,17 @@ const StateDeclarationWidget = () => {
 
   if (loading) {
     return (
-      <div className="bg-white p-6 rounded-2xl border border-neutral-200 animate-pulse h-64" />
+      <div className="bg-card p-6 rounded-2xl border border-border animate-pulse h-64" />
     );
   }
 
   return (
-    <div className="bg-white p-6 rounded-2xl border border-neutral-200 space-y-6">
+    <div className="bg-card p-6 rounded-2xl border border-border space-y-6">
       <div className="">
-        <h3 className="text-xl font-bold dm-sans-bold text-neutral-900 tracking-tight">
+        <h3 className="text-xl font-bold dm-sans-bold text-foreground tracking-tight">
           État Actuel
         </h3>
-        <p className="text-neutral-400 text-sm dm-sans-medium mt-1">
+        <p className="text-muted-foreground text-sm dm-sans-medium mt-1">
           Déclarez votre état pour l'équipe.
         </p>
       </div>
@@ -81,11 +81,11 @@ const StateDeclarationWidget = () => {
       <div className="space-y-6">
         {/* ================= Workload ================= */}
         <div>
-          <label className="text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-3 block pl-1 dm-sans-bold">
+          <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3 block pl-1 dm-sans-bold">
             Charge de travail
           </label>
 
-          <div className="bg-neutral-100 p-1 rounded-full flex gap-1 relative">
+          <div className="bg-muted p-1 rounded-full flex gap-1 relative">
             <LayoutGroup id="workload">
               {[
                 { value: "LOW", label: "Faible", Icon: SunIcon },
@@ -101,14 +101,14 @@ const StateDeclarationWidget = () => {
                     className={cn(
                       "flex-1 relative isolate overflow-hidden flex flex-col items-center justify-center py-2.5 rounded-full transition-colors duration-200",
                       isActive
-                        ? "text-white"
-                        : "text-neutral-500 hover:text-neutral-900 hover:bg-white/50"
+                        ? "text-primary-foreground"
+                        : "text-muted-foreground hover:text-foreground hover:bg-background/50"
                     )}
                   >
                     {isActive && (
                       <motion.div
                         layoutId="workload-bg"
-                        className="absolute inset-0 bg-neutral-900 rounded-full shadow-sm"
+                        className="absolute inset-0 bg-primary rounded-full shadow-sm"
                         transition={{
                           type: "spring",
                           stiffness: 500,
@@ -132,11 +132,11 @@ const StateDeclarationWidget = () => {
 
         {/* ================= Availability ================= */}
         <div>
-          <label className="text-xs font-semibold uppercase tracking-wider text-neutral-400 mb-3 block pl-1 dm-sans-bold">
+          <label className="text-xs font-semibold uppercase tracking-wider text-muted-foreground mb-3 block pl-1 dm-sans-bold">
             Disponibilité
           </label>
 
-          <div className="bg-neutral-100 p-1 rounded-full flex gap-1 relative">
+          <div className="bg-muted p-1 rounded-full flex gap-1 relative">
             <LayoutGroup id="availability">
               {[
                 {
@@ -168,14 +168,14 @@ const StateDeclarationWidget = () => {
                     className={cn(
                       "flex-1 relative isolate overflow-hidden flex flex-col items-center justify-center py-2.5 rounded-full transition-colors duration-200",
                       isActive
-                        ? "text-white"
-                        : "text-neutral-500 hover:text-neutral-900 hover:bg-white/50"
+                        ? "text-primary-foreground"
+                        : "text-muted-foreground hover:text-foreground hover:bg-background/50"
                     )}
                   >
                     {isActive && (
                       <motion.div
                         layoutId="availability-bg"
-                        className="absolute inset-0 bg-neutral-900 rounded-lg shadow-sm"
+                        className="absolute inset-0 bg-primary rounded-lg shadow-sm"
                         transition={{
                           type: "spring",
                           stiffness: 500,

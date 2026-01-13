@@ -155,26 +155,26 @@ const ManageSkillsTab = () => {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Total Skills */}
-        <div className="border border-neutral-200 rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all">
-          <div className="absolute top-0 right-0 h-24 w-24 rounded-[0_0_0_100%] bg-neutral-900/10 group-hover:bg-neutral-900/15 transition-colors blur-xl z-0"></div>
+        <div className="border border-border rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all bg-card">
+          <div className="absolute top-0 right-0 h-24 w-24 rounded-[0_0_0_100%] bg-neutral-900/10 dark:bg-white/5 group-hover:bg-neutral-900/15 dark:group-hover:bg-white/10 transition-colors blur-xl z-0"></div>
           <div className="relative z-10">
             <div className="flex justify-between items-start mb-4">
               <div>
-                <p className="text-sm font-medium text-neutral-500 uppercase tracking-wide">
+                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
                   Compétences disponibles
                 </p>
-                <div className="text-4xl font-bold dm-sans-bold text-neutral-900 mt-1">
+                <div className="text-4xl font-bold dm-sans-bold text-foreground mt-1">
                   {skills.length}
                 </div>
               </div>
-              <div className="h-10 w-10 bg-white rounded-full flex items-center justify-center border border-neutral-200 shadow-sm">
+              <div className="h-10 w-10 bg-card rounded-full flex items-center justify-center border border-border shadow-sm">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="size-5 text-neutral-700"
+                  className="size-5 text-muted-foreground"
                 >
                   <path
                     strokeLinecap="round"
@@ -188,19 +188,19 @@ const ManageSkillsTab = () => {
         </div>
 
         {/* Total Declared */}
-        <div className="border border-neutral-200 rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all">
+        <div className="border border-border rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all bg-card">
           <div className="absolute top-0 right-0 h-24 w-24 rounded-[0_0_0_100%] bg-orange-500/10 group-hover:bg-orange-500/20 transition-colors blur-xl z-0"></div>
           <div className="relative z-10">
             <div className="flex justify-between items-start mb-4">
               <div>
-                <p className="text-sm font-medium text-neutral-500 uppercase tracking-wide">
+                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
                   Compétences déclarées
                 </p>
-                <div className="text-4xl font-bold dm-sans-bold text-neutral-900 mt-1">
+                <div className="text-4xl font-bold dm-sans-bold text-foreground mt-1">
                   {skills.reduce((sum, skill) => sum + (skill.userCount || 0), 0)}
                 </div>
               </div>
-              <div className="h-10 w-10 bg-white rounded-full flex items-center justify-center border border-neutral-200 shadow-sm">
+              <div className="h-10 w-10 bg-card rounded-full flex items-center justify-center border border-border shadow-sm">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -223,32 +223,32 @@ const ManageSkillsTab = () => {
 
       {/* Skills List Table */}
       <Card>
-        <CardHeader className="border-b border-neutral-100 pb-4">
+        <CardHeader className="border-b border-border pb-4">
           <CardTitle className="text-lg">Répertoire des compétences</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           <div className="max-h-[600px] overflow-y-auto">
             <Table>
-              <TableHeader className="bg-neutral-50/50 sticky top-0 bg-white z-10">
-                <TableRow>
-                  <TableHead className="w-2/3">Nom</TableHead>
-                  <TableHead className="text-center">Utilisateurs</TableHead>
-                  <TableHead className="text-right">Actions</TableHead>
+              <TableHeader className="bg-muted/50 sticky top-0 bg-card z-10">
+                <TableRow className="border-border hover:bg-muted/50">
+                  <TableHead className="w-2/3 text-muted-foreground">Nom</TableHead>
+                  <TableHead className="text-center text-muted-foreground">Utilisateurs</TableHead>
+                  <TableHead className="text-right text-muted-foreground">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {skills.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={3} className="h-32 text-center text-neutral-500">
+                    <TableCell colSpan={3} className="h-32 text-center text-muted-foreground">
                       Aucune compétence trouvée. Ajoutez-en une pour commencer.
                     </TableCell>
                   </TableRow>
                 ) : (
                   skills.map((skill) => (
-                    <TableRow key={skill.id} className="hover:bg-neutral-50/50 transition-colors">
-                      <TableCell className="font-medium text-neutral-900">
+                    <TableRow key={skill.id} className="hover:bg-muted/50 transition-colors border-border">
+                      <TableCell className="font-medium text-foreground">
                         <div className="flex items-center gap-3">
-                          <div className="h-8 w-8 rounded-full bg-neutral-900/5 flex items-center justify-center text-neutral-600">
+                          <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center text-muted-foreground">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
                               <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
                             </svg>
@@ -257,14 +257,14 @@ const ManageSkillsTab = () => {
                         </div>
                       </TableCell>
                       <TableCell className="text-center">
-                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-neutral-100 text-neutral-800">
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-muted text-foreground border border-border">
                           {skill.userCount || 0}
                         </span>
                       </TableCell>
                       <TableCell className="text-right">
                         <button
                           onClick={() => setSkillToDelete(skill)}
-                          className="p-2 hover:bg-red-50 rounded-lg text-neutral-400 hover:text-red-600 transition-colors"
+                          className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg text-muted-foreground hover:text-red-600 dark:hover:text-red-400 transition-colors"
                           title="Supprimer"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
@@ -293,14 +293,14 @@ const ManageSkillsTab = () => {
           <div className="py-4">
             <div className="space-y-4">
               <div className="space-y-2">
-                <label className="text-sm font-medium text-neutral-700">Nom de la compétence</label>
+                <label className="text-sm font-medium text-foreground">Nom de la compétence</label>
                 <input
                   type="text"
                   placeholder="Ex: React.js, Gestion de projet..."
                   value={newSkillName}
                   onChange={(e) => setNewSkillName(e.target.value)}
                   onKeyPress={(e) => e.key === "Enter" && handleAddSkill()}
-                  className="flex h-10 w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
+                  className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                 />
               </div>
             </div>
@@ -308,14 +308,14 @@ const ManageSkillsTab = () => {
           <div className="flex justify-end gap-3">
             <button
               onClick={() => setIsAddDialogOpen(false)}
-              className="px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors"
+              className="px-4 py-2 text-sm font-medium text-muted-foreground hover:bg-muted rounded-lg transition-colors"
             >
               Annuler
             </button>
             <button
               onClick={handleAddSkill}
               disabled={isAdding || !newSkillName.trim()}
-              className="px-4 py-2 text-sm font-medium bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 transition-colors disabled:opacity-50"
+              className="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50"
             >
               {isAdding ? "Ajout..." : "Ajouter"}
             </button>
@@ -329,7 +329,7 @@ const ManageSkillsTab = () => {
           <AlertDialogHeader>
             <AlertDialogTitle>Êtes-vous sûr ?</AlertDialogTitle>
             <AlertDialogDescription>
-              Voulez-vous vraiment supprimer la compétence <span className="font-bold text-neutral-900">{skillToDelete?.name}</span> ?
+              Voulez-vous vraiment supprimer la compétence <span className="font-bold text-foreground">{skillToDelete?.name}</span> ?
               Cette action est irréversible et retirera cette compétence de tous les profils utilisateurs.
             </AlertDialogDescription>
           </AlertDialogHeader>

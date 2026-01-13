@@ -1,4 +1,8 @@
-import { ReinforcementRequest, CreateReinforcementRequestDTO, UpdateReinforcementRequestDTO } from '../entities/ReinforcementRequest.js';
+import {
+  ReinforcementRequest,
+  CreateReinforcementRequestDTO,
+  UpdateReinforcementRequestDTO,
+} from "../entities/ReinforcementRequest.js";
 
 export interface IReinforcementRequestRepository {
   create(data: CreateReinforcementRequestDTO): Promise<ReinforcementRequest>;
@@ -6,5 +10,9 @@ export interface IReinforcementRequestRepository {
   findByTeamId(teamId: string): Promise<ReinforcementRequest[]>;
   findOpenRequests(): Promise<ReinforcementRequest[]>;
   findExpiredRequests(): Promise<ReinforcementRequest[]>;
-  update(id: string, data: UpdateReinforcementRequestDTO): Promise<ReinforcementRequest>;
+  update(
+    id: string,
+    data: UpdateReinforcementRequestDTO
+  ): Promise<ReinforcementRequest>;
+  delete(id: string): Promise<void>;
 }

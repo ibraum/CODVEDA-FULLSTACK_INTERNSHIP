@@ -1,4 +1,4 @@
-import { ReinforcementStatus } from '../value-objects/enums.js';
+import { ReinforcementStatus } from "../value-objects/enums.js";
 
 export interface ReinforcementRequest {
   id: string;
@@ -19,4 +19,6 @@ export interface CreateReinforcementRequestDTO {
 
 export interface UpdateReinforcementRequestDTO {
   status?: ReinforcementStatus;
+  urgencyLevel?: number;
+  requiredSkills?: Record<string, any>;
 }

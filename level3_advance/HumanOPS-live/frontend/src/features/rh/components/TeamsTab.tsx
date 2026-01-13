@@ -93,12 +93,12 @@ const TeamsTab = () => {
 
   const getTensionColor = (level: string): string => {
     const map: Record<string, string> = {
-      LOW: "bg-green-100 text-green-800 hover:bg-green-100 border-green-200",
-      MODERATE: "bg-orange-100 text-orange-800 hover:bg-orange-100 border-orange-200",
+      LOW: "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/30 border-green-200 dark:border-green-800",
+      MODERATE: "bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300 hover:bg-orange-100 dark:hover:bg-orange-900/30 border-orange-200 dark:border-orange-800",
       HIGH: "bg-orange-500 text-white hover:bg-orange-600 border-orange-600",
-      CRITICAL: "bg-neutral-900 text-white hover:bg-neutral-800 border-neutral-900",
+      CRITICAL: "bg-neutral-900 dark:bg-neutral-700 text-white hover:bg-neutral-800 border-neutral-900 dark:border-neutral-700",
     };
-    return map[level] || "bg-neutral-100 text-neutral-800";
+    return map[level] || "bg-neutral-100 dark:bg-secondary text-neutral-800 dark:text-secondary-foreground";
   };
 
   const getTensionLabel = (level: string): string => {
@@ -218,26 +218,26 @@ const TeamsTab = () => {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Total Teams */}
-        <div className="border border-neutral-200 rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all">
+        <div className="border border-border rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all bg-card">
           <div className="absolute top-0 right-0 h-24 w-24 rounded-[0_0_0_100%] bg-neutral-900/10 group-hover:bg-neutral-900/15 transition-colors blur-xl z-0"></div>
           <div className="relative z-10">
             <div className="flex justify-between items-start mb-4">
               <div>
-                <p className="text-sm font-medium text-neutral-500 uppercase tracking-wide">
+                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
                   Total Équipes
                 </p>
-                <div className="text-4xl font-bold dm-sans-bold text-neutral-900 mt-1">
+                <div className="text-4xl font-bold dm-sans-bold text-foreground mt-1">
                   {totalTeams}
                 </div>
               </div>
-              <div className="h-10 w-10 bg-white rounded-full flex items-center justify-center border border-neutral-200 shadow-sm">
+              <div className="h-10 w-10 bg-card rounded-full flex items-center justify-center border border-border shadow-sm">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="size-5 text-neutral-700"
+                  className="size-5 text-muted-foreground"
                 >
                   <path
                     strokeLinecap="round"
@@ -251,19 +251,19 @@ const TeamsTab = () => {
         </div>
 
         {/* Total Members */}
-        <div className="border border-neutral-200 rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all">
+        <div className="border border-border rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all bg-card">
           <div className="absolute top-0 right-0 h-24 w-24 rounded-[0_0_0_100%] bg-blue-500/10 group-hover:bg-blue-500/20 transition-colors blur-xl z-0"></div>
           <div className="relative z-10">
             <div className="flex justify-between items-start mb-4">
               <div>
-                <p className="text-sm font-medium text-neutral-500 uppercase tracking-wide">
+                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
                   Collaborateurs
                 </p>
-                <div className="text-4xl font-bold dm-sans-bold text-neutral-900 mt-1">
+                <div className="text-4xl font-bold dm-sans-bold text-foreground mt-1">
                   {totalMembers}
                 </div>
               </div>
-              <div className="h-10 w-10 bg-white rounded-full flex items-center justify-center border border-neutral-200 shadow-sm">
+              <div className="h-10 w-10 bg-card rounded-full flex items-center justify-center border border-border shadow-sm">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -284,19 +284,19 @@ const TeamsTab = () => {
         </div>
 
         {/* Critical Teams */}
-        <div className="border border-neutral-200 rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all">
+        <div className="border border-border rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all bg-card">
           <div className="absolute top-0 right-0 h-24 w-24 rounded-[0_0_0_100%] bg-orange-500/10 group-hover:bg-orange-500/20 transition-colors blur-xl z-0"></div>
           <div className="relative z-10">
             <div className="flex justify-between items-start mb-4">
               <div>
-                <p className="text-sm font-medium text-neutral-500 uppercase tracking-wide">
+                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
                   En Tension
                 </p>
-                <div className="text-4xl font-bold dm-sans-bold text-neutral-900 mt-1">
+                <div className="text-4xl font-bold dm-sans-bold text-foreground mt-1">
                   {criticalTeams}
                 </div>
               </div>
-              <div className="h-10 w-10 bg-white rounded-full flex items-center justify-center border border-neutral-200 shadow-sm">
+              <div className="h-10 w-10 bg-card rounded-full flex items-center justify-center border border-border shadow-sm">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -326,7 +326,7 @@ const TeamsTab = () => {
       </div>
 
       {teams.length === 0 ? (
-        <div className="bg-white p-12 rounded-2xl border border-dashed border-neutral-300 text-center flex flex-col items-center justify-center">
+        <div className="bg-card p-12 rounded-2xl border border-dashed border-border text-center flex flex-col items-center justify-center">
           <div className="h-16 w-16 rounded-full bg-neutral-100 flex items-center justify-center mb-4 text-neutral-400">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -363,7 +363,7 @@ const TeamsTab = () => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Sidebar: Team List */}
             <div className="lg:col-span-1 space-y-4">
-              <h3 className="text-lg font-semibold text-neutral-900 px-1">
+              <h3 className="text-lg font-semibold text-foreground px-1">
                 Liste des équipes
               </h3>
               <div className="space-y-2 max-h-[600px] overflow-y-auto pr-2 scrollbar-thin">
@@ -374,8 +374,8 @@ const TeamsTab = () => {
                     className={cn(
                       "w-full text-left p-4 rounded-xl border transition-all duration-200 group relative overflow-hidden",
                       selectedTeam === team.id
-                        ? "bg-neutral-900 border-neutral-900 text-white shadow-lg"
-                        : "bg-white border-neutral-200 text-neutral-700 hover:border-orange-200 hover:shadow-sm"
+                        ? "bg-neutral-900 dark:bg-primary border-neutral-900 dark:border-primary text-white dark:text-primary-foreground shadow-lg"
+                        : "bg-card border-border text-foreground hover:border-orange-200 dark:hover:border-orange-800 hover:shadow-sm"
                     )}
                   >
                     <div className="flex justify-between items-start mb-2 relative z-10">
@@ -446,22 +446,22 @@ const TeamsTab = () => {
                       </CardHeader>
                       <CardContent>
                         <div className="space-y-4 mt-2">
-                          <div className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg">
-                            <span className="text-sm text-neutral-600">
+                          <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
+                            <span className="text-sm text-muted-foreground">
                               Manager
                             </span>
                             <div className="flex items-center gap-2">
                               <div className="h-6 w-6 rounded-full bg-orange-100 flex items-center justify-center text-orange-700 text-xs font-bold">
                                 M
                               </div>
-                              <span className="font-semibold text-neutral-900 text-sm">
+                              <span className="font-semibold text-foreground text-sm">
                                 {selectedTeamData.manager?.firstName || "N/A"}{" "}
                                 {selectedTeamData.manager?.lastName || ""}
                               </span>
                             </div>
                           </div>
-                          <div className="flex items-center justify-between p-3 bg-neutral-50 rounded-lg">
-                            <span className="text-sm text-neutral-600">
+                          <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
+                            <span className="text-sm text-muted-foreground">
                               Demandes
                             </span>
                             <span className="font-semibold text-orange-600">
@@ -492,10 +492,12 @@ const TeamsTab = () => {
                                   dot={{ fill: "#f97316", r: 4, stroke: "#fff", strokeWidth: 2 }}
                                 />
                                 <Tooltip
-                                  cursor={{ stroke: "#e5e5e5" }}
+                                  cursor={{ stroke: "var(--border)" }}
                                   contentStyle={{
                                     borderRadius: "8px",
-                                    border: "none",
+                                    border: "1px solid var(--border)",
+                                    backgroundColor: "var(--card)",
+                                    color: "var(--foreground)",
                                     boxShadow: "0 4px 6px -1px rgb(0 0 0 / 0.1)",
                                   }}
                                 />
@@ -513,13 +515,13 @@ const TeamsTab = () => {
 
                   {/* Reinforcement Requests for this team */}
                   <div>
-                    <h3 className="text-lg font-semibold text-neutral-900 mb-3">
+                    <h3 className="text-lg font-semibold text-foreground mb-3">
                       Demandes de Renfort
                     </h3>
                     {teamRequests.filter((r) => r.teamId === selectedTeam)
                       .length === 0 ? (
-                      <div className="bg-neutral-50 rounded-xl p-8 text-center border border-neutral-100">
-                        <p className="text-neutral-500 text-sm">
+                      <div className="bg-muted rounded-xl p-8 text-center border border-border">
+                        <p className="text-muted-foreground text-sm">
                           Aucune demande active pour cette équipe.
                         </p>
                       </div>
@@ -530,7 +532,7 @@ const TeamsTab = () => {
                           .map((request) => (
                             <div
                               key={request.id}
-                              className="bg-white p-4 rounded-xl border border-neutral-200 shadow-sm flex items-center justify-between"
+                              className="bg-card p-4 rounded-xl border border-border shadow-sm flex items-center justify-between"
                             >
                               <div className="flex items-center gap-4">
                                 <div
@@ -544,10 +546,10 @@ const TeamsTab = () => {
                                   {request.urgencyLevel}
                                 </div>
                                 <div>
-                                  <h4 className="font-semibold text-neutral-900">
+                                  <h4 className="font-semibold text-foreground">
                                     Besoin de renfort
                                   </h4>
-                                  <p className="text-xs text-neutral-500">
+                                  <p className="text-xs text-muted-foreground">
                                     Skills:{" "}
                                     {Object.keys(
                                       request.requiredSkills || {}
@@ -555,7 +557,7 @@ const TeamsTab = () => {
                                   </p>
                                 </div>
                               </div>
-                              <Badge variant="outline" className="bg-neutral-50">
+                              <Badge variant="outline" className="bg-muted text-muted-foreground">
                                 {new Date(request.createdAt).toLocaleDateString(
                                   "fr-FR", { day: 'numeric', month: 'short' }
                                 )}
@@ -587,8 +589,8 @@ const TeamsTab = () => {
             </DialogDescription>
           </DialogHeader>
           <div className="py-8 text-center">
-            <div className="h-16 w-16 rounded-full bg-neutral-100 flex items-center justify-center mx-auto mb-4">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-8 text-neutral-400">
+            <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-8 text-muted-foreground">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
               </svg>
             </div>

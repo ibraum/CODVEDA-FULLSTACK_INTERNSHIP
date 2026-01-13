@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { apiClient } from "../lib/axios";
+import { socket, connectSocket } from "../lib/socket";
 import type { Alert } from "../types/alert";
 
 export const useAlerts = () => {
@@ -37,10 +38,6 @@ export const useAlerts = () => {
   };
 
   const markAllAsRead = async () => {
-    // Since backend might not have bulk update, we optimistically update UI
-    // and try to update server. For now, let's just update UI or loop requests if needed.
-    // Ideally backend should support this.
-    // For this task, I will iterate.
     const unreadAlerts = alerts.filter((a) => !a.isRead);
 
     // Optimistic update
@@ -58,16 +55,30 @@ export const useAlerts = () => {
       );
     } catch (err) {
       console.error("Failed to mark all as read", err);
-      // Revert or fetch again on error
       fetchAlerts();
     }
   };
 
   useEffect(() => {
     fetchAlerts();
-    // Optional: polling or socket here
-    const interval = setInterval(fetchAlerts, 60000); // Poll every minute
-    return () => clearInterval(interval);
+
+    // Listen for real-time alerts
+    const handleNewAlert = () => {
+      fetchAlerts();
+    };
+
+    if (!socket.connected) {
+      connectSocket();
+    }
+
+    socket.on("alert:new", handleNewAlert);
+
+    const interval = setInterval(fetchAlerts, 60000); // Poll every minute as backup
+
+    return () => {
+      socket.off("alert:new", handleNewAlert);
+      clearInterval(interval);
+    };
   }, [fetchAlerts]);
 
   const unreadCount = alerts.filter((a) => !a.isRead).length;

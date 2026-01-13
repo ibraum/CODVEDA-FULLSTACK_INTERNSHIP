@@ -1,11 +1,11 @@
-import { Server as HTTPServer } from 'http';
-import { Server as SocketIOServer, Socket } from 'socket.io';
-import { createAdapter } from '@socket.io/redis-adapter';
-import { createClient } from 'redis';
-import jwt from 'jsonwebtoken';
-import { config } from '../../config/index.js';
-import { eventBus } from '../event-bus/EventBus.js';
-import { Role } from '../../domain/value-objects/enums.js';
+import { Server as HTTPServer } from "http";
+import { Server as SocketIOServer, Socket } from "socket.io";
+import { createAdapter } from "@socket.io/redis-adapter";
+import { createClient } from "redis";
+import jwt from "jsonwebtoken";
+import { config } from "../../config/index.js";
+import { eventBus } from "../event-bus/EventBus.js";
+import { Role } from "../../domain/value-objects/enums.js";
 
 export interface AuthenticatedSocket extends Socket {
   user?: {
@@ -24,17 +24,17 @@ export class SocketAdapter {
     });
 
     if (config.redis?.url) {
-      console.log('Initializing Redis Adapter for Socket.io...');
+      console.log("Initializing Redis Adapter for Socket.io...");
       const pubClient = createClient({ url: config.redis.url });
       const subClient = pubClient.duplicate();
 
       Promise.all([pubClient.connect(), subClient.connect()])
         .then(() => {
           this.io.adapter(createAdapter(pubClient, subClient));
-          console.log('Redis Adapter initialized');
+          console.log("Redis Adapter initialized");
         })
         .catch((err) => {
-          console.error('Failed to connect to Redis:', err);
+          console.error("Failed to connect to Redis:", err);
         });
     }
 
@@ -51,7 +51,7 @@ export class SocketAdapter {
       const token = socket.handshake.auth.token;
 
       if (!token) {
-        return next(new Error('Authentication required'));
+        return next(new Error("Authentication required"));
       }
 
       try {
@@ -64,7 +64,7 @@ export class SocketAdapter {
         socket.user = decoded;
         next();
       } catch (error) {
-        next(new Error('Invalid token'));
+        next(new Error("Invalid token"));
       }
     });
   }
@@ -74,39 +74,39 @@ export class SocketAdapter {
    */
   private setupEventListeners(): void {
     // Événement : État humain mis à jour
-    eventBus.on('HumanStateUpdated', (event) => {
+    eventBus.on("HumanStateUpdated", (event) => {
       const { userId, newState } = event.payload;
-      
+
       // Diffuser à l'utilisateur concerné
-      this.io.to(`user:${userId}`).emit('human_state:updated', {
+      this.io.to(`user:${userId}`).emit("human_state:updated", {
         userId,
         state: newState,
       });
 
       // Diffuser aux managers et RH
-      this.io.to('role:MANAGER').emit('team_member_state:updated', {
+      this.io.to("role:MANAGER").emit("team_member_state:updated", {
         userId,
         state: newState,
       });
 
-      this.io.to('role:ADMIN_RH').emit('team_member_state:updated', {
+      this.io.to("role:ADMIN_RH").emit("team_member_state:updated", {
         userId,
         state: newState,
       });
     });
 
     // Événement : Tension calculée (même si non critique)
-    eventBus.on('TeamTensionComputed', (event) => {
+    eventBus.on("TeamTensionComputed", (event) => {
       const { teamId, level, metrics } = event.payload;
 
       // Diffuser aux managers et RH pour affichage temps réel de la jauge
-      this.io.to('role:MANAGER').emit('tension:updated', {
+      this.io.to("role:MANAGER").emit("tension:updated", {
         teamId,
         level,
         metrics,
       });
 
-      this.io.to('role:ADMIN_RH').emit('tension:updated', {
+      this.io.to("role:ADMIN_RH").emit("tension:updated", {
         teamId,
         level,
         metrics,
@@ -114,85 +114,93 @@ export class SocketAdapter {
     });
 
     // Événement : Tension critique détectée
-    eventBus.on('CriticalTensionDetected', (event) => {
+    eventBus.on("CriticalTensionDetected", (event) => {
       const { teamId, metrics } = event.payload;
 
       // Alerter les managers et RH uniquement
-      this.io.to('role:MANAGER').emit('tension:critical', {
+      this.io.to("role:MANAGER").emit("tension:critical", {
         teamId,
         metrics,
       });
 
-      this.io.to('role:ADMIN_RH').emit('tension:critical', {
+      this.io.to("role:ADMIN_RH").emit("tension:critical", {
         teamId,
         metrics,
       });
     });
 
     // Événement : Membre ajouté à une équipe
-    eventBus.on('TeamMemberAdded', (event) => {
+    eventBus.on("TeamMemberAdded", (event) => {
       const { teamId, userId } = event.payload;
-      
-      this.io.to('role:MANAGER').emit('team:member_added', { teamId, userId });
-      this.io.to(`user:${userId}`).emit('team:joined', { teamId });
+
+      this.io.to("role:MANAGER").emit("team:member_added", { teamId, userId });
+      this.io.to(`user:${userId}`).emit("team:joined", { teamId });
     });
 
     // Événement : Membre retiré d'une équipe
-    eventBus.on('TeamMemberRemoved', (event) => {
+    eventBus.on("TeamMemberRemoved", (event) => {
       const { teamId, userId } = event.payload;
-      
-      this.io.to('role:MANAGER').emit('team:member_removed', { teamId, userId });
-      this.io.to(`user:${userId}`).emit('team:left', { teamId });
+
+      this.io
+        .to("role:MANAGER")
+        .emit("team:member_removed", { teamId, userId });
+      this.io.to(`user:${userId}`).emit("team:left", { teamId });
     });
 
     // Événement : Demande de renfort
-    eventBus.on('ReinforcementRequested', (event) => {
+    eventBus.on("ReinforcementRequested", (event) => {
       const { requestId, teamId, requiredSkills, urgencyLevel } = event.payload;
 
-      // Diffuser aux collaborateurs disponibles
-      this.io.to('role:COLLABORATOR').emit('reinforcement:requested', {
+      const payload = {
         requestId,
         teamId,
         requiredSkills,
         urgencyLevel,
-      });
+      };
+
+      // Diffuser aux collaborateurs disponibles
+      this.io.to("role:COLLABORATOR").emit("reinforcement:new", payload);
+
+      // Diffuser aux managers et RH
+      this.io.to("role:MANAGER").emit("reinforcement:new", payload);
+      this.io.to("role:ADMIN_RH").emit("reinforcement:new", payload);
     });
 
     // Événement : Renfort accepté
-    eventBus.on('ReinforcementAccepted', (event) => {
+    eventBus.on("ReinforcementAccepted", (event) => {
       const { requestId, userId } = event.payload;
 
       // Notifier les managers
-      this.io.to('role:MANAGER').emit('reinforcement:accepted', {
+      this.io.to("role:MANAGER").emit("reinforcement:accepted", {
         requestId,
         userId,
       });
     });
 
     // Événement : Renfort refusé
-    eventBus.on('ReinforcementRefused', (event) => {
+    eventBus.on("ReinforcementRefused", (event) => {
       const { requestId, userId } = event.payload;
 
       // Notifier les managers (optionnel : uniquement le manager de l'équipe demanderesse si on filtrait par team)
-      this.io.to('role:MANAGER').emit('reinforcement:refused', {
+      this.io.to("role:MANAGER").emit("reinforcement:refused", {
         requestId,
         userId,
       });
     });
 
     // Événement : Alerte créée
-    eventBus.on('AlertCreated', (event) => {
+    eventBus.on("AlertCreated", (event) => {
       const { alertId, type, targetRole, userId } = event.payload;
 
       if (userId) {
         // Alerte ciblée utilisateur
-        this.io.to(`user:${userId}`).emit('alert:new', {
+        this.io.to(`user:${userId}`).emit("alert:new", {
           alertId,
           type,
         });
       } else if (targetRole) {
         // Alerte ciblée rôle
-        this.io.to(`role:${targetRole}`).emit('alert:new', {
+        this.io.to(`role:${targetRole}`).emit("alert:new", {
           alertId,
           type,
         });
@@ -204,7 +212,7 @@ export class SocketAdapter {
    * Gestion des connexions/déconnexions
    */
   private setupConnectionHandlers(): void {
-    this.io.on('connection', (socket: AuthenticatedSocket) => {
+    this.io.on("connection", (socket: AuthenticatedSocket) => {
       if (!socket.user) return;
 
       console.log(`User connected: ${socket.user.email} (${socket.user.role})`);
@@ -213,7 +221,7 @@ export class SocketAdapter {
       socket.join(`user:${socket.user.userId}`);
       socket.join(`role:${socket.user.role}`);
 
-      socket.on('disconnect', () => {
+      socket.on("disconnect", () => {
         console.log(`User disconnected: ${socket.user?.email}`);
       });
     });

@@ -14,6 +14,20 @@ router.post(
   ReinforcementController.create
 );
 
+// Mise à jour : Manager ou Admin RH
+router.put(
+  "/:id",
+  requireRole(Role.MANAGER, Role.ADMIN_RH),
+  ReinforcementController.update
+);
+
+// Suppression : Manager ou Admin RH
+router.delete(
+  "/:id",
+  requireRole(Role.MANAGER, Role.ADMIN_RH),
+  ReinforcementController.delete
+);
+
 // Réponse : Collaborateur (ou tout rôle connecté susceptible d'aider)
 router.post("/:id/respond", ReinforcementController.respond);
 

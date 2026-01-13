@@ -77,7 +77,17 @@ router.post("/register", AuthController.register);
  *       401:
  *         description: Invalid credentials
  */
-router.post("/login", AuthController.login);
+import { rateLimit } from "express-rate-limit";
+
+const loginLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 10, // Limit each IP to 10 login requests per `window` (here, per 15 minutes)
+  message: "Trop de tentatives de connexion, veuillez réessayer plus tard.",
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+router.post("/login", loginLimiter, AuthController.login);
 
 /**
  * @swagger

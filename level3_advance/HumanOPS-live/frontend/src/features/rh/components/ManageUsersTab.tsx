@@ -202,26 +202,26 @@ const ManageUsersTab = () => {
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* Total Users */}
-        <div className="border border-neutral-200 rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all">
-          <div className="absolute top-0 right-0 h-24 w-24 rounded-[0_0_0_100%] bg-neutral-900/10 group-hover:bg-neutral-900/15 transition-colors blur-xl z-0"></div>
+        <div className="border border-border rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all bg-card">
+          <div className="absolute top-0 right-0 h-24 w-24 rounded-[0_0_0_100%] bg-neutral-900/10 dark:bg-primary/5 group-hover:bg-neutral-900/15 dark:group-hover:bg-primary/10 transition-colors blur-xl z-0"></div>
           <div className="relative z-10">
             <div className="flex justify-between items-start mb-4">
               <div>
-                <p className="text-sm font-medium text-neutral-500 uppercase tracking-wide">
+                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
                   Total Membres
                 </p>
-                <div className="text-4xl font-bold dm-sans-bold text-neutral-900 mt-1">
+                <div className="text-4xl font-bold dm-sans-bold text-foreground mt-1">
                   {totalUsers}
                 </div>
               </div>
-              <div className="h-10 w-10 bg-white rounded-full flex items-center justify-center border border-neutral-200 shadow-sm">
+              <div className="h-10 w-10 bg-card rounded-full flex items-center justify-center border border-border shadow-sm">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="size-5 text-neutral-700"
+                  className="size-5 text-muted-foreground"
                 >
                   <path
                     strokeLinecap="round"
@@ -235,26 +235,26 @@ const ManageUsersTab = () => {
         </div>
 
         {/* Available Users */}
-        <div className="border border-neutral-200 rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all">
-          <div className="absolute top-0 right-0 h-24 w-24 rounded-[0_0_0_100%] bg-green-500/10 group-hover:bg-green-500/20 transition-colors blur-xl z-0"></div>
+        <div className="border border-border rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all bg-card">
+          <div className="absolute top-0 right-0 h-24 w-24 rounded-[0_0_0_100%] bg-green-500/10 dark:bg-green-500/20 group-hover:bg-green-500/20 dark:group-hover:bg-green-500/30 transition-colors blur-xl z-0"></div>
           <div className="relative z-10">
             <div className="flex justify-between items-start mb-4">
               <div>
-                <p className="text-sm font-medium text-neutral-500 uppercase tracking-wide">
+                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
                   Disponibles
                 </p>
-                <div className="text-4xl font-bold dm-sans-bold text-neutral-900 mt-1">
+                <div className="text-4xl font-bold dm-sans-bold text-foreground mt-1">
                   {availableUsers}
                 </div>
               </div>
-              <div className="h-10 w-10 bg-white rounded-full flex items-center justify-center border border-neutral-200 shadow-sm">
+              <div className="h-10 w-10 bg-card rounded-full flex items-center justify-center border border-border shadow-sm">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="size-5 text-green-600"
+                  className="size-5 text-green-600 dark:text-green-400"
                 >
                   <path
                     strokeLinecap="round"
@@ -264,7 +264,7 @@ const ManageUsersTab = () => {
                 </svg>
               </div>
             </div>
-            <div className="w-full bg-neutral-100 h-1.5 rounded-full overflow-hidden mt-2">
+            <div className="w-full bg-muted h-1.5 rounded-full overflow-hidden mt-2">
               <div
                 className="h-full bg-green-500 rounded-full"
                 style={{
@@ -276,26 +276,26 @@ const ManageUsersTab = () => {
         </div>
 
         {/* Overloaded Users */}
-        <div className="border border-neutral-200 rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all">
-          <div className="absolute top-0 right-0 h-24 w-24 rounded-[0_0_0_100%] bg-red-500/10 group-hover:bg-red-500/20 transition-colors blur-xl z-0"></div>
+        <div className="border border-border rounded-2xl p-6 relative overflow-hidden group hover:shadow-md transition-all bg-card">
+          <div className="absolute top-0 right-0 h-24 w-24 rounded-[0_0_0_100%] bg-red-500/10 dark:bg-red-500/20 group-hover:bg-red-500/20 dark:group-hover:bg-red-500/30 transition-colors blur-xl z-0"></div>
           <div className="relative z-10">
             <div className="flex justify-between items-start mb-4">
               <div>
-                <p className="text-sm font-medium text-neutral-500 uppercase tracking-wide">
+                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
                   Surchargés
                 </p>
-                <div className="text-4xl font-bold dm-sans-bold text-neutral-900 mt-1">
+                <div className="text-4xl font-bold dm-sans-bold text-foreground mt-1">
                   {overloadedUsers}
                 </div>
               </div>
-              <div className="h-10 w-10 bg-white rounded-full flex items-center justify-center border border-neutral-200 shadow-sm">
+              <div className="h-10 w-10 bg-card rounded-full flex items-center justify-center border border-border shadow-sm">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="size-5 text-red-600"
+                  className="size-5 text-red-600 dark:text-red-400"
                 >
                   <path
                     strokeLinecap="round"
@@ -305,7 +305,7 @@ const ManageUsersTab = () => {
                 </svg>
               </div>
             </div>
-            <div className="w-full bg-neutral-100 h-1.5 rounded-full overflow-hidden mt-2">
+            <div className="w-full bg-muted h-1.5 rounded-full overflow-hidden mt-2">
               <div
                 className="h-full bg-red-500 rounded-full show-tooltip" // Added show-tooltip just in case, though handled by css usually
                 style={{
@@ -319,7 +319,7 @@ const ManageUsersTab = () => {
 
       {/* Users DataTable */}
       <Card>
-        <CardHeader className="border-b border-neutral-100 pb-4">
+        <CardHeader className="border-b border-border pb-4">
           <div className="flex items-center justify-between">
             <CardTitle className="text-lg">Annuaire des Utilisateurs</CardTitle>
             <div className="flex gap-2">
@@ -329,7 +329,7 @@ const ManageUsersTab = () => {
         </CardHeader>
         <CardContent className="p-0">
           <Table>
-            <TableHeader className="bg-neutral-50/50">
+            <TableHeader className="bg-muted/50">
               <TableRow>
                 <TableHead className="w-[80px]">Avatar</TableHead>
                 <TableHead>Identité</TableHead>
@@ -341,10 +341,10 @@ const ManageUsersTab = () => {
             </TableHeader>
             <TableBody>
               {users.map((user) => (
-                <TableRow key={user.id} className="hover:bg-neutral-50/50 transition-colors">
+                <TableRow key={user.id} className="hover:bg-muted/50 transition-colors">
                   <TableCell>
-                    <Avatar className="h-10 w-10 border border-neutral-100">
-                      <AvatarFallback className="bg-neutral-900 text-white font-medium text-xs">
+                    <Avatar className="h-10 w-10 border border-border">
+                      <AvatarFallback className="bg-muted text-foreground font-medium text-xs">
                         {(user.firstName?.[0] || user.email[0]).toUpperCase()}
                         {(user.lastName?.[0] || "").toUpperCase()}
                       </AvatarFallback>
@@ -352,17 +352,17 @@ const ManageUsersTab = () => {
                   </TableCell>
                   <TableCell>
                     <div>
-                      <div className="font-semibold text-neutral-900">
+                      <div className="font-semibold text-foreground">
                         {user.firstName ? `${user.firstName} ${user.lastName}` : "Sans nom"}
                       </div>
-                      <div className="text-xs text-neutral-500">
+                      <div className="text-xs text-muted-foreground">
                         ID: {user.id.substring(0, 8)}...
                       </div>
                     </div>
                   </TableCell>
-                  <TableCell className="text-neutral-600">{user.email}</TableCell>
+                  <TableCell className="text-muted-foreground">{user.email}</TableCell>
                   <TableCell>
-                    <Badge variant="outline" className="font-normal bg-white">
+                    <Badge variant="outline" className="font-normal bg-card">
                       {user.role === "ADMIN_RH" ? "Admin RH" : user.role === "MANAGER" ? "Manager" : "Collaborateur"}
                     </Badge>
                   </TableCell>
@@ -372,24 +372,24 @@ const ManageUsersTab = () => {
                         variant="secondary"
                         className={
                           user.humanState.availability === "AVAILABLE"
-                            ? "bg-green-100 text-green-700 hover:bg-green-100"
+                            ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 hover:bg-green-100 dark:hover:bg-green-900/30"
                             : user.humanState.availability === "MOBILISABLE"
-                              ? "bg-orange-100 text-orange-700 hover:bg-orange-100"
-                              : "bg-red-100 text-red-700 hover:bg-red-100"
+                              ? "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300 hover:bg-orange-100 dark:hover:bg-orange-900/30"
+                              : "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/30"
                         }
                       >
                         {user.humanState.availability === "AVAILABLE" ? "Disponible" :
                           user.humanState.availability === "MOBILISABLE" ? "Mobilisable" : "Indisponible"}
                       </Badge>
                     ) : (
-                      <span className="text-neutral-400">-</span>
+                      <span className="text-muted-foreground">-</span>
                     )}
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex items-center justify-end gap-2">
                       <button
                         onClick={() => handleEditUser(user)}
-                        className="p-2 hover:bg-neutral-100 rounded-lg text-neutral-500 hover:text-neutral-900 transition-colors"
+                        className="p-2 hover:bg-muted rounded-lg text-muted-foreground hover:text-foreground transition-colors"
                         title="Modifier"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
@@ -398,7 +398,7 @@ const ManageUsersTab = () => {
                       </button>
                       <button
                         onClick={() => openDeleteDialog(user)}
-                        className="p-2 hover:bg-red-50 rounded-lg text-neutral-400 hover:text-red-600 transition-colors"
+                        className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg text-muted-foreground hover:text-red-600 transition-colors"
                         title="Supprimer"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
@@ -427,7 +427,7 @@ const ManageUsersTab = () => {
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
-              <label className="text-sm font-medium text-neutral-700">
+              <label className="text-sm font-medium text-foreground">
                 Prénom
               </label>
               <input
@@ -436,11 +436,11 @@ const ManageUsersTab = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, firstName: e.target.value })
                 }
-                className="flex h-10 w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-neutral-700">
+              <label className="text-sm font-medium text-foreground">
                 Nom
               </label>
               <input
@@ -449,22 +449,22 @@ const ManageUsersTab = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, lastName: e.target.value })
                 }
-                className="flex h-10 w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-neutral-700">
+              <label className="text-sm font-medium text-foreground">
                 Email (non modifiable)
               </label>
               <input
                 type="email"
                 value={formData.email}
                 disabled
-                className="flex h-10 w-full rounded-md border border-neutral-200 bg-neutral-100 px-3 py-2 text-sm text-neutral-500 cursor-not-allowed"
+                className="flex h-10 w-full rounded-md border border-input bg-muted px-3 py-2 text-sm text-muted-foreground cursor-not-allowed"
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium text-neutral-700">
+              <label className="text-sm font-medium text-foreground">
                 Rôle
               </label>
               <select
@@ -472,7 +472,7 @@ const ManageUsersTab = () => {
                 onChange={(e) =>
                   setFormData({ ...formData, role: e.target.value })
                 }
-                className="flex h-10 w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-sm ring-offset-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-900 focus-visible:ring-offset-2"
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               >
                 <option value="COLLABORATOR">Collaborateur</option>
                 <option value="MANAGER">Manager</option>
@@ -483,14 +483,14 @@ const ManageUsersTab = () => {
           <div className="flex justify-end gap-3">
             <button
               onClick={() => setIsEditDialogOpen(false)}
-              className="px-4 py-2 text-sm font-medium text-neutral-700 hover:bg-neutral-100 rounded-lg transition-colors"
+              className="px-4 py-2 text-sm font-medium text-foreground hover:bg-muted rounded-lg transition-colors"
             >
               Annuler
             </button>
             <button
               onClick={handleSaveUser}
               disabled={isSaving}
-              className="px-4 py-2 text-sm font-medium bg-neutral-900 text-white rounded-lg hover:bg-neutral-800 transition-colors disabled:opacity-50"
+              className="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50"
             >
               {isSaving ? "Enregistrement..." : "Enregistrer"}
             </button>
@@ -508,7 +508,7 @@ const ManageUsersTab = () => {
             <AlertDialogTitle>Êtes-vous sûr ?</AlertDialogTitle>
             <AlertDialogDescription>
               Cette action désactivera l'utilisateur{" "}
-              <span className="font-semibold text-neutral-900">
+              <span className="font-semibold text-foreground">
                 {selectedUser?.firstName} {selectedUser?.lastName}
               </span>
               . L'utilisateur ne pourra plus se connecter mais ses données
@@ -540,14 +540,14 @@ const ManageUsersTab = () => {
             </DialogDescription>
           </DialogHeader>
           <div className="py-8 text-center">
-            <div className="h-16 w-16 rounded-full bg-neutral-100 flex items-center justify-center mx-auto mb-4">
+            <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth={1.5}
                 stroke="currentColor"
-                className="size-8 text-neutral-400"
+                className="size-8 text-muted-foreground"
               >
                 <path
                   strokeLinecap="round"
@@ -556,7 +556,7 @@ const ManageUsersTab = () => {
                 />
               </svg>
             </div>
-            <p className="text-neutral-600">
+            <p className="text-muted-foreground">
               L'ajout d'utilisateurs nécessite l'endpoint d'inscription côté
               backend.
             </p>
