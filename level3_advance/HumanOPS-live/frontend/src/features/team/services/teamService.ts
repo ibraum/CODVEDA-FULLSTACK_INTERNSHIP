@@ -69,7 +69,7 @@ export interface HumanStateHistory {
   userId: string;
   workload: string;
   availability: string;
-  updatedAt: string;
+  changedAt: string;
 }
 
 export const getTeams = async (): Promise<Team[]> => {
@@ -123,4 +123,34 @@ export const getHumanStates = async (): Promise<HumanState[]> => {
 export const getUser = async (userId: string): Promise<Manager> => {
   const response = await apiClient.get<{ user: Manager }>(`/users/${userId}`);
   return response.data.user;
+};
+
+export const getTeamDetails = async (teamId: string): Promise<TeamDetails> => {
+  const response = await apiClient.get<{ team: any }>(
+    `/teams/${teamId}/details`
+  );
+  // Map backend response to TeamDetails
+  return {
+    team: {
+      id: response.data.team.id,
+      name: response.data.team.name,
+      managerId: response.data.team.managerId,
+      createdAt: response.data.team.createdAt,
+    },
+    manager: response.data.team.manager ?? {
+      id: response.data.team.managerId,
+      firstName: null,
+      lastName: null,
+      email: "Inconnu",
+    },
+    members: response.data.team.members.map((m: any) => ({
+      id: m.user.id,
+      email: m.user.email,
+      firstName: m.user.firstName,
+      lastName: m.user.lastName,
+      role: m.user.role,
+      humanState: m.user.humanState, // Already object or null
+      joinedAt: m.joinedAt,
+    })),
+  };
 };

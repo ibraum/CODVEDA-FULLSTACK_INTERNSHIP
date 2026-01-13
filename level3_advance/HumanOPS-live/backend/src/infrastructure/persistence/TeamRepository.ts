@@ -1,35 +1,39 @@
-import { ITeamRepository } from '../../domain/repositories/ITeamRepository.js';
-import { Team, CreateTeamDTO, UpdateTeamDTO } from '../../domain/entities/Team.js';
-import { prisma } from './prisma.js';
+import { ITeamRepository } from "../../domain/repositories/ITeamRepository.js";
+import {
+  Team,
+  CreateTeamDTO,
+  UpdateTeamDTO,
+} from "../../domain/entities/Team.js";
+import { prisma } from "./prisma.js";
 
 export class TeamRepository implements ITeamRepository {
   async create(data: CreateTeamDTO): Promise<Team> {
-    return await prisma.team.create({
+    return (await prisma.team.create({
       data,
-    }) as Team;
+    })) as Team;
   }
 
   async findById(id: string): Promise<Team | null> {
-    return await prisma.team.findUnique({
+    return (await prisma.team.findUnique({
       where: { id },
-    }) as Team | null;
+    })) as Team | null;
   }
 
   async findByManagerId(managerId: string): Promise<Team[]> {
-    return await prisma.team.findMany({
+    return (await prisma.team.findMany({
       where: { managerId },
-    }) as Team[];
+    })) as Team[];
   }
 
   async findAll(): Promise<Team[]> {
-    return await prisma.team.findMany() as Team[];
+    return (await prisma.team.findMany()) as Team[];
   }
 
   async update(id: string, data: UpdateTeamDTO): Promise<Team> {
-    return await prisma.team.update({
+    return (await prisma.team.update({
       where: { id },
       data,
-    }) as Team;
+    })) as Team;
   }
 
   async delete(id: string): Promise<void> {
@@ -48,7 +52,7 @@ export class TeamRepository implements ITeamRepository {
         },
       },
     });
-    
+
     return count > 0;
   }
 
@@ -68,7 +72,7 @@ export class TeamRepository implements ITeamRepository {
     });
 
     if (!membership || membership.teamId !== teamId) {
-      throw new Error('User is not a member of this team');
+      throw new Error("User is not a member of this team");
     }
 
     await prisma.teamMember.delete({
@@ -80,6 +84,42 @@ export class TeamRepository implements ITeamRepository {
     await prisma.teamMember.update({
       where: { userId },
       data: { teamId },
+    });
+  }
+
+  async getByIdWithDetails(id: string): Promise<any> {
+    return await prisma.team.findUnique({
+      where: { id },
+      include: {
+        manager: {
+          select: {
+            id: true,
+            firstName: true,
+            lastName: true,
+            email: true,
+          },
+        },
+        members: {
+          include: {
+            user: {
+              select: {
+                id: true,
+                firstName: true,
+                lastName: true,
+                email: true,
+                role: true,
+                humanState: {
+                  select: {
+                    workload: true,
+                    availability: true,
+                    updatedAt: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
     });
   }
 }

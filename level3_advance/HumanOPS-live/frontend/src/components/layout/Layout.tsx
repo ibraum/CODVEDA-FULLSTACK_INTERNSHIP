@@ -49,6 +49,7 @@ import HistoryTab from "../../features/team/components/HistoryTab";
 import TeamsTab from "../../features/rh/components/TeamsTab";
 import ManageUsersTab from "../../features/rh/components/ManageUsersTab";
 import ManageSkillsTab from "../../features/rh/components/ManageSkillsTab";
+import AddSkillDialog from "../../features/dashboard/components/AddSkillDialog";
 
 const Layout = () => {
   const { logout, user } = useAuth();
@@ -71,6 +72,7 @@ const Layout = () => {
   const [isAlertPanelOpen, setIsAlertPanelOpen] = useState(false);
   const { alerts, markAllAsRead, unreadCount, markAsRead } = useAlerts();
   const [activeTab, setActiveTab] = useState<"all" | "unread">("all");
+  const [isAddSkillDialogOpen, setIsAddSkillDialogOpen] = useState(false);
   const [drawerTab, setDrawerTab] = useState<
     "team" | "requests" | "history" | "teams" | "users" | "skills"
   >(user?.role === "ADMIN_RH" ? "teams" : "team");
@@ -210,9 +212,8 @@ const Layout = () => {
 
   return (
     <div
-      className={`min-h-screen flex flex-col lg:grid lg:grid-rows-[280px_1fr] bg-white transition-all duration-300 ease-in-out ${
-        isAlertPanelOpen ? "lg:grid-cols-[1fr_450px]" : "lg:grid-cols-[1fr]"
-      }`}
+      className={`min-h-screen flex flex-col lg:grid lg:grid-rows-[280px_1fr] bg-white transition-all duration-300 ease-in-out ${isAlertPanelOpen ? "lg:grid-cols-[1fr_450px]" : "lg:grid-cols-[1fr]"
+        }`}
     >
       <div className="w-full h-full flex flex-col lg:grid lg:grid-rows-[280px_1fr]">
         <header className="bg-neutral-100 py-6 px-4 lg:px-12 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 lg:gap-0 col-start-1 h-auto lg:h-full">
@@ -239,8 +240,8 @@ const Layout = () => {
                     {user?.role === "COLLABORATOR"
                       ? "My Team"
                       : user?.role === "ADMIN_RH"
-                      ? "Manage Plateform"
-                      : "Show All Teams"}
+                        ? "Manage Plateform"
+                        : "Show All Teams"}
                     {user?.role === "COLLABORATOR" ? (
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -282,8 +283,8 @@ const Layout = () => {
                         {user?.role === "COLLABORATOR"
                           ? "Espace Collaborateur"
                           : user?.role === "ADMIN_RH"
-                          ? "Espace Admin RH"
-                          : "Espace Manager"}
+                            ? "Espace Admin RH"
+                            : "Espace Manager"}
                       </DrawerTitle>
                     </div>
                     <div className="flex items-center gap-8">
@@ -291,11 +292,10 @@ const Layout = () => {
                         <>
                           <button
                             onClick={() => setDrawerTab("teams")}
-                            className={`pb-4 text-sm font-medium transition-all relative ${
-                              drawerTab === "teams"
+                            className={`pb-4 text-sm font-medium transition-all relative ${drawerTab === "teams"
                                 ? "text-neutral-900"
                                 : "text-neutral-400 hover:text-neutral-600"
-                            }`}
+                              }`}
                           >
                             Les équipes
                             {drawerTab === "teams" && (
@@ -304,11 +304,10 @@ const Layout = () => {
                           </button>
                           <button
                             onClick={() => setDrawerTab("users")}
-                            className={`pb-4 text-sm font-medium transition-all relative ${
-                              drawerTab === "users"
+                            className={`pb-4 text-sm font-medium transition-all relative ${drawerTab === "users"
                                 ? "text-neutral-900"
                                 : "text-neutral-400 hover:text-neutral-600"
-                            }`}
+                              }`}
                           >
                             Manage Users
                             {drawerTab === "users" && (
@@ -317,11 +316,10 @@ const Layout = () => {
                           </button>
                           <button
                             onClick={() => setDrawerTab("skills")}
-                            className={`pb-4 text-sm font-medium transition-all relative ${
-                              drawerTab === "skills"
+                            className={`pb-4 text-sm font-medium transition-all relative ${drawerTab === "skills"
                                 ? "text-neutral-900"
                                 : "text-neutral-400 hover:text-neutral-600"
-                            }`}
+                              }`}
                           >
                             Manage Skills
                             {drawerTab === "skills" && (
@@ -333,11 +331,10 @@ const Layout = () => {
                         <>
                           <button
                             onClick={() => setDrawerTab("team")}
-                            className={`pb-4 text-sm font-medium transition-all relative ${
-                              drawerTab === "team"
+                            className={`pb-4 text-sm font-medium transition-all relative ${drawerTab === "team"
                                 ? "text-neutral-900"
                                 : "text-neutral-400 hover:text-neutral-600"
-                            }`}
+                              }`}
                           >
                             Mon équipe
                             {drawerTab === "team" && (
@@ -346,11 +343,10 @@ const Layout = () => {
                           </button>
                           <button
                             onClick={() => setDrawerTab("history")}
-                            className={`pb-4 text-sm font-medium transition-all relative ${
-                              drawerTab === "history"
+                            className={`pb-4 text-sm font-medium transition-all relative ${drawerTab === "history"
                                 ? "text-neutral-900"
                                 : "text-neutral-400 hover:text-neutral-600"
-                            }`}
+                              }`}
                           >
                             Mon Historique d'état
                             {drawerTab === "history" && (
@@ -362,11 +358,10 @@ const Layout = () => {
                         <>
                           <button
                             onClick={() => setDrawerTab("team")}
-                            className={`pb-4 text-sm font-medium transition-all relative ${
-                              drawerTab === "team"
+                            className={`pb-4 text-sm font-medium transition-all relative ${drawerTab === "team"
                                 ? "text-neutral-900"
                                 : "text-neutral-400 hover:text-neutral-600"
-                            }`}
+                              }`}
                           >
                             Mon équipe
                             {drawerTab === "team" && (
@@ -375,11 +370,10 @@ const Layout = () => {
                           </button>
                           <button
                             onClick={() => setDrawerTab("requests")}
-                            className={`pb-4 text-sm font-medium transition-all relative ${
-                              drawerTab === "requests"
+                            className={`pb-4 text-sm font-medium transition-all relative ${drawerTab === "requests"
                                 ? "text-neutral-900"
                                 : "text-neutral-400 hover:text-neutral-600"
-                            }`}
+                              }`}
                           >
                             Les demandes
                             {drawerTab === "requests" && (
@@ -388,11 +382,10 @@ const Layout = () => {
                           </button>
                           <button
                             onClick={() => setDrawerTab("history")}
-                            className={`pb-4 text-sm font-medium transition-all relative ${
-                              drawerTab === "history"
+                            className={`pb-4 text-sm font-medium transition-all relative ${drawerTab === "history"
                                 ? "text-neutral-900"
                                 : "text-neutral-400 hover:text-neutral-600"
-                            }`}
+                              }`}
                           >
                             Mon Historique d'état
                             {drawerTab === "history" && (
@@ -703,17 +696,16 @@ const Layout = () => {
                   </svg>
 
                   <div
-                    className={`h-20 p-1 group-hover:bg-white group-hover:shadow-lg overflow-hidden rounded-full grid gap-1 cursor-pointer duration-300 group absolute top-0 z-[1000] ${
-                      user?.role === "ADMIN_RH"
+                    className={`h-20 p-1 group-hover:bg-white group-hover:shadow-lg overflow-hidden rounded-full grid gap-1 cursor-pointer duration-300 group absolute top-0 z-[1000] ${user?.role === "ADMIN_RH"
                         ? "group-hover:h-[256px] group-hover:grid-rows-3 group-hover:top-[-168px]"
                         : "group-hover:h-[172px] group-hover:grid-rows-2 group-hover:top-[-84px]"
-                    }`}
+                      }`}
                   >
                     <TooltipProvider delayDuration={0}>
                       <Tooltip>
                         <TooltipTrigger asChild>
                           <div
-                            onClick={handleAddSkill}
+                            onClick={() => setIsAddSkillDialogOpen(true)}
                             className="h-20 w-20 rounded-full border border-neutral-300 flex items-center justify-center cursor-pointer hover:bg-neutral-300 duration-300 group-hover:flex hidden"
                           >
                             <svg
@@ -806,11 +798,10 @@ const Layout = () => {
         </main>
       </div>
       <div
-        className={`fixed inset-y-0 right-0 z-50 w-full sm:w-[450px] lg:static lg:h-full lg:row-span-2 lg:col-start-2 bg-neutral-100 border-l border-neutral-200 transition-all duration-500 ease-in-out shadow-2xl lg:shadow-none ${
-          isAlertPanelOpen
+        className={`fixed inset-y-0 right-0 z-50 w-full sm:w-[450px] lg:static lg:h-full lg:row-span-2 lg:col-start-2 bg-neutral-100 border-l border-neutral-200 transition-all duration-500 ease-in-out shadow-2xl lg:shadow-none ${isAlertPanelOpen
             ? "translate-x-0 opacity-100"
             : "translate-x-full opacity-0 lg:hidden"
-        }`}
+          }`}
       >
         <div className="h-full w-full bg-white rounded-xl flex flex-col overflow-hidden">
           <div className="flex items-center justify-between mb-2 relative pt-14 pb-2 px-8 shrink-0">
@@ -851,38 +842,34 @@ const Layout = () => {
               <div className="flex items-start gap-4">
                 <div
                   onClick={() => setActiveTab("all")}
-                  className={`pb-2 px-2 cursor-pointer transition-colors dm-sans-medium flex items-center justify-center gap-2 border-b-3 ${
-                    activeTab === "all"
+                  className={`pb-2 px-2 cursor-pointer transition-colors dm-sans-medium flex items-center justify-center gap-2 border-b-3 ${activeTab === "all"
                       ? "border-neutral-900 text-neutral-900"
                       : "border-transparent text-neutral-500 hover:text-neutral-800"
-                  }`}
+                    }`}
                 >
                   <div className="">All</div>{" "}
                   <div
-                    className={`px-2 text-xs rounded-sm ${
-                      activeTab === "all"
+                    className={`px-2 text-xs rounded-sm ${activeTab === "all"
                         ? "bg-neutral-900 text-white"
                         : "bg-neutral-200 text-neutral-500"
-                    }`}
+                      }`}
                   >
                     {alerts.length}
                   </div>
                 </div>
                 <div
                   onClick={() => setActiveTab("unread")}
-                  className={`pb-2 px-2 cursor-pointer transition-colors dm-sans-medium flex items-center justify-center gap-2 border-b-3 ${
-                    activeTab === "unread"
+                  className={`pb-2 px-2 cursor-pointer transition-colors dm-sans-medium flex items-center justify-center gap-2 border-b-3 ${activeTab === "unread"
                       ? "border-neutral-900 text-neutral-900"
                       : "border-transparent text-neutral-500 hover:text-neutral-800"
-                  }`}
+                    }`}
                 >
                   <div className="">Unread</div>{" "}
                   <div
-                    className={`px-2 text-xs rounded-sm ${
-                      activeTab === "unread"
+                    className={`px-2 text-xs rounded-sm ${activeTab === "unread"
                         ? "bg-neutral-900 text-white"
                         : "bg-neutral-200 text-neutral-500"
-                    }`}
+                      }`}
                   >
                     {unreadCount}
                   </div>
@@ -914,9 +901,8 @@ const Layout = () => {
                 filteredAlerts.map((alert) => (
                   <div
                     key={alert.id}
-                    className={`px-8 py-4 grid grid-cols-[40px_1fr] gap-2 border-b border-neutral-200 cursor-pointer hover:bg-neutral-50 ${
-                      alert.isRead ? "bg-white" : "bg-orange-50"
-                    }`}
+                    className={`px-8 py-4 grid grid-cols-[40px_1fr] gap-2 border-b border-neutral-200 cursor-pointer hover:bg-neutral-50 ${alert.isRead ? "bg-white" : "bg-orange-50"
+                      }`}
                     onClick={() => !alert.isRead && markAsRead(alert.id)}
                   >
                     <div className="profile-icon rounded-lg h-[40px] w-[40px] bg-neutral-200 bg-[url(/src/assets/profil-bg.png)] bg-cover bg-center relative">
@@ -966,7 +952,20 @@ const Layout = () => {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </div>
+
+      <AddSkillDialog
+        open={isAddSkillDialogOpen}
+        onOpenChange={(open) => {
+          setIsAddSkillDialogOpen(open);
+          if (!open) {
+            // Refresh skills when dialog closes
+            getAllSkills()
+              .then(setSkills)
+              .catch(err => console.error("Failed to refresh skills", err));
+          }
+        }}
+      />
+    </div >
   );
 };
 

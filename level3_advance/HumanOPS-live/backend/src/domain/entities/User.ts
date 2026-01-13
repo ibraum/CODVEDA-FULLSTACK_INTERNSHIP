@@ -11,6 +11,7 @@ export interface User {
   deletedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
+  teamId?: string | null;
 }
 
 export interface CreateUserDTO {

@@ -23,10 +23,7 @@ export const config = {
   },
 
   cors: {
-    origin:
-      corsOrigins && corsOrigins.length > 0
-        ? corsOrigins
-        : ["http://localhost:5173", "http://127.0.0.1:5173"],
+    origin: process.env.NODE_ENV === "production" ? corsOrigins : true, // Allow all origins in development
     credentials: true,
   },
 
