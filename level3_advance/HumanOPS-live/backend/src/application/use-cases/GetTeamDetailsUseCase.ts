@@ -1,4 +1,4 @@
-import { ITeamRepository } from "../domain/repositories/ITeamRepository.js";
+import { ITeamRepository } from "../../domain/repositories/ITeamRepository.js";
 
 export class GetTeamDetailsUseCase {
   constructor(private teamRepository: ITeamRepository) {}
