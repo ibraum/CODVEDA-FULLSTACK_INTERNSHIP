@@ -16,7 +16,7 @@ const ReinforcementRequestsList = () => {
   const fetchRequests = async () => {
     try {
       const data = await getOpenReinforcementRequests();
-      setRequests(data);
+      setRequests(data.filter((r) => r.status === "OPEN"));
     } catch (error) {
       console.error("Failed to fetch reinforcement requests", error);
     } finally {
@@ -26,7 +26,22 @@ const ReinforcementRequestsList = () => {
 
   useEffect(() => {
     fetchRequests();
-    // Ideally subscribe to socket events here for real-time updates
+
+    // Listen for real-time updates
+    const handleRealtimeUpdate = (event: Event) => {
+      const customEvent = event as CustomEvent;
+      console.log("Realtime update received:", customEvent.detail);
+      fetchRequests();
+    };
+
+    window.addEventListener("reinforcementRequestUpdate", handleRealtimeUpdate);
+
+    return () => {
+      window.removeEventListener(
+        "reinforcementRequestUpdate",
+        handleRealtimeUpdate
+      );
+    };
   }, []);
 
   const { toast } = useToast();

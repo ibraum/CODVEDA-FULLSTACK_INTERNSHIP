@@ -36,6 +36,18 @@ const AdminDashboard = () => {
 
   useEffect(() => {
     fetchDashboardData();
+
+    const handleUpdate = () => {
+      fetchDashboardData();
+    };
+
+    window.addEventListener("reinforcementRequestUpdate", handleUpdate);
+    window.addEventListener("tensionUpdate", handleUpdate); // Also listen for tension updates
+
+    return () => {
+      window.removeEventListener("reinforcementRequestUpdate", handleUpdate);
+      window.removeEventListener("tensionUpdate", handleUpdate);
+    };
   }, []);
 
   const fetchDashboardData = async () => {

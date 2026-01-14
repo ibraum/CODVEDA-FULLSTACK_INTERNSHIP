@@ -94,6 +94,13 @@ export const deleteSkill = async (skillId: string): Promise<void> => {
   await apiClient.delete(`/skills/${skillId}`);
 };
 
+export const updateSkill = async (
+  skillId: string,
+  name: string
+): Promise<void> => {
+  await apiClient.put(`/skills/${skillId}`, { name });
+};
+
 // Teams Management
 export const getAllTeamsWithDetails = async (): Promise<TeamWithDetails[]> => {
   try {

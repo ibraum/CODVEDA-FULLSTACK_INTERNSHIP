@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { getReinforcementRequests } from "../../team/services/teamService";
+import { getReinforcementRequests, deleteReinforcementRequest } from "../../team/services/teamService";
 import type { ReinforcementRequest } from "../../team/services/teamService";
 import {
   BarChart,
