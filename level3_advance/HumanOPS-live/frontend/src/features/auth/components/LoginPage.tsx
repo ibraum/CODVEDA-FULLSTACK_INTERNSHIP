@@ -27,7 +27,10 @@ const LoginPage = () => {
 
   return (
     <div className="w-full h-screen grid grid-cols-1 lg:grid-cols-[1fr_500px] font-sans">
-      <div className="flex items-center justify-center p-8 bg-white text-neutral-900 md:order-1 order-2">
+      <div className="flex items-center justify-center p-8 bg-white text-neutral-900 md:order-1 order-2 relative">
+        <Link to="/" className="absolute h-14 w-14 duration-300 rounded-full cursor-pointer flex items-center justify-center hover:bg-black group border border-neutral-300 top-4 left-4">
+
+        </Link>
         <div className="w-full max-w-[400px] space-y-6">
           <div className="flex flex-col space-y-2 text-center">
             <h1 className="text-3xl font-bold tracking-tight dm-sans-bold">

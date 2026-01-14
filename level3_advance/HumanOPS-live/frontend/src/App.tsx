@@ -10,8 +10,6 @@ import SignupPage from "./features/auth/components/SignupPage";
 import Dashboard from "./features/dashboard/components/Dashboard";
 import NotFound from "./components/pages/NotFound";
 
-// Placeholder pages
-
 function App() {
   return (
     <AuthProvider>

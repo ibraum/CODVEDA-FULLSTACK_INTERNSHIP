@@ -271,7 +271,7 @@ const Layout = () => {
     >
       <div className="w-full h-full flex flex-col lg:grid lg:grid-rows-[280px_1fr]">
         <header className="bg-muted/40 dark:bg-muted/10 py-6 px-4 lg:px-12 flex flex-col lg:flex-row justify-between items-start lg:items-center lg:gap-0 col-start-1 h-auto lg:h-full">
-          <div className="w-full max-w-[750px] h-full flex flex-col justify-between items-start">
+          <div className="w-full md:max-w-[875px] md:w-full lg:w-full lg:max-w-[750px] h-full flex flex-col justify-between items-start">
             <div className="flex items-center gap-4 lg:mb-0 mb-4">
               <div className="h-14 w-14 rounded-full bg-black dark:bg-white flex items-center justify-center">
                 <span className="text-xl font-bold text-white dark:text-black">HOL</span>
@@ -511,7 +511,7 @@ const Layout = () => {
               </button>
             </div>
           </div>
-          <div className="w-full max-w-[750px] h-full flex flex-col justify-between items-start mt-4 lg:mt-0">
+          <div className="w-full md:max-w-[875px] md:w-full lg:w-full lg:max-w-[750px] h-full flex flex-col justify-between items-start mt-4 lg:mt-0">
             <div className="w-full flex items-center justify-between gap-2 lg:gap-6 lg:flex">
               <div className="flex items-center gap-6">
                 <Dialog>
@@ -533,7 +533,7 @@ const Layout = () => {
                       </svg>
                     </div>
                   </DialogTrigger>
-                  <DialogContent className="w-[70vw] h-[90vh] max-w-none rounded-4xl p-0 overflow-hidden flex flex-col">
+                  <DialogContent className="w-[1100px] h-[90vh] max-w-[90%] rounded-2xl md:rounded-4xl p-0 overflow-hidden flex flex-col">
                     <div className="bg-muted/40 dark:bg-neutral-800 px-8 py-6 border-b border-border flex items-center justify-between">
                       <DialogHeader className="text-left">
                         <DialogTitle className="text-2xl font-bold dm-sans-bold">
@@ -760,7 +760,7 @@ const Layout = () => {
                 </div>
               </div>
             </div>
-            <div className="flex items-center justify-between w-full gap-6 mt-4 lg:mt-0">
+            <div className="flex items-center justify-between w-full gap-6 mt-4 lg:mt-0 ">
               <div className="dm-sans-light text-muted-foreground">
                 <div className="text-3xl lg:text-5xl">Hey, Welcome back </div>
                 <div className="text-3xl lg:text-5xl text-foreground">
@@ -850,7 +850,7 @@ const Layout = () => {
                               <p>Paramètres RH</p>
                             </TooltipContent>
                           </Tooltip>
-                          <DialogContent className="w-[70vw] h-[90vh] max-w-none rounded-4xl p-0 overflow-hidden flex flex-col">
+                          <DialogContent className="w-[1000px] h-[90vh] max-w-[90%] rounded-2xl md:rounded-4xl p-0 overflow-hidden flex flex-col">
                             <div className="bg-muted/40 dark:bg-neutral-800 px-8 py-6 border-b border-border flex items-center justify-between">
                               <DialogHeader className="text-left">
                                 <DialogTitle className="text-2xl font-bold dm-sans-bold">
@@ -916,31 +916,6 @@ const Layout = () => {
                                         className={`w-11 h-6 rounded-full transition-colors relative ${rhAutoAssign ? 'bg-primary' : 'bg-muted border border-input'}`}
                                       >
                                         <div className={`w-4 h-4 rounded-full bg-white absolute top-1 transition-transform ${rhAutoAssign ? 'left-6' : 'left-1'}`}></div>
-                                      </button>
-                                    </div>
-                                  </div>
-                                </div>
-
-                                {/* Notification Settings */}
-                                <div className="space-y-4">
-                                  <h3 className="text-lg font-semibold border-b border-border pb-2 text-foreground">
-                                    Notifications Système
-                                  </h3>
-                                  <div className="flex items-center justify-between p-4 border border-border rounded-lg bg-card bg-muted/20">
-                                    <div className="space-y-0.5">
-                                      <label className="text-sm font-medium text-foreground block">
-                                        Rapports Email Hebdomadaires
-                                      </label>
-                                      <p className="text-xs text-muted-foreground">
-                                        Envoyer un résumé de l'activité RH par email chaque lundi.
-                                      </p>
-                                    </div>
-                                    <div className="flex items-center">
-                                      <button
-                                        onClick={() => setRhEmailAlerts(!rhEmailAlerts)}
-                                        className={`w-11 h-6 rounded-full transition-colors relative ${rhEmailAlerts ? 'bg-primary' : 'bg-muted border border-input'}`}
-                                      >
-                                        <div className={`w-4 h-4 rounded-full bg-white absolute top-1 transition-transform ${rhEmailAlerts ? 'left-6' : 'left-1'}`}></div>
                                       </button>
                                     </div>
                                   </div>
