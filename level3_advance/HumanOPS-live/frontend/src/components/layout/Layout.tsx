@@ -252,8 +252,7 @@ const Layout = () => {
     }
   };
 
-  const filteredAlerts =
-    activeTab === "all" ? alerts : alerts.filter((a) => !a.isRead);
+  const filteredAlerts = activeTab === "all" ? alerts : alerts.filter((a) => !a.isRead);
 
   const handleLogout = () => {
     setIsLogoutDialogOpen(true);
@@ -271,9 +270,9 @@ const Layout = () => {
         }`}
     >
       <div className="w-full h-full flex flex-col lg:grid lg:grid-rows-[280px_1fr]">
-        <header className="bg-muted/40 dark:bg-muted/10 py-6 px-4 lg:px-12 flex flex-col lg:flex-row justify-between items-start lg:items-center gap-6 lg:gap-0 col-start-1 h-auto lg:h-full">
+        <header className="bg-muted/40 dark:bg-muted/10 py-6 px-4 lg:px-12 flex flex-col lg:flex-row justify-between items-start lg:items-center lg:gap-0 col-start-1 h-auto lg:h-full">
           <div className="w-full max-w-[750px] h-full flex flex-col justify-between items-start">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 lg:mb-0 mb-4">
               <div className="h-14 w-14 rounded-full bg-black dark:bg-white flex items-center justify-center">
                 <span className="text-xl font-bold text-white dark:text-black">HOL</span>
               </div>
@@ -512,8 +511,8 @@ const Layout = () => {
               </button>
             </div>
           </div>
-          <div className="w-full max-w-[750px] h-full flex flex-col justify-between items-start mt-6 lg:mt-0">
-            <div className="w-full flex items-center justify-between gap-6 hidden lg:flex">
+          <div className="w-full max-w-[750px] h-full flex flex-col justify-between items-start mt-4 lg:mt-0">
+            <div className="w-full flex items-center justify-between gap-2 lg:gap-6 lg:flex">
               <div className="flex items-center gap-6">
                 <Dialog>
                   <DialogTrigger asChild>
@@ -756,12 +755,12 @@ const Layout = () => {
                     </svg>
                   )}
                 </button>
-                <div className="dm-sans-regular text-muted-foreground dark:text-neutral-400">
+                <div className="dm-sans-regular text-muted-foreground dark:text-neutral-400 lg:flex hidden">
                   {theme === "light" ? "Switch to Dark" : "Switch to Light"}
                 </div>
               </div>
             </div>
-            <div className="flex items-center justify-between w-full gap-6">
+            <div className="flex items-center justify-between w-full gap-6 mt-4 lg:mt-0">
               <div className="dm-sans-light text-muted-foreground">
                 <div className="text-3xl lg:text-5xl">Hey, Welcome back </div>
                 <div className="text-3xl lg:text-5xl text-foreground">
