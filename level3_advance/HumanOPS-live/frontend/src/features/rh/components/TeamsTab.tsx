@@ -17,9 +17,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import {
   LineChart,
   Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
   Tooltip,
   ResponsiveContainer,
 } from "recharts";

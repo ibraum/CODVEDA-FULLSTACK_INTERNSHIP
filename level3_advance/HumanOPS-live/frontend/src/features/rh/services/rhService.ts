@@ -28,6 +28,7 @@ export interface TeamWithDetails {
   managerId: string;
   createdAt: string;
   memberCount?: number;
+  manager: UserWithHumanState;
   currentTension?: {
     level: "LOW" | "MODERATE" | "HIGH" | "CRITICAL";
   };

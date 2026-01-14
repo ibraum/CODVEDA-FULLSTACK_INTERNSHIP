@@ -34,19 +34,6 @@ const HistoryTab = () => {
     fetchHistory();
   }, []);
 
-  const getAvailabilityColor = (availability: string) => {
-    switch (availability) {
-      case "AVAILABLE":
-        return "bg-green-100 dark:bg-green-900/20 text-green-800 dark:text-green-400 border-green-200 dark:border-green-900/30";
-      case "MOBILISABLE":
-        return "bg-orange-100 dark:bg-orange-900/20 text-orange-800 dark:text-orange-400 border-orange-200 dark:border-orange-900/30";
-      case "UNAVAILABLE":
-        return "bg-red-100 dark:bg-red-900/20 text-red-800 dark:text-red-400 border-red-200 dark:border-red-900/30";
-      default:
-        return "bg-muted text-muted-foreground border-border";
-    }
-  };
-
   const getAvailabilityLabel = (availability: string | undefined | null) => {
     if (!availability) return "Inconnu";
     switch (availability) {
@@ -72,19 +59,6 @@ const HistoryTab = () => {
         return "Élevée";
       default:
         return workload;
-    }
-  };
-
-  const getWorkloadColor = (workload: string | undefined | null) => {
-    switch (workload) {
-      case "LOW":
-        return "text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/20 border border-green-400 dark:border-green-800 rounded-full px-1";
-      case "NORMAL":
-        return "text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 border border-blue-400 dark:border-blue-800 rounded-full px-1";
-      case "HIGH":
-        return "text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 border border-red-400 dark:border-red-800 rounded-full px-1";
-      default:
-        return "text-muted-foreground bg-muted border border-border rounded-full px-1";
     }
   };
 

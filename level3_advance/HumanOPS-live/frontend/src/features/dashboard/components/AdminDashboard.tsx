@@ -1,10 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"; // Keep for now if needed, or remove later
-import { Badge } from "@/components/ui/badge";
 import {
-  LineChart,
-  Line,
   BarChart,
   Bar,
   XAxis,
@@ -137,7 +134,6 @@ const AdminDashboard = () => {
     }
   };
 
-  const COLORS = ["#22c55e", "#ea6e08ff", "#f95616ff", "#fa3200ff"];
 
   if (loading) {
     return (
