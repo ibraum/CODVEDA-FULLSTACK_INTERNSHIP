@@ -28,6 +28,9 @@ app.use(cors(config.cors));
 app.use(helmet());
 app.use(compression());
 
+import { requestLogger } from "./infrastructure/http/middlewares/logging.middleware.js";
+app.use(requestLogger);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));

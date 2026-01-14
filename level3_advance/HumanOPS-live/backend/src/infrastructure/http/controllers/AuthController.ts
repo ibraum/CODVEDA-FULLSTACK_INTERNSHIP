@@ -46,6 +46,7 @@ export class AuthController {
     next: NextFunction
   ): Promise<void> {
     try {
+      console.log(`[AuthController] Registering user: ${req.body.email}`);
       const createUserUseCase = new CreateUserUseCase(userRepository);
       const user = await createUserUseCase.execute(req.body);
 
@@ -102,6 +103,7 @@ export class AuthController {
     next: NextFunction
   ): Promise<void> {
     try {
+      console.log(`[AuthController] Login attempt for: ${req.body.email}`);
       const authenticateUserUseCase = new AuthenticateUserUseCase(
         userRepository
       );
