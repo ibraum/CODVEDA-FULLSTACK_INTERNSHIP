@@ -36,6 +36,19 @@ app.use(morgan("dev"));
 // ROUTES
 // ============================================
 
+app.get("/", (_req, res) => {
+  res.status(200).json({
+    name: "HumanOps Live Backend",
+    status: "running",
+    environment: config.nodeEnv,
+    uptime: process.uptime(),
+  });
+});
+
+app.head("/", (_req, res) => {
+  res.sendStatus(200);
+});
+
 // Documentation API
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
