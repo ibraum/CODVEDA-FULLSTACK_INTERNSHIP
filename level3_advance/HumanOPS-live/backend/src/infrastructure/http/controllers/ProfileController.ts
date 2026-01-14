@@ -136,7 +136,7 @@ export class ProfileController {
    *         description: List of all skills
    */
   static async getAllSkills(
-    req: AuthRequest,
+    _req: AuthRequest,
     res: Response,
     next: NextFunction
   ): Promise<void> {
