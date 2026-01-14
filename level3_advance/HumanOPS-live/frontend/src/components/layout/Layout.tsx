@@ -712,7 +712,7 @@ const Layout = () => {
                     </div>
                   </DialogContent>
                 </Dialog>
-                <div className="h-14 w-14 rounded-full bg-black bg-[url('/src/assets/profil-bg.png')] bg-cover bg-center border border-border shadow"></div>
+                <div className={`h-14 w-14 rounded-full bg-black bg-cover bg-center border border-border shadow ${userRole == "COLLABORATOR" ? "bg-[url('/src/assets/profil-bg.png')]" : userRole == "MANAGER" ? "bg-[url('/src/assets/profiles/profile-2.png')]" : "bg-[url('/src/assets/profiles/profile-6.png')]"}`}></div>
                 <div className="h-14 pt-1 dm-sans-regular">
                   <div className="text-lg">{fullName}</div>
                   <div className="text-sm">{userRole}</div>

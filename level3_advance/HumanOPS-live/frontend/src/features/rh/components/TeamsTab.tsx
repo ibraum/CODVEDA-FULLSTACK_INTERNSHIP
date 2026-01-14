@@ -313,7 +313,7 @@ const TeamsTab = () => {
                 </svg>
               </div>
             </div>
-            <div className="w-full bg-neutral-100 h-1.5 rounded-full overflow-hidden mt-2">
+            <div className="w-full bg-neutral-100 dark:bg-neutral-800 h-1.5 rounded-full overflow-hidden mt-2">
               <div
                 className="h-full bg-orange-500 rounded-full"
                 style={{
@@ -374,8 +374,8 @@ const TeamsTab = () => {
                     className={cn(
                       "w-full text-left p-4 rounded-xl border transition-all duration-200 group relative overflow-hidden",
                       selectedTeam === team.id
-                        ? "bg-neutral-900 dark:bg-primary border-neutral-900 dark:border-primary text-white dark:text-primary-foreground shadow-lg"
-                        : "bg-card border-border text-foreground hover:border-orange-200 dark:hover:border-orange-800 hover:shadow-sm"
+                        ? "bg-black dark:bg-white text-white dark:text-black shadow-lg"
+                        : "bg-card border-border text-foreground hover:border-black dark:hover:border-neutral-700 hover:shadow-sm cursor-pointer"
                     )}
                   >
                     <div className="flex justify-between items-start mb-2 relative z-10">

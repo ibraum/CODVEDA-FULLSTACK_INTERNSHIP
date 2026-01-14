@@ -4,6 +4,9 @@ import {
 } from "../../reinforcement/services/reinforcementService";
 import type { ReinforcementRequest } from "../../reinforcement/services/reinforcementService";
 import { cn } from "../../../lib/utils";
+import { useToast } from "../../../context/ToastContext";
+import { formatDistanceToNow } from "date-fns";
+import { fr } from "date-fns/locale";
 
 const ReinforcementRequestsList = () => {
   const [requests, setRequests] = useState<ReinforcementRequest[]>([]);
@@ -26,22 +29,32 @@ const ReinforcementRequestsList = () => {
     // Ideally subscribe to socket events here for real-time updates
   }, []);
 
+  const { toast } = useToast();
+
   const handleRespond = async (requestId: string) => {
     setRespondingTo(requestId);
     try {
       await respondToReinforcement(requestId, "ACCEPTED");
       // Remove the request from the list or mark as accepted
       setRequests((prev) => prev.filter((r) => r.id !== requestId));
-      alert("Mission acceptée ! Merci pour votre solidarité.");
+      toast({
+        title: "Succès",
+        description: "Mission acceptée ! Merci pour votre solidarité.",
+        variant: "success",
+      });
     } catch (error) {
       console.error("Failed to respond", error);
-      alert("Erreur lors de l'acceptation de la mission.");
+      toast({
+        title: "Erreur",
+        description: "Erreur lors de l'acceptation de la mission.",
+        variant: "destructive",
+      });
     } finally {
       setRespondingTo(null);
     }
   };
 
-  if (loading) return <div>Chargement des demandes...</div>;
+  if (loading) return <div className="flex items-center justify-center">Chargement des demandes...</div>;
 
   if (requests.length === 0) {
     return (
@@ -81,51 +94,72 @@ const ReinforcementRequestsList = () => {
         </span>
       </h3>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {requests.map((request) => (
-          <div
-            key={request.id}
-            className="bg-card p-5 rounded-2xl border border-border shadow-sm hover:shadow-md transition-shadow relative overflow-hidden group"
-          >
-            <div
-              className={cn(
-                "absolute top-0 left-0 w-1.5 h-full",
-                request.urgencyLevel >= 8
-                  ? "bg-red-500"
-                  : request.urgencyLevel >= 5
-                    ? "bg-orange-500"
-                    : "bg-yellow-500"
-              )}
-            ></div>
-            <div className="pl-3">
-              <div className="flex items-start justify-between mb-2">
-                <div>
-                  <h4 className="font-semibold text-foreground text-lg">
-                    Renfort Équipe A
-                  </h4>
-                  <p className="text-sm text-muted-foreground">
-                    Compétences requises : React, Node.js
-                  </p>
-                </div>
-                <div className="bg-muted text-muted-foreground text-xs font-medium px-2 py-1 rounded-md">
-                  Urgence {request.urgencyLevel}/10
-                </div>
-              </div>
+        {requests.map((request) => {
+          const skillsList = Object.entries(request.requiredSkills)
+            .map(([skill, level]) => `${skill} (Niveau ${level})`)
+            .join(", ");
 
-              <div className="mt-4 flex items-center justify-between">
-                <span className="text-xs text-muted-foreground">Expire dans 2h</span>
-                <button
-                  onClick={() => handleRespond(request.id)}
-                  disabled={respondingTo === request.id}
-                  className="bg-primary text-primary-foreground text-sm font-medium px-4 py-2 rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50"
-                >
-                  {respondingTo === request.id
-                    ? "Acceptation..."
-                    : "Accepter la mission"}
-                </button>
+          return (
+            <div
+              key={request.id}
+              className="bg-card p-5 rounded-2xl border border-neutral-300 dark:border-neutral-800 transition-shadow relative group"
+            >
+              <div
+                className={cn(
+                  "absolute top-0 left-0 w-3 h-3 rounded-full",
+                  request.urgencyLevel >= 8
+                    ? "bg-red-500"
+                    : request.urgencyLevel >= 5
+                      ? "bg-orange-500"
+                      : "bg-yellow-500"
+                )}
+              ></div>
+              <div
+                className={cn(
+                  "absolute -top-1 -left-1 w-5 h-5 rounded-full animate-ping",
+                  request.urgencyLevel >= 8
+                    ? "bg-red-500"
+                    : request.urgencyLevel >= 5
+                      ? "bg-orange-500"
+                      : "bg-yellow-500"
+                )}
+              ></div>
+              <div className="pl-3">
+                <div className="flex items-start justify-between mb-2">
+                  <div>
+                    <h4 className="font-semibold text-foreground text-lg">
+                      Renfort {request.team?.name || "Équipe inconnue"}
+                    </h4>
+                    <p className="text-sm text-muted-foreground">
+                      Compétences requises : {skillsList}
+                    </p>
+                  </div>
+                  <div className="bg-muted text-muted-foreground text-xs font-medium px-2 py-1 rounded-md">
+                    Urgence {request.urgencyLevel}/10
+                  </div>
+                </div>
+
+                <div className="mt-4 flex items-center justify-between">
+                  <span className="text-xs text-muted-foreground">
+                    Expire dans{" "}
+                    {formatDistanceToNow(new Date(request.expiresAt), {
+                      locale: fr,
+                    })}
+                  </span>
+                  <button
+                    onClick={() => handleRespond(request.id)}
+                    disabled={respondingTo === request.id}
+                    className="cursor-pointer bg-primary text-primary-foreground text-sm font-medium px-4 py-2 rounded-full hover:bg-primary/90 transition-colors disabled:opacity-50"
+                  >
+                    {respondingTo === request.id
+                      ? "Acceptation..."
+                      : "Accepter la mission"}
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
