@@ -1,4 +1,6 @@
+
 import { Outlet, useNavigate } from "react-router-dom";
+import { useLanguage } from "../../context/LanguageContext";
 import { useAuth } from "../../features/auth/context/AuthContext";
 import {
   updateMe,
@@ -35,7 +37,7 @@ import {
 } from "../ui/dialog";
 import { useAlerts } from "../../hooks/useAlerts";
 import { useRealtimeNotifications } from "../../hooks/useRealtimeNotifications";
-import { formatTimeAgo } from "../../lib/utils";
+import { formatTimeAgo, cn } from "../../lib/utils";
 import {
   Tooltip,
   TooltipContent,
@@ -54,6 +56,7 @@ import { getRHSettings, updateRHSetting } from "../../features/rh/services/rhSer
 
 const Layout = () => {
   const { logout, user } = useAuth();
+  const { t, language, setLanguage } = useLanguage();
 
   // Enable real-time notifications
   useRealtimeNotifications();
@@ -65,7 +68,7 @@ const Layout = () => {
 
   const fullName =
     user?.firstName && user?.lastName
-      ? `${user.lastName} ${user.firstName}`
+      ? `${user.lastName} ${user.firstName} `
       : user?.email || "Guest";
   const userRole = user?.role ? user.role.replace("_", " ") : "";
   const navigate = useNavigate();
@@ -283,9 +286,19 @@ const Layout = () => {
                 </div>
               </div>
               <div className="language-switch flex items-center gap-2 text-xl">
-                <div className="">FR</div>
+                <button
+                  onClick={() => setLanguage('fr')}
+                  className={cn("transition-colors", language === 'fr' ? "text-foreground font-bold" : "text-neutral-400 hover:text-neutral-600")}
+                >
+                  FR
+                </button>
                 <div className="w-[1px] h-4 bg-neutral-300 dark:bg-neutral-700"></div>
-                <div className="text-neutral-400">EN</div>
+                <button
+                  onClick={() => setLanguage('en')}
+                  className={cn("transition-colors", language === 'en' ? "text-foreground font-bold" : "text-neutral-400 hover:text-neutral-600")}
+                >
+                  EN
+                </button>
               </div>
             </div>
             <div className="mb-4 w-full h-[1px] bg-neutral-200 dark:bg-neutral-800 md:hidden block"></div>
@@ -302,10 +315,10 @@ const Layout = () => {
                 <DrawerTrigger asChild>
                   <button className="cursor-pointer text-white text-sm h-12 px-8 bg-orange-600 hover:bg-orange-700 duration-300 rounded-full flex items-center gap-2">
                     {user?.role === "COLLABORATOR"
-                      ? "My Team"
+                      ? t('myTeam')
                       : user?.role === "ADMIN_RH"
-                        ? "Manage Plateform"
-                        : "Show All Teams"}
+                        ? t('managePlatform')
+                        : t('showAllTeams')}
                     {user?.role === "COLLABORATOR" ? (
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -345,10 +358,10 @@ const Layout = () => {
                     <div className="flex items-center justify-between mb-4">
                       <DrawerTitle className="text-2xl font-semibold dm-sans-bold">
                         {user?.role === "COLLABORATOR"
-                          ? "Collaborator Space"
+                          ? t('collaboratorSpace')
                           : user?.role === "ADMIN_RH"
-                            ? "RH Admin Space"
-                            : "Manager Space"}
+                            ? t('rhAdminSpace')
+                            : t('managerSpace')}
                       </DrawerTitle>
                     </div>
                     <div className="flex items-center gap-8">
@@ -359,9 +372,9 @@ const Layout = () => {
                             className={`pb-4 text-sm font-medium transition-all relative ${drawerTab === "teams"
                               ? "text-foreground"
                               : "text-neutral-400 hover:text-neutral-600"
-                              }`}
+                              } `}
                           >
-                            Teams
+                            {t('teams')}
                             {drawerTab === "teams" && (
                               <div className="absolute bottom-0 left-0 w-full h-[2px] bg-neutral-900 rounded-t-full"></div>
                             )}
@@ -371,9 +384,9 @@ const Layout = () => {
                             className={`pb-4 text-sm font-medium transition-all relative ${drawerTab === "users"
                               ? "text-foreground"
                               : "text-neutral-400 hover:text-neutral-600"
-                              }`}
+                              } `}
                           >
-                            Manage Users
+                            {t('manageUsers')}
                             {drawerTab === "users" && (
                               <div className="absolute bottom-0 left-0 w-full h-[2px] bg-neutral-900 rounded-t-full"></div>
                             )}
@@ -383,9 +396,9 @@ const Layout = () => {
                             className={`pb-4 text-sm font-medium transition-all relative ${drawerTab === "skills"
                               ? "text-foreground"
                               : "text-neutral-400 hover:text-neutral-600"
-                              }`}
+                              } `}
                           >
-                            Manage Skills
+                            {t('manageSkills')}
                             {drawerTab === "skills" && (
                               <div className="absolute bottom-0 left-0 w-full h-[2px] bg-neutral-900 rounded-t-full"></div>
                             )}
@@ -395,9 +408,9 @@ const Layout = () => {
                             className={`pb-4 text-sm font-medium transition-all relative ${drawerTab === "requests"
                               ? "text-foreground"
                               : "text-neutral-400 hover:text-neutral-600"
-                              }`}
+                              } `}
                           >
-                            Requests
+                            {t('requests')}
                             {drawerTab === "requests" && (
                               <div className="absolute bottom-0 left-0 w-full h-[2px] bg-neutral-900 rounded-t-full"></div>
                             )}
@@ -410,9 +423,9 @@ const Layout = () => {
                             className={`pb-4 text-sm font-medium transition-all relative ${drawerTab === "team"
                               ? "text-foreground"
                               : "text-neutral-400 hover:text-neutral-600"
-                              }`}
+                              } `}
                           >
-                            My Team
+                            {t('myTeam')}
                             {drawerTab === "team" && (
                               <div className="absolute bottom-0 left-0 w-full h-[2px] bg-neutral-900 rounded-t-full"></div>
                             )}
@@ -422,9 +435,9 @@ const Layout = () => {
                             className={`pb-4 text-sm font-medium transition-all relative ${drawerTab === "history"
                               ? "text-foreground"
                               : "text-neutral-400 hover:text-neutral-600"
-                              }`}
+                              } `}
                           >
-                            My State History
+                            {t('myHistory')}
                             {drawerTab === "history" && (
                               <div className="absolute bottom-0 left-0 w-full h-[2px] bg-neutral-900 rounded-t-full"></div>
                             )}
@@ -437,9 +450,9 @@ const Layout = () => {
                             className={`pb-4 text-sm font-medium transition-all relative ${drawerTab === "team"
                               ? "text-foreground"
                               : "text-neutral-400 hover:text-neutral-600"
-                              }`}
+                              } `}
                           >
-                            My Team
+                            {t('myTeam')}
                             {drawerTab === "team" && (
                               <div className="absolute bottom-0 left-0 w-full h-[2px] bg-neutral-900 rounded-t-full"></div>
                             )}
@@ -449,9 +462,9 @@ const Layout = () => {
                             className={`pb-4 text-sm font-medium transition-all relative ${drawerTab === "requests"
                               ? "text-foreground"
                               : "text-neutral-400 hover:text-neutral-600"
-                              }`}
+                              } `}
                           >
-                            Requests
+                            {t('requests')}
                             {drawerTab === "requests" && (
                               <div className="absolute bottom-0 left-0 w-full h-[2px] bg-neutral-900 rounded-t-full"></div>
                             )}
@@ -461,9 +474,9 @@ const Layout = () => {
                             className={`pb-4 text-sm font-medium transition-all relative ${drawerTab === "history"
                               ? "text-foreground"
                               : "text-neutral-400 hover:text-neutral-600"
-                              }`}
+                              } `}
                           >
-                            My State History
+                            {t('myHistory')}
                             {drawerTab === "history" && (
                               <div className="absolute bottom-0 left-0 w-full h-[2px] bg-neutral-900 rounded-t-full"></div>
                             )}
@@ -546,11 +559,9 @@ const Layout = () => {
                     <div className="bg-muted/40 dark:bg-neutral-800 px-8 py-6 border-b border-border flex items-center justify-between">
                       <DialogHeader className="text-left">
                         <DialogTitle className="text-2xl font-bold dm-sans-bold">
-                          Settings
+                          {t('settingsTitle')}
                         </DialogTitle>
-                        <DialogDescription>
-                          Manage your preferences and account settings.
-                        </DialogDescription>
+                        <DialogDescription>Manage your preferences and account settings.</DialogDescription>
                       </DialogHeader>
                     </div>
                     <div className="p-8 flex-1 overflow-y-auto scrollbar bg-background">
@@ -558,12 +569,12 @@ const Layout = () => {
                         {/* Profile Section */}
                         <div className="space-y-4">
                           <h3 className="text-lg font-semibold border-b border-border pb-2 text-foreground">
-                            Informations Personnelles
+                            {t('personalInfo')}
                           </h3>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
                               <label className="text-sm font-medium text-foreground">
-                                First Name
+                                {t('firstName')}
                               </label>
                               <input
                                 type="text"
@@ -576,7 +587,7 @@ const Layout = () => {
                             </div>
                             <div className="space-y-2">
                               <label className="text-sm font-medium text-foreground">
-                                Last Name
+                                {t('lastName')}
                               </label>
                               <input
                                 type="text"
@@ -589,7 +600,7 @@ const Layout = () => {
                             </div>
                             <div className="space-y-2 md:col-span-2">
                               <label className="text-sm font-medium text-foreground">
-                                Email
+                                {t('email')}
                               </label>
                               <input
                                 type="email"
@@ -602,7 +613,7 @@ const Layout = () => {
                             </div>
                             <div className="space-y-2 md:col-span-2">
                               <label className="text-sm font-medium text-foreground">
-                                Role (Not editable)
+                                {t('role')}
                               </label>
                               <input
                                 type="text"
@@ -621,8 +632,8 @@ const Layout = () => {
                             className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-11 px-8 bg-primary text-primary-foreground hover:bg-primary/90 shadow-md"
                           >
                             {isSaving
-                              ? "Saving..."
-                              : "Save changes"}
+                              ? t('saving')
+                              : t('saveChanges')}
                           </button>
                         </div>
 
@@ -634,7 +645,7 @@ const Layout = () => {
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
                               <label className="text-sm font-medium text-foreground">
-                                Enter Password
+                                {t('enterPassword')}
                               </label>
                               <input
                                 type="password"
@@ -649,7 +660,7 @@ const Layout = () => {
                             </div>
                             <div className="space-y-2">
                               <label className="text-sm font-medium text-foreground">
-                                Confirm Password
+                                {t('confirmPassword')}
                               </label>
                               <input
                                 type="password"
@@ -670,8 +681,8 @@ const Layout = () => {
                               className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-6 bg-primary text-primary-foreground hover:bg-primary/90 hover:text-white shadow-sm"
                             >
                               {isSavingPassword
-                                ? "Saving..."
-                                : "Change Password"}
+                                ? t('saving')
+                                : t('changePassword')}
                             </button>
                           </div>
                         </div>
@@ -679,12 +690,12 @@ const Layout = () => {
                         {/* Skills Section */}
                         <div className="space-y-4">
                           <h3 className="text-lg font-semibold border-b border-border pb-2 text-foreground">
-                            My Skills
+                            {t('skills')}
                           </h3>
                           <div className="flex flex-wrap gap-2 min-h-[40px]">
                             {skills.length === 0 ? (
                               <p className="text-muted-foreground text-sm">
-                                No skills added
+                                {t('noSkills')}
                               </p>
                             ) : (
                               skills.map((skill) => (
@@ -700,7 +711,7 @@ const Layout = () => {
                           <div className="flex gap-2">
                             <input
                               type="text"
-                              placeholder="Add a skill..."
+                              placeholder={t('addSkillPlaceholder')}
                               value={newSkill}
                               onChange={(e) => setNewSkill(e.target.value)}
                               onKeyPress={(e) =>
@@ -713,7 +724,7 @@ const Layout = () => {
                               disabled={isLoadingSkills || !newSkill.trim()}
                               className="inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-6 bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:pointer-events-none"
                             >
-                              {isLoadingSkills ? "..." : "Add"}
+                              {isLoadingSkills ? "..." : t('add')}
                             </button>
                           </div>
                         </div>
@@ -721,7 +732,7 @@ const Layout = () => {
                     </div>
                   </DialogContent>
                 </Dialog>
-                <div className={`lg:h-14 lg:w-14 h-10 w-10 rounded-full bg-black bg-cover bg-center border border-border shadow ${userRole == "COLLABORATOR" ? "bg-[url('/src/assets/profil-bg.png')]" : userRole == "MANAGER" ? "bg-[url('/src/assets/profiles/profile-2.png')]" : "bg-[url('/src/assets/profiles/profile-6.png')]"}`}></div>
+                <div className={`lg: h - 14 lg: w - 14 h - 10 w - 10 rounded - full bg - black bg - cover bg - center border border - border shadow ${userRole == "COLLABORATOR" ? "bg-[url('/src/assets/profil-bg.png')]" : userRole == "MANAGER" ? "bg-[url('/src/assets/profiles/profile-2.png')]" : "bg-[url('/src/assets/profiles/profile-6.png')]"} `}></div>
                 <div className="lg:h-14 h-10 lg:pt-1 dm-sans-regular lg:text-lg text-sm">
                   <div className="text-lg">{fullName}</div>
                   <div className="text-sm">{userRole}</div>
@@ -765,14 +776,14 @@ const Layout = () => {
                   )}
                 </button>
                 <div className="dm-sans-regular text-muted-foreground dark:text-neutral-400 lg:flex hidden">
-                  {theme === "light" ? "Switch to Dark" : "Switch to Light"}
+                  {theme === "light" ? t('switchToDark') : t('switchToLight')}
                 </div>
               </div>
             </div>
             <div className="mt-4 w-full h-[1px] bg-neutral-200 dark:bg-neutral-800 md:hidden block"></div>
             <div className="flex items-center justify-between w-full gap-6 mt-4 lg:mt-0 ">
               <div className="dm-sans-light text-muted-foreground">
-                <div className="text-2xl lg:text-5xl">Hey, Welcome back </div>
+                <div className="text-2xl lg:text-5xl">{t('welcomeBack')} </div>
                 <div className="text-3xl lg:text-5xl text-foreground">
                   {fullName} !
                 </div>
@@ -795,10 +806,10 @@ const Layout = () => {
                   </svg>
 
                   <div
-                    className={`h-20 p-1 group-hover:bg-card dark:group-hover:bg-card group-hover:shadow-lg overflow-hidden rounded-full grid gap-1 cursor-pointer duration-300 group absolute top-0 z-[1000] ${user?.role === "ADMIN_RH"
+                    className={`h - 20 p - 1 group - hover: bg - card dark: group - hover: bg - card group - hover: shadow - lg overflow - hidden rounded - full grid gap - 1 cursor - pointer duration - 300 group absolute top - 0 z - [1000] ${user?.role === "ADMIN_RH"
                       ? "group-hover:h-[256px] group-hover:grid-rows-3 group-hover:top-[-168px]"
                       : "group-hover:h-[172px] group-hover:grid-rows-2 group-hover:top-[-84px]"
-                      }`}
+                      } `}
                   >
                     <TooltipProvider delayDuration={0}>
                       <Tooltip>
@@ -923,9 +934,9 @@ const Layout = () => {
                                     <div className="flex items-center">
                                       <button
                                         onClick={() => setRhAutoAssign(!rhAutoAssign)}
-                                        className={`w-11 h-6 rounded-full transition-colors relative ${rhAutoAssign ? 'bg-primary' : 'bg-muted border border-input'}`}
+                                        className={`w - 11 h - 6 rounded - full transition - colors relative ${rhAutoAssign ? 'bg-primary' : 'bg-muted border border-input'} `}
                                       >
-                                        <div className={`w-4 h-4 rounded-full bg-white absolute top-1 transition-transform ${rhAutoAssign ? 'left-6' : 'left-1'}`}></div>
+                                        <div className={`w - 4 h - 4 rounded - full bg - white absolute top - 1 transition - transform ${rhAutoAssign ? 'left-6' : 'left-1'} `}></div>
                                       </button>
                                     </div>
                                   </div>
@@ -984,10 +995,10 @@ const Layout = () => {
         </main>
       </div>
       <div
-        className={`fixed inset-y-0 right-0 z-50 w-full sm:w-[450px] lg:static lg:h-full lg:row-span-2 lg:col-start-2 bg-background border-l border-border transition-all duration-500 ease-in-out shadow-2xl lg:shadow-none ${isAlertPanelOpen
+        className={`fixed inset - y - 0 right - 0 z - 50 w - full sm: w - [450px] lg:static lg: h - full lg: row - span - 2 lg: col - start - 2 bg - background border - l border - border transition - all duration - 500 ease -in -out shadow - 2xl lg: shadow - none ${isAlertPanelOpen
           ? "translate-x-0 opacity-100"
           : "translate-x-full opacity-0 lg:hidden"
-          }`}
+          } `}
       >
         <div className="h-full w-full bg-card rounded-xl flex flex-col overflow-hidden">
           <div className="flex items-center justify-between mb-2 relative pt-14 pb-2 px-8 shrink-0">
@@ -1028,34 +1039,34 @@ const Layout = () => {
               <div className="flex items-start gap-4">
                 <div
                   onClick={() => setActiveTab("all")}
-                  className={`pb-2 px-2 cursor-pointer transition-colors dm-sans-medium flex items-center justify-center gap-2 border-b-3 ${activeTab === "all"
+                  className={`pb - 2 px - 2 cursor - pointer transition - colors dm - sans - medium flex items - center justify - center gap - 2 border - b - 3 ${activeTab === "all"
                     ? "border-primary text-primary"
                     : "border-transparent text-muted-foreground hover:text-foreground"
-                    }`}
+                    } `}
                 >
                   <div className="">All</div>{" "}
                   <div
-                    className={`px-2 text-xs rounded-sm ${activeTab === "all"
+                    className={`px - 2 text - xs rounded - sm ${activeTab === "all"
                       ? "bg-primary text-primary-foreground"
                       : "bg-muted text-muted-foreground"
-                      }`}
+                      } `}
                   >
                     {alerts.length}
                   </div>
                 </div>
                 <div
                   onClick={() => setActiveTab("unread")}
-                  className={`pb-2 px-2 cursor-pointer transition-colors dm-sans-medium flex items-center justify-center gap-2 border-b-3 ${activeTab === "unread"
+                  className={`pb - 2 px - 2 cursor - pointer transition - colors dm - sans - medium flex items - center justify - center gap - 2 border - b - 3 ${activeTab === "unread"
                     ? "border-primary text-primary"
                     : "border-transparent text-muted-foreground hover:text-foreground"
-                    }`}
+                    } `}
                 >
                   <div className="">Unread</div>{" "}
                   <div
-                    className={`px-2 text-xs rounded-sm ${activeTab === "unread"
+                    className={`px - 2 text - xs rounded - sm ${activeTab === "unread"
                       ? "bg-primary text-primary-foreground"
                       : "bg-muted text-muted-foreground"
-                      }`}
+                      } `}
                   >
                     {unreadCount}
                   </div>
@@ -1087,8 +1098,8 @@ const Layout = () => {
                 filteredAlerts.map((alert) => (
                   <div
                     key={alert.id}
-                    className={`px-8 py-4 grid grid-cols-[40px_1fr] gap-2 border-b border-border cursor-pointer hover:bg-muted/50 ${alert.isRead ? "bg-card" : "bg-orange-50 dark:bg-orange-900/10"
-                      }`}
+                    className={`px - 8 py - 4 grid grid - cols - [40px_1fr] gap - 2 border - b border - border cursor - pointer hover: bg - muted / 50 ${alert.isRead ? "bg-card" : "bg-orange-50 dark:bg-orange-900/10"
+                      } `}
                     onClick={() => !alert.isRead && markAsRead(alert.id)}
                   >
                     <div className="profile-icon rounded-lg h-[40px] w-[40px] bg-muted bg-[url(/src/assets/profil-bg.png)] bg-cover bg-center relative">

@@ -40,6 +40,9 @@ RUN rm -rf node_modules/.prisma
 # Générer Prisma Client
 RUN npx prisma generate
 
+# Compiler le script de seed
+RUN npx tsc prisma/seed.ts --outDir dist --module esnext --target es2020 --moduleResolution node --esModuleInterop --skipLibCheck --allowSyntheticDefaultImports
+
 # Compiler TypeScript
 RUN npm run build
 
@@ -60,6 +63,8 @@ COPY --from=build /usr/src/app/dist ./dist
 
 # Prisma Client runtime
 COPY --from=build /usr/src/app/src/generated ./dist/generated
+# Prisma Client runtime (pour le seed qui cherche dans src/generated)
+COPY --from=build /usr/src/app/src/generated ./src/generated
 
 # Schema Prisma
 COPY --from=build /usr/src/app/prisma ./prisma
@@ -69,4 +74,4 @@ COPY --from=build /usr/src/app/prisma.config.ts ./prisma.config.ts
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/index.js"]
+CMD ["sh", "-c", "npx prisma migrate deploy && node dist/seed.js && node dist/index.js"]
