@@ -270,19 +270,19 @@ const Layout = () => {
         }`}
     >
       <div className="w-full h-full flex flex-col lg:grid lg:grid-rows-[280px_1fr]">
-        <header className="bg-muted/40 dark:bg-muted/10 py-6 px-4 lg:px-12 flex flex-col lg:flex-row justify-between items-start lg:items-center lg:gap-0 col-start-1 h-auto lg:h-full">
+        <header className="bg-muted/40 dark:bg-muted/10 py-2 px-4  lg:px-12 lg:py-6 flex flex-col lg:flex-row justify-between items-start lg:items-center lg:gap-0 col-start-1 h-auto lg:h-full">
           <div className="w-full md:max-w-[875px] md:w-full lg:w-full lg:max-w-[750px] h-full flex flex-col justify-between items-start">
-            <div className="flex items-center gap-4 lg:mb-0 mb-4">
-              <div className="h-14 w-14 rounded-full bg-black dark:bg-white flex items-center justify-center">
-                <span className="text-xl font-bold text-white dark:text-black">HOL</span>
+            <div className="flex items-center gap-4 lg:mb-0 mb-6">
+              <div className="h-10 w-10 lg:h-14 lg:w-14 rounded-full bg-black dark:bg-white flex items-center justify-center">
+                <span className="text-sm lg:text-xl font-bold text-white dark:text-black">HOL</span>
               </div>
-              <div className="h-14 pt-1">
+              <div className="lg:h-14 h-10 lg:pt-1">
                 <div className="text-lg">HumanOps-Live</div>
                 <div className="text-sm text-muted-foreground">Dashboard</div>
               </div>
             </div>
-            <div className="flex items-center gap-6 self-end lg:self-auto">
-              <div className="dm-sans-medium h-16 w-16 lg:h-22 lg:w-22 rounded-full flex items-center justify-center text-xl lg:text-3xl font-semibold text-foreground border border-border shrink-0">
+            <div className="flex items-center justify-between w-full lg:justify-start lg:w-auto lg:gap-6 self-end lg:self-auto">
+              <div className="dm-sans-medium h-12 w-12 lg:h-22 lg:w-22 rounded-full flex items-center justify-center text-xl lg:text-3xl font-semibold text-foreground border border-border shrink-0">
                 {dayNumber}
               </div>
               <div className="text-sm lg:text-md text-foreground">
@@ -489,7 +489,7 @@ const Layout = () => {
               </Drawer>
               <button
                 onClick={() => setIsAlertPanelOpen(!isAlertPanelOpen)}
-                className="alert-button cursor-pointer h-12 w-12 border border-border rounded-full flex items-center justify-center relative text-foreground hover:bg-muted transition-colors"
+                className="alert-button cursor-pointer h-10 w-10 lg:h-12 lg:w-12  border border-border rounded-full flex items-center justify-center relative text-foreground hover:bg-muted transition-colors"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -497,7 +497,7 @@ const Layout = () => {
                   viewBox="0 0 24 24"
                   strokeWidth={1.5}
                   stroke="currentColor"
-                  className="size-6 text-foreground"
+                  className="size-5 lg:size-6 text-foreground"
                 >
                   <path
                     strokeLinecap="round"
@@ -513,17 +513,17 @@ const Layout = () => {
           </div>
           <div className="w-full md:max-w-[875px] md:w-full lg:w-full lg:max-w-[750px] h-full flex flex-col justify-between items-start mt-4 lg:mt-0">
             <div className="w-full flex items-center justify-between gap-2 lg:gap-6 lg:flex">
-              <div className="flex items-center gap-6">
+              <div className="flex items-center lg:gap-6 gap-3">
                 <Dialog>
                   <DialogTrigger asChild>
-                    <div className="parametre-profil h-14 w-14 rounded-full border border-border flex items-center justify-center cursor-pointer hover:bg-muted transition-colors text-foreground">
+                    <div className="parametre-profil lg:h-14 lg:w-14 h-10 w-10 rounded-full border border-border flex items-center justify-center cursor-pointer hover:bg-muted transition-colors text-foreground">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
                         strokeWidth={1.5}
                         stroke="currentColor"
-                        className="size-6"
+                        className="size-5 lg:size-6"
                       >
                         <path
                           strokeLinecap="round"
@@ -712,8 +712,8 @@ const Layout = () => {
                     </div>
                   </DialogContent>
                 </Dialog>
-                <div className={`h-14 w-14 rounded-full bg-black bg-cover bg-center border border-border shadow ${userRole == "COLLABORATOR" ? "bg-[url('/src/assets/profil-bg.png')]" : userRole == "MANAGER" ? "bg-[url('/src/assets/profiles/profile-2.png')]" : "bg-[url('/src/assets/profiles/profile-6.png')]"}`}></div>
-                <div className="h-14 pt-1 dm-sans-regular">
+                <div className={`lg:h-14 lg:w-14 h-10 w-10 rounded-full bg-black bg-cover bg-center border border-border shadow ${userRole == "COLLABORATOR" ? "bg-[url('/src/assets/profil-bg.png')]" : userRole == "MANAGER" ? "bg-[url('/src/assets/profiles/profile-2.png')]" : "bg-[url('/src/assets/profiles/profile-6.png')]"}`}></div>
+                <div className="lg:h-14 h-10 lg:pt-1 dm-sans-regular lg:text-lg text-sm">
                   <div className="text-lg">{fullName}</div>
                   <div className="text-sm">{userRole}</div>
                 </div>
@@ -721,7 +721,7 @@ const Layout = () => {
               <div className="flex items-center gap-6">
                 <button
                   onClick={toggleTheme}
-                  className="h-14 w-14 flex items-center justify-center rounded-full border border-border hover:bg-muted transition-colors cursor-pointer text-foreground"
+                  className="lg:h-14 lg:w-14 h-10 w-10 flex items-center justify-center rounded-full border border-border hover:bg-muted transition-colors cursor-pointer text-foreground"
                 >
                   {theme === "light" ? (
                     <svg
@@ -730,7 +730,7 @@ const Layout = () => {
                       viewBox="0 0 24 24"
                       strokeWidth={1.5}
                       stroke="currentColor"
-                      className="size-6 text-foreground"
+                      className="size-5 lg:size-6 text-foreground"
                     >
                       <path
                         strokeLinecap="round"
@@ -745,7 +745,7 @@ const Layout = () => {
                       viewBox="0 0 24 24"
                       strokeWidth={1.5}
                       stroke="currentColor"
-                      className="size-6 text-foreground dark:text-white"
+                      className="size-5 lg:size-6 text-foreground dark:text-white"
                     >
                       <path
                         strokeLinecap="round"
@@ -762,13 +762,13 @@ const Layout = () => {
             </div>
             <div className="flex items-center justify-between w-full gap-6 mt-4 lg:mt-0 ">
               <div className="dm-sans-light text-muted-foreground">
-                <div className="text-3xl lg:text-5xl">Hey, Welcome back </div>
+                <div className="text-2xl lg:text-5xl">Hey, Welcome back </div>
                 <div className="text-3xl lg:text-5xl text-foreground">
                   {fullName} !
                 </div>
               </div>
               <div className="flex items-center gap-4">
-                <div className="h-20 w-20 rounded-full border border-border flex items-center justify-center cursor-pointer hover:bg-neutral-900 dark:hover:bg-primary duration-300 group relative text-foreground">
+                <div className="lg:h-20 lg:w-20 h-16 w-16 rounded-full border border-border flex items-center justify-center cursor-pointer hover:bg-neutral-900 dark:hover:bg-primary duration-300 group relative text-foreground">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
