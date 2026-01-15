@@ -38,6 +38,8 @@ async function main() {
     data: {
       email: "admin@humanops.com",
       passwordHash,
+      firstName: "Admin",
+      lastName: "System",
       role: "ADMIN_RH",
       isActive: true,
       profile: {
@@ -53,6 +55,8 @@ async function main() {
     data: {
       email: "sarah.mitchell@humanops.com",
       passwordHash,
+      firstName: "Sarah",
+      lastName: "Mitchell",
       role: "MANAGER",
       isActive: true,
       profile: {
@@ -67,6 +71,8 @@ async function main() {
     data: {
       email: "david.chen@humanops.com",
       passwordHash,
+      firstName: "David",
+      lastName: "Chen",
       role: "MANAGER",
       isActive: true,
       profile: {
@@ -82,6 +88,8 @@ async function main() {
     data: {
       email: "alice.dupont@humanops.com",
       passwordHash,
+      firstName: "Alice",
+      lastName: "Dupont",
       role: "COLLABORATOR",
       isActive: true,
       reliability: { create: { score: 0.95 } },
@@ -97,6 +105,8 @@ async function main() {
     data: {
       email: "bob.martin@humanops.com",
       passwordHash,
+      firstName: "Bob",
+      lastName: "Martin",
       role: "COLLABORATOR",
       isActive: true,
       reliability: { create: { score: 0.88 } },
@@ -113,6 +123,8 @@ async function main() {
     data: {
       email: "charlie.davis@humanops.com",
       passwordHash,
+      firstName: "Charlie",
+      lastName: "Davis",
       role: "COLLABORATOR",
       isActive: true,
       reliability: { create: { score: 0.92 } },
@@ -128,6 +140,8 @@ async function main() {
     data: {
       email: "diana.ross@humanops.com",
       passwordHash,
+      firstName: "Diana",
+      lastName: "Ross",
       role: "COLLABORATOR",
       isActive: true,
       reliability: { create: { score: 0.98 } },
