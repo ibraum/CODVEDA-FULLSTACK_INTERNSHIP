@@ -74,4 +74,4 @@ COPY --from=build /usr/src/app/prisma.config.ts ./prisma.config.ts
 
 EXPOSE 3000
 
-CMD ["sh", "-c", "NODE_ENV=development npx prisma migrate reset --force --skip-seed && node dist/seed.js && node dist/index.js"]
+CMD ["sh", "-c", "NODE_ENV=development npx prisma migrate reset --force && node dist/seed.js && node dist/index.js"]
