@@ -281,6 +281,7 @@ const Layout = () => {
                 <div className="text-sm text-muted-foreground">Dashboard</div>
               </div>
             </div>
+            <div className="mb-4 w-full h-[1px] bg-neutral-200 md:hidden block"></div>
             <div className="flex items-center justify-between w-full lg:justify-start lg:w-auto lg:gap-6 self-end lg:self-auto">
               <div className="dm-sans-medium h-12 w-12 lg:h-22 lg:w-22 rounded-full flex items-center justify-center text-xl lg:text-3xl font-semibold text-foreground border border-border shrink-0">
                 {dayNumber}
@@ -511,7 +512,7 @@ const Layout = () => {
               </button>
             </div>
           </div>
-          <div className="my-4 w-full h-1 bg-neutral-300 md:hidden block"></div>
+          <div className="mt-4 w-full h-[1px] bg-neutral-200 md:hidden block"></div>
           <div className="w-full md:max-w-[875px] md:w-full lg:w-full lg:max-w-[750px] h-full flex flex-col justify-between items-start mt-4 lg:mt-0">
             <div className="w-full flex items-center justify-between gap-2 lg:gap-6 lg:flex">
               <div className="flex items-center lg:gap-6 gap-3">
@@ -761,6 +762,7 @@ const Layout = () => {
                 </div>
               </div>
             </div>
+            <div className="mt-4 w-full h-[1px] bg-neutral-200 md:hidden block"></div>
             <div className="flex items-center justify-between w-full gap-6 mt-4 lg:mt-0 ">
               <div className="dm-sans-light text-muted-foreground">
                 <div className="text-2xl lg:text-5xl">Hey, Welcome back </div>
