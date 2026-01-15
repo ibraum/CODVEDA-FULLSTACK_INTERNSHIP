@@ -7,7 +7,7 @@ export interface DomainEvent {
 
 // Événements liés aux états humains
 export interface HumanStateUpdatedEvent extends DomainEvent {
-  eventName: 'HumanStateUpdated';
+  eventName: "HumanStateUpdated";
   payload: {
     userId: string;
     previousState: {
@@ -23,7 +23,7 @@ export interface HumanStateUpdatedEvent extends DomainEvent {
 
 // Événements liés aux tensions
 export interface TeamTensionComputedEvent extends DomainEvent {
-  eventName: 'TeamTensionComputed';
+  eventName: "TeamTensionComputed";
   payload: {
     teamId: string;
     level: string;
@@ -32,7 +32,7 @@ export interface TeamTensionComputedEvent extends DomainEvent {
 }
 
 export interface CriticalTensionDetectedEvent extends DomainEvent {
-  eventName: 'CriticalTensionDetected';
+  eventName: "CriticalTensionDetected";
   payload: {
     teamId: string;
     metrics: Record<string, number>;
@@ -41,7 +41,7 @@ export interface CriticalTensionDetectedEvent extends DomainEvent {
 
 // Événements liés à la gestion d'équipe
 export interface TeamMemberAddedEvent extends DomainEvent {
-  eventName: 'TeamMemberAdded';
+  eventName: "TeamMemberAdded";
   payload: {
     teamId: string;
     userId: string;
@@ -49,7 +49,7 @@ export interface TeamMemberAddedEvent extends DomainEvent {
 }
 
 export interface TeamMemberRemovedEvent extends DomainEvent {
-  eventName: 'TeamMemberRemoved';
+  eventName: "TeamMemberRemoved";
   payload: {
     teamId: string;
     userId: string;
@@ -58,7 +58,7 @@ export interface TeamMemberRemovedEvent extends DomainEvent {
 
 // Événements liés aux renforts
 export interface ReinforcementRequestedEvent extends DomainEvent {
-  eventName: 'ReinforcementRequested';
+  eventName: "ReinforcementRequested";
   payload: {
     requestId: string;
     teamId: string;
@@ -68,7 +68,7 @@ export interface ReinforcementRequestedEvent extends DomainEvent {
 }
 
 export interface ReinforcementAcceptedEvent extends DomainEvent {
-  eventName: 'ReinforcementAccepted';
+  eventName: "ReinforcementAccepted";
   payload: {
     requestId: string;
     userId: string;
@@ -76,7 +76,7 @@ export interface ReinforcementAcceptedEvent extends DomainEvent {
 }
 
 export interface ReinforcementRefusedEvent extends DomainEvent {
-  eventName: 'ReinforcementRefused';
+  eventName: "ReinforcementRefused";
   payload: {
     requestId: string;
     userId: string;
@@ -84,7 +84,7 @@ export interface ReinforcementRefusedEvent extends DomainEvent {
 }
 
 export interface ReinforcementExpiredEvent extends DomainEvent {
-  eventName: 'ReinforcementExpired';
+  eventName: "ReinforcementExpired";
   payload: {
     requestId: string;
   };
@@ -92,7 +92,7 @@ export interface ReinforcementExpiredEvent extends DomainEvent {
 
 // Événements liés aux alertes
 export interface AlertCreatedEvent extends DomainEvent {
-  eventName: 'AlertCreated';
+  eventName: "AlertCreated";
   payload: {
     alertId: string;
     type: string;
