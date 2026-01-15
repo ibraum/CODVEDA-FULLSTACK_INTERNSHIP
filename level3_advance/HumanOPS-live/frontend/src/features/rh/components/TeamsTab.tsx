@@ -64,7 +64,7 @@ const TeamsTab = () => {
       }
     } catch (err: any) {
       console.error("Failed to fetch teams", err);
-      setError("Impossible de charger les équipes");
+      setError("Failed to load teams");
     } finally {
       setLoading(false);
     }
@@ -100,12 +100,12 @@ const TeamsTab = () => {
 
   const getTensionLabel = (level: string): string => {
     const map: Record<string, string> = {
-      LOW: "Faible",
-      MODERATE: "Modérée",
-      HIGH: "Élevée",
-      CRITICAL: "Critique",
+      LOW: "Low",
+      MODERATE: "Moderate",
+      HIGH: "High",
+      CRITICAL: "Critical",
     };
-    return map[level] || "Inconnue";
+    return map[level] || "Unknown";
   };
 
   const getTensionValue = (level: string): number => {
@@ -162,7 +162,7 @@ const TeamsTab = () => {
   // Prepare chart data
   const chartData = selectedTeamTensions
     .map((t) => ({
-      time: new Date(t.calculatedAt).toLocaleDateString("fr-FR", {
+      time: new Date(t.calculatedAt).toLocaleDateString("en-US", {
         month: "short",
         day: "numeric",
       }),
@@ -183,10 +183,10 @@ const TeamsTab = () => {
         <div className="relative z-10 w-full flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold mb-2 dm-sans-bold">
-              Gestion des Équipes
+              Team Management
             </h1>
             <p className="text-neutral-300">
-              Supervisez les équipes, surveillez les tensions et gérez les renforts
+              Supervise teams, monitor tensions and manage reinforcements
             </p>
           </div>
           <button
@@ -221,7 +221,7 @@ const TeamsTab = () => {
             <div className="flex justify-between items-start mb-4">
               <div>
                 <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
-                  Total Équipes
+                  Total Teams
                 </p>
                 <div className="text-4xl font-bold dm-sans-bold text-foreground mt-1">
                   {totalTeams}
@@ -254,7 +254,7 @@ const TeamsTab = () => {
             <div className="flex justify-between items-start mb-4">
               <div>
                 <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
-                  Collaborateurs
+                  Collaborators
                 </p>
                 <div className="text-4xl font-bold dm-sans-bold text-foreground mt-1">
                   {totalMembers}
@@ -287,7 +287,7 @@ const TeamsTab = () => {
             <div className="flex justify-between items-start mb-4">
               <div>
                 <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
-                  En Tension
+                  In Tension
                 </p>
                 <div className="text-4xl font-bold dm-sans-bold text-foreground mt-1">
                   {criticalTeams}
@@ -341,17 +341,17 @@ const TeamsTab = () => {
             </svg>
           </div>
           <h3 className="text-xl font-bold text-neutral-900 mb-2">
-            Aucune équipe
+            No Teams
           </h3>
           <p className="text-neutral-500 max-w-sm mx-auto mb-6">
-            Commencez par créer des équipes pour organiser vos collaborateurs et
-            suivre leurs performances.
+            Start by creating teams to organize your collaborators and
+            track their performance.
           </p>
           <button
             onClick={() => setIsAddTeamDialogOpen(true)}
             className="bg-neutral-900 text-white px-5 py-2.5 rounded-lg font-medium hover:bg-neutral-800 transition-colors"
           >
-            Créer la première équipe
+            Create first team
           </button>
         </div>
       ) : (
@@ -361,7 +361,7 @@ const TeamsTab = () => {
             {/* Sidebar: Team List */}
             <div className="lg:col-span-1 space-y-4">
               <h3 className="text-lg font-semibold text-foreground px-1">
-                Liste des équipes
+                Team List
               </h3>
               <div className="space-y-2 max-h-[600px] overflow-y-auto pr-2 scrollbar-thin">
                 {teams.map((team) => (
@@ -406,7 +406,7 @@ const TeamsTab = () => {
                       </span>
                       <span>
                         {team.currentTension?.level === "CRITICAL"
-                          ? "Critique"
+                          ? "Critical"
                           : team.currentTension?.level === "HIGH"
                             ? "Tension"
                             : "Stable"}
@@ -427,7 +427,7 @@ const TeamsTab = () => {
                     <Card>
                       <CardHeader className="pb-2">
                         <CardTitle className="text-lg flex justify-between items-center">
-                          <span>Informations</span>
+                          <span>Information</span>
                           {selectedTeamData.currentTension && (
                             <Badge
                               className={getTensionColor(
@@ -459,12 +459,12 @@ const TeamsTab = () => {
                           </div>
                           <div className="flex items-center justify-between p-3 bg-muted rounded-lg">
                             <span className="text-sm text-muted-foreground">
-                              Demandes
+                              Requests
                             </span>
                             <span className="font-semibold text-orange-600">
                               {selectedTeamData.pendingReinforcementRequests ||
                                 0}{" "}
-                              en attente
+                              pending
                             </span>
                           </div>
                         </div>
@@ -474,7 +474,7 @@ const TeamsTab = () => {
                     {/* Chart Card */}
                     <Card>
                       <CardHeader className="pb-2">
-                        <CardTitle className="text-lg">Tension (10j)</CardTitle>
+                        <CardTitle className="text-lg">Tension (10d)</CardTitle>
                       </CardHeader>
                       <CardContent>
                         {chartData.length > 0 ? (
@@ -503,7 +503,7 @@ const TeamsTab = () => {
                           </div>
                         ) : (
                           <div className="h-[140px] flex items-center justify-center text-neutral-400 text-sm">
-                            Pas de données
+                            No data
                           </div>
                         )}
                       </CardContent>
@@ -513,13 +513,13 @@ const TeamsTab = () => {
                   {/* Reinforcement Requests for this team */}
                   <div>
                     <h3 className="text-lg font-semibold text-foreground mb-3">
-                      Demandes de Renfort
+                      Reinforcement Requests
                     </h3>
                     {teamRequests.filter((r) => r.teamId === selectedTeam)
                       .length === 0 ? (
                       <div className="bg-muted rounded-xl p-8 text-center border border-border">
                         <p className="text-muted-foreground text-sm">
-                          Aucune demande active pour cette équipe.
+                          No active requests for this team.
                         </p>
                       </div>
                     ) : (
@@ -544,7 +544,7 @@ const TeamsTab = () => {
                                 </div>
                                 <div>
                                   <h4 className="font-semibold text-foreground">
-                                    Besoin de renfort
+                                    Reinforcement needed
                                   </h4>
                                   <p className="text-xs text-muted-foreground">
                                     Skills:{" "}
@@ -556,7 +556,7 @@ const TeamsTab = () => {
                               </div>
                               <Badge variant="outline" className="bg-muted text-muted-foreground">
                                 {new Date(request.createdAt).toLocaleDateString(
-                                  "fr-FR", { day: 'numeric', month: 'short' }
+                                  "en-US", { day: 'numeric', month: 'short' }
                                 )}
                               </Badge>
                             </div>
@@ -579,10 +579,10 @@ const TeamsTab = () => {
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle className="text-2xl dm-sans-bold">
-              Créer une équipe
+              Create Team
             </DialogTitle>
             <DialogDescription>
-              Cette fonctionnalité sera disponible dans une prochaine mise à jour.
+              This feature will be available in a future update.
             </DialogDescription>
           </DialogHeader>
           <div className="py-8 text-center">

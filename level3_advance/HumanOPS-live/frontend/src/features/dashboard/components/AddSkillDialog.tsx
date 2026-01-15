@@ -54,7 +54,7 @@ const AddSkillDialog = ({ open, onOpenChange }: AddSkillDialogProps) => {
       setSearchTerm("");
     } catch (error) {
       console.error("Failed to add skills", error);
-      alert("Erreur lors de l'ajout des compétences. Veuillez réessayer.");
+      alert("Error adding skills. Please try again.");
     } finally {
       setIsSubmitting(false);
     }
@@ -78,10 +78,10 @@ const AddSkillDialog = ({ open, onOpenChange }: AddSkillDialogProps) => {
         <div className="bg-muted px-8 py-6 border-b border-border">
           <DialogHeader>
             <DialogTitle className="text-3xl font-bold dm-sans-bold mb-2 text-foreground">
-              Ajouter des compétences
+              Add Skills
             </DialogTitle>
             <DialogDescription className="text-muted-foreground text-base">
-              Recherchez et ajoutez plusieurs compétences à votre profil
+              Search and add multiple skills to your profile
             </DialogDescription>
           </DialogHeader>
         </div>
@@ -99,7 +99,7 @@ const AddSkillDialog = ({ open, onOpenChange }: AddSkillDialogProps) => {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                   onKeyPress={handleKeyPress}
-                  placeholder="Ex: React, Gestion de projet, Python..."
+                  placeholder="Ex: React, Project Management, Python..."
                   className="w-full px-4 py-3 pr-12 rounded-xl border-2 border-input bg-background focus:outline-none focus:ring-2 focus:ring-ring focus:border-border transition-all text-foreground placeholder:text-muted-foreground"
                   autoFocus
                 />
@@ -155,7 +155,7 @@ const AddSkillDialog = ({ open, onOpenChange }: AddSkillDialogProps) => {
             <div className="space-y-3">
               <div className="flex items-center justify-between">
                 <h3 className="text-sm font-bold text-foreground uppercase tracking-wider">
-                  Compétences sélectionnées ({selectedSkills.length})
+                  Selected Skills ({selectedSkills.length})
                 </h3>
                 {selectedSkills.length > 0 && (
                   <button
@@ -163,7 +163,7 @@ const AddSkillDialog = ({ open, onOpenChange }: AddSkillDialogProps) => {
                     onClick={() => setSelectedSkills([])}
                     className="text-xs text-red-600 hover:text-red-700 font-medium"
                   >
-                    Tout effacer
+                    Clear all
                   </button>
                 )}
               </div>
@@ -185,10 +185,10 @@ const AddSkillDialog = ({ open, onOpenChange }: AddSkillDialogProps) => {
                     />
                   </svg>
                   <p className="text-muted-foreground text-sm">
-                    Aucune compétence sélectionnée
+                    No skills selected
                   </p>
                   <p className="text-muted-foreground/70 text-xs mt-1">
-                    Tapez et appuyez sur Entrée ou cliquez sur +
+                    Type and press Enter or click +
                   </p>
                 </div>
               ) : (
@@ -235,14 +235,14 @@ const AddSkillDialog = ({ open, onOpenChange }: AddSkillDialogProps) => {
               onClick={() => onOpenChange(false)}
               className="px-6 py-3 text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground hover:shadow-sm rounded-xl transition-all"
             >
-              Annuler
+              Cancel
             </button>
             <button
               type="submit"
               disabled={isSubmitting || selectedSkills.length === 0}
               className="px-8 py-3 text-sm font-medium text-primary-foreground bg-primary hover:bg-primary/90 rounded-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-primary/10 min-w-[140px]"
             >
-              {isSubmitting ? "Ajout..." : `Ajouter (${selectedSkills.length})`}
+              {isSubmitting ? "Adding..." : `Add (${selectedSkills.length})`}
             </button>
           </div>
         </form>

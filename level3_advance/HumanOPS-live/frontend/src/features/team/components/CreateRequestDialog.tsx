@@ -89,7 +89,7 @@ const CreateRequestDialog = ({ children, onSuccess, requestToEdit }: CreateReque
         const teamIdToUse = selectedTeamId || user?.teamId;
 
         if (!teamIdToUse) {
-            console.warn("Veuillez sélectionner une équipe.");
+            console.warn("Please select a team.");
             return;
         }
 
@@ -133,10 +133,10 @@ const CreateRequestDialog = ({ children, onSuccess, requestToEdit }: CreateReque
             <DialogContent className="sm:max-w-[500px] border-border shadow-xl bg-background">
                 <DialogHeader>
                     <DialogTitle className="text-xl dm-sans-bold text-foreground">
-                        {isEditing ? "Modifier la demande" : "Nouvelle demande de renfort"}
+                        {isEditing ? "Edit Request" : "New Reinforcement Request"}
                     </DialogTitle>
                     <DialogDescription className="text-muted-foreground">
-                        {isEditing ? "Mettre à jour les détails de la demande." : "Créez une demande pour signaler un besoin de ressources supplémentaires."}
+                        {isEditing ? "Update request details." : "Create a request to signal a need for additional resources."}
                     </DialogDescription>
                 </DialogHeader>
                 <form onSubmit={handleSubmit} className="space-y-6 mt-4">
@@ -145,13 +145,13 @@ const CreateRequestDialog = ({ children, onSuccess, requestToEdit }: CreateReque
                         {/* Admin Team Selection */}
                         {user?.role === "ADMIN_RH" && !isEditing && (
                             <div className="space-y-2">
-                                <Label htmlFor="team" className="text-foreground">Équipe concernée</Label>
+                                <Label htmlFor="team" className="text-foreground">Affected Team</Label>
                                 <Select
                                     value={selectedTeamId}
                                     onValueChange={setSelectedTeamId}
                                 >
                                     <SelectTrigger id="team" className="w-full bg-background border-input">
-                                        <SelectValue placeholder="Sélectionner une équipe" />
+                                        <SelectValue placeholder="Select a team" />
                                     </SelectTrigger>
                                     <SelectContent className="max-h-[200px]">
                                         {teams.map((t) => (
@@ -165,7 +165,7 @@ const CreateRequestDialog = ({ children, onSuccess, requestToEdit }: CreateReque
                         )}
 
                         <div className="space-y-2">
-                            <Label htmlFor="urgency" className="text-foreground">Niveau d'urgence (1-10)</Label>
+                            <Label htmlFor="urgency" className="text-foreground">Urgency Level (1-10)</Label>
                             <div className="flex items-center gap-4">
                                 <Select
                                     value={formData.urgencyLevel}
@@ -176,12 +176,12 @@ const CreateRequestDialog = ({ children, onSuccess, requestToEdit }: CreateReque
                                             parseInt(formData.urgencyLevel) > 4 ? "border-orange-200 bg-orange-50 dark:bg-orange-900/20 text-orange-900 dark:text-orange-200 focus:ring-orange-200" :
                                                 "border-input bg-background"
                                     )}>
-                                        <SelectValue placeholder="Selectionner" />
+                                        <SelectValue placeholder="Select" />
                                     </SelectTrigger>
                                     <SelectContent>
                                         {[...Array(10)].map((_, i) => (
                                             <SelectItem key={i + 1} value={(i + 1).toString()}>
-                                                {i + 1} - {(i + 1) <= 3 ? "Faible" : (i + 1) <= 7 ? "Moyenne" : "Critique"}
+                                                {i + 1} - {(i + 1) <= 3 ? "Low" : (i + 1) <= 7 ? "Medium" : "Critical"}
                                             </SelectItem>
                                         ))}
                                     </SelectContent>
@@ -191,7 +191,7 @@ const CreateRequestDialog = ({ children, onSuccess, requestToEdit }: CreateReque
 
                         {!isEditing && (
                             <div className="space-y-2">
-                                <Label htmlFor="duration" className="text-foreground">Durée estimée (heures)</Label>
+                                <Label htmlFor="duration" className="text-foreground">Estimated Duration (hours)</Label>
                                 <Input
                                     id="duration"
                                     type="number"
@@ -204,7 +204,7 @@ const CreateRequestDialog = ({ children, onSuccess, requestToEdit }: CreateReque
                         )}
 
                         <div className="space-y-2">
-                            <Label htmlFor="skills" className="text-foreground">Compétences requises</Label>
+                            <Label htmlFor="skills" className="text-foreground">Required Skills</Label>
                             <Input
                                 id="skills"
                                 placeholder="React, Node.js, Design..."
@@ -213,21 +213,21 @@ const CreateRequestDialog = ({ children, onSuccess, requestToEdit }: CreateReque
                                 className="bg-background border-input"
                             />
                             <p className="text-xs text-muted-foreground">
-                                Séparez les compétences par des virgules.
+                                Separate skills with commas.
                             </p>
                         </div>
                     </div>
 
                     <DialogFooter>
                         <Button type="button" variant="outline" onClick={() => setOpen(false)}>
-                            Annuler
+                            Cancel
                         </Button>
                         <Button
                             type="submit"
                             className="bg-primary text-primary-foreground hover:bg-primary/90"
                             disabled={loading}
                         >
-                            {loading ? "Enregistrement..." : isEditing ? "Mettre à jour" : "Créer la demande"}
+                            {loading ? "Saving..." : isEditing ? "Update" : "Create Request"}
                         </Button>
                     </DialogFooter>
                 </form>

@@ -67,7 +67,7 @@ const ManageUsersTab = () => {
       setUsers(usersData);
     } catch (err: any) {
       console.error("Failed to fetch users", err);
-      setError("Impossible de charger les utilisateurs");
+      setError("Failed to load users");
     } finally {
       setLoading(false);
     }
@@ -99,7 +99,7 @@ const ManageUsersTab = () => {
       setSelectedUser(null);
     } catch (err: any) {
       console.error("Failed to update user", err);
-      alert("Erreur lors de la mise à jour de l'utilisateur");
+      alert("Error updating user");
     } finally {
       setIsSaving(false);
     }
@@ -116,7 +116,7 @@ const ManageUsersTab = () => {
       setSelectedUser(null);
     } catch (err: any) {
       console.error("Failed to delete user", err);
-      alert("Erreur lors de la suppression de l'utilisateur");
+      alert("Error deleting user");
     } finally {
       setIsSaving(false);
     }
@@ -170,10 +170,10 @@ const ManageUsersTab = () => {
         <div className="relative z-10 w-full flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold mb-2 dm-sans-bold">
-              Gestion de l'Effectif
+              Workforce Management
             </h1>
             <p className="text-neutral-300">
-              Administrez les profils et les accès collaborateurs
+              Manage collaborator profiles and access
             </p>
           </div>
           <button
@@ -194,7 +194,7 @@ const ManageUsersTab = () => {
                 d="M12 4.5v15m7.5-7.5h-15"
               />
             </svg>
-            Ajouter un membre
+            Add Member
           </button>
         </div>
       </div>
@@ -208,7 +208,7 @@ const ManageUsersTab = () => {
             <div className="flex justify-between items-start mb-4">
               <div>
                 <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
-                  Total Membres
+                  Total Members
                 </p>
                 <div className="text-4xl font-bold dm-sans-bold text-foreground mt-1">
                   {totalUsers}
@@ -241,7 +241,7 @@ const ManageUsersTab = () => {
             <div className="flex justify-between items-start mb-4">
               <div>
                 <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
-                  Disponibles
+                  Available
                 </p>
                 <div className="text-4xl font-bold dm-sans-bold text-foreground mt-1">
                   {availableUsers}
@@ -282,7 +282,7 @@ const ManageUsersTab = () => {
             <div className="flex justify-between items-start mb-4">
               <div>
                 <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
-                  Surchargés
+                  Overloaded
                 </p>
                 <div className="text-4xl font-bold dm-sans-bold text-foreground mt-1">
                   {overloadedUsers}
@@ -321,7 +321,7 @@ const ManageUsersTab = () => {
       <Card>
         <CardHeader className="border-b border-border pb-4">
           <div className="flex items-center justify-between">
-            <CardTitle className="text-lg">Annuaire des Utilisateurs</CardTitle>
+            <CardTitle className="text-lg">User Directory</CardTitle>
             <div className="flex gap-2">
               {/* Place for filters if needed later */}
             </div>
@@ -332,10 +332,10 @@ const ManageUsersTab = () => {
             <TableHeader className="bg-muted/50">
               <TableRow>
                 <TableHead className="w-[80px]">Avatar</TableHead>
-                <TableHead>Identité</TableHead>
+                <TableHead>Identity</TableHead>
                 <TableHead>Email</TableHead>
-                <TableHead>Rôle</TableHead>
-                <TableHead className="text-center">Statut</TableHead>
+                <TableHead>Role</TableHead>
+                <TableHead className="text-center">Status</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
@@ -353,7 +353,7 @@ const ManageUsersTab = () => {
                   <TableCell>
                     <div>
                       <div className="font-semibold text-foreground">
-                        {user.firstName ? `${user.firstName} ${user.lastName}` : "Sans nom"}
+                        {user.firstName ? `${user.firstName} ${user.lastName}` : "No Name"}
                       </div>
                       <div className="text-xs text-muted-foreground">
                         ID: {user.id.substring(0, 8)}...
@@ -378,8 +378,8 @@ const ManageUsersTab = () => {
                               : "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 hover:bg-red-100 dark:hover:bg-red-900/30"
                         }
                       >
-                        {user.humanState.availability === "AVAILABLE" ? "Disponible" :
-                          user.humanState.availability === "MOBILISABLE" ? "Mobilisable" : "Indisponible"}
+                        {user.humanState.availability === "AVAILABLE" ? "Available" :
+                          user.humanState.availability === "MOBILISABLE" ? "On Standby" : "Unavailable"}
                       </Badge>
                     ) : (
                       <span className="text-muted-foreground">-</span>
@@ -390,7 +390,7 @@ const ManageUsersTab = () => {
                       <button
                         onClick={() => handleEditUser(user)}
                         className="p-2 hover:bg-muted rounded-lg text-muted-foreground hover:text-foreground transition-colors"
-                        title="Modifier"
+                        title="Edit"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
                           <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
@@ -399,7 +399,7 @@ const ManageUsersTab = () => {
                       <button
                         onClick={() => openDeleteDialog(user)}
                         className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg text-muted-foreground hover:text-red-600 transition-colors"
-                        title="Supprimer"
+                        title="Delete"
                       >
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
                           <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
@@ -419,16 +419,16 @@ const ManageUsersTab = () => {
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle className="text-2xl dm-sans-bold">
-              Modifier l'utilisateur
+              Edit User
             </DialogTitle>
             <DialogDescription>
-              Modifiez les informations de l'utilisateur ci-dessous.
+              Edit user information below.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">
-                Prénom
+                First Name
               </label>
               <input
                 type="text"
@@ -441,7 +441,7 @@ const ManageUsersTab = () => {
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">
-                Nom
+                Last Name
               </label>
               <input
                 type="text"
@@ -454,7 +454,7 @@ const ManageUsersTab = () => {
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">
-                Email (non modifiable)
+                Email (not editable)
               </label>
               <input
                 type="email"
@@ -465,7 +465,7 @@ const ManageUsersTab = () => {
             </div>
             <div className="space-y-2">
               <label className="text-sm font-medium text-foreground">
-                Rôle
+                Role
               </label>
               <select
                 value={formData.role}
@@ -474,7 +474,7 @@ const ManageUsersTab = () => {
                 }
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
               >
-                <option value="COLLABORATOR">Collaborateur</option>
+                <option value="COLLABORATOR">Collaborator</option>
                 <option value="MANAGER">Manager</option>
                 <option value="ADMIN_RH">Admin RH</option>
               </select>
@@ -485,14 +485,14 @@ const ManageUsersTab = () => {
               onClick={() => setIsEditDialogOpen(false)}
               className="px-4 py-2 text-sm font-medium text-foreground hover:bg-muted rounded-lg transition-colors"
             >
-              Annuler
+              Cancel
             </button>
             <button
               onClick={handleSaveUser}
               disabled={isSaving}
               className="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50"
             >
-              {isSaving ? "Enregistrement..." : "Enregistrer"}
+              {isSaving ? "Saving..." : "Save"}
             </button>
           </div>
         </DialogContent>
@@ -505,24 +505,23 @@ const ManageUsersTab = () => {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Êtes-vous sûr ?</AlertDialogTitle>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              Cette action désactivera l'utilisateur{" "}
+              This action will deactivate user{" "}
               <span className="font-semibold text-foreground">
                 {selectedUser?.firstName} {selectedUser?.lastName}
               </span>
-              . L'utilisateur ne pourra plus se connecter mais ses données
-              seront conservées.
+              . The user will no longer be able to log in but their data will be kept.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleDeleteUser}
               disabled={isSaving}
               className="bg-red-600 hover:bg-red-700"
             >
-              {isSaving ? "Suppression..." : "Supprimer"}
+              {isSaving ? "Deleting..." : "Delete"}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -533,10 +532,10 @@ const ManageUsersTab = () => {
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle className="text-2xl dm-sans-bold">
-              Ajouter un utilisateur
+              Add User
             </DialogTitle>
             <DialogDescription>
-              Cette fonctionnalité sera disponible prochainement.
+              This feature will be available soon.
             </DialogDescription>
           </DialogHeader>
           <div className="py-8 text-center">
@@ -557,8 +556,7 @@ const ManageUsersTab = () => {
               </svg>
             </div>
             <p className="text-muted-foreground">
-              L'ajout d'utilisateurs nécessite l'endpoint d'inscription côté
-              backend.
+              Adding users requires backend registration endpoint.
             </p>
           </div>
         </DialogContent>

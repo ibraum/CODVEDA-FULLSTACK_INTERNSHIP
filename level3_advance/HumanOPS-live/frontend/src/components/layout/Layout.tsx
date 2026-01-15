@@ -272,13 +272,20 @@ const Layout = () => {
       <div className="w-full h-full flex flex-col lg:grid lg:grid-rows-[280px_1fr]">
         <header className="bg-muted/40 dark:bg-muted/10 py-2 px-4  lg:px-12 lg:py-6 flex flex-col lg:flex-row justify-between items-start lg:items-center lg:gap-0 col-start-1 h-auto lg:h-full">
           <div className="w-full md:max-w-[875px] md:w-full lg:w-full lg:max-w-[750px] h-full flex flex-col justify-between items-start">
-            <div className="flex items-center gap-4 lg:mb-0 mb-6">
-              <div className="h-10 w-10 lg:h-14 lg:w-14 rounded-full bg-black dark:bg-white flex items-center justify-center">
-                <span className="text-sm lg:text-xl font-bold text-white dark:text-black">HOL</span>
+            <div className="grid grid-cols-2 gap-4 lg:mb-0 mb-6 w-full">
+              <div className="flex items-center gap-4">
+                <div className="h-10 w-10 lg:h-14 lg:w-14 rounded-full bg-black dark:bg-white flex items-center justify-center">
+                  <span className="text-sm lg:text-xl font-bold text-white dark:text-black">HOL</span>
+                </div>
+                <div className="lg:h-14 h-10 lg:pt-1">
+                  <div className="text-lg">HumanOps-Live</div>
+                  <div className="text-sm text-muted-foreground">Dashboard</div>
+                </div>
               </div>
-              <div className="lg:h-14 h-10 lg:pt-1">
-                <div className="text-lg">HumanOps-Live</div>
-                <div className="text-sm text-muted-foreground">Dashboard</div>
+              <div className="language-switch flex items-center gap-2 text-xl">
+                <div className="">FR</div>
+                <div className="w-[1px] h-4 bg-neutral-300 dark:bg-neutral-700"></div>
+                <div className="text-neutral-400">EN</div>
               </div>
             </div>
             <div className="mb-4 w-full h-[1px] bg-neutral-200 dark:bg-neutral-800 md:hidden block"></div>
@@ -338,10 +345,10 @@ const Layout = () => {
                     <div className="flex items-center justify-between mb-4">
                       <DrawerTitle className="text-2xl font-semibold dm-sans-bold">
                         {user?.role === "COLLABORATOR"
-                          ? "Espace Collaborateur"
+                          ? "Collaborator Space"
                           : user?.role === "ADMIN_RH"
-                            ? "Espace Admin RH"
-                            : "Espace Manager"}
+                            ? "RH Admin Space"
+                            : "Manager Space"}
                       </DrawerTitle>
                     </div>
                     <div className="flex items-center gap-8">
@@ -354,7 +361,7 @@ const Layout = () => {
                               : "text-neutral-400 hover:text-neutral-600"
                               }`}
                           >
-                            Les équipes
+                            Teams
                             {drawerTab === "teams" && (
                               <div className="absolute bottom-0 left-0 w-full h-[2px] bg-neutral-900 rounded-t-full"></div>
                             )}
@@ -390,7 +397,7 @@ const Layout = () => {
                               : "text-neutral-400 hover:text-neutral-600"
                               }`}
                           >
-                            Les demandes
+                            Requests
                             {drawerTab === "requests" && (
                               <div className="absolute bottom-0 left-0 w-full h-[2px] bg-neutral-900 rounded-t-full"></div>
                             )}
@@ -405,7 +412,7 @@ const Layout = () => {
                               : "text-neutral-400 hover:text-neutral-600"
                               }`}
                           >
-                            Mon équipe
+                            My Team
                             {drawerTab === "team" && (
                               <div className="absolute bottom-0 left-0 w-full h-[2px] bg-neutral-900 rounded-t-full"></div>
                             )}
@@ -417,7 +424,7 @@ const Layout = () => {
                               : "text-neutral-400 hover:text-neutral-600"
                               }`}
                           >
-                            Mon Historique d'état
+                            My State History
                             {drawerTab === "history" && (
                               <div className="absolute bottom-0 left-0 w-full h-[2px] bg-neutral-900 rounded-t-full"></div>
                             )}
@@ -432,7 +439,7 @@ const Layout = () => {
                               : "text-neutral-400 hover:text-neutral-600"
                               }`}
                           >
-                            Mon équipe
+                            My Team
                             {drawerTab === "team" && (
                               <div className="absolute bottom-0 left-0 w-full h-[2px] bg-neutral-900 rounded-t-full"></div>
                             )}
@@ -444,7 +451,7 @@ const Layout = () => {
                               : "text-neutral-400 hover:text-neutral-600"
                               }`}
                           >
-                            Les demandes
+                            Requests
                             {drawerTab === "requests" && (
                               <div className="absolute bottom-0 left-0 w-full h-[2px] bg-neutral-900 rounded-t-full"></div>
                             )}
@@ -456,7 +463,7 @@ const Layout = () => {
                               : "text-neutral-400 hover:text-neutral-600"
                               }`}
                           >
-                            Mon Historique d'état
+                            My State History
                             {drawerTab === "history" && (
                               <div className="absolute bottom-0 left-0 w-full h-[2px] bg-neutral-900 rounded-t-full"></div>
                             )}
@@ -539,10 +546,10 @@ const Layout = () => {
                     <div className="bg-muted/40 dark:bg-neutral-800 px-8 py-6 border-b border-border flex items-center justify-between">
                       <DialogHeader className="text-left">
                         <DialogTitle className="text-2xl font-bold dm-sans-bold">
-                          Paramètres
+                          Settings
                         </DialogTitle>
                         <DialogDescription>
-                          Gérez vos préférences et paramètres de compte.
+                          Manage your preferences and account settings.
                         </DialogDescription>
                       </DialogHeader>
                     </div>
@@ -556,7 +563,7 @@ const Layout = () => {
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
                               <label className="text-sm font-medium text-foreground">
-                                Prénom
+                                First Name
                               </label>
                               <input
                                 type="text"
@@ -569,7 +576,7 @@ const Layout = () => {
                             </div>
                             <div className="space-y-2">
                               <label className="text-sm font-medium text-foreground">
-                                Nom
+                                Last Name
                               </label>
                               <input
                                 type="text"
@@ -595,7 +602,7 @@ const Layout = () => {
                             </div>
                             <div className="space-y-2 md:col-span-2">
                               <label className="text-sm font-medium text-foreground">
-                                Rôle (Non modifiable)
+                                Role (Not editable)
                               </label>
                               <input
                                 type="text"
@@ -614,20 +621,20 @@ const Layout = () => {
                             className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-11 px-8 bg-primary text-primary-foreground hover:bg-primary/90 shadow-md"
                           >
                             {isSaving
-                              ? "Sauvegarde..."
-                              : "Sauvegarder les modifications"}
+                              ? "Saving..."
+                              : "Save changes"}
                           </button>
                         </div>
 
                         {/* Password Change Section */}
                         <div className="space-y-4">
                           <h3 className="text-lg font-semibold border-b border-border pb-2 text-foreground">
-                            Changer le mot de passe
+                            Change Password
                           </h3>
                           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
                               <label className="text-sm font-medium text-foreground">
-                                Entrer le mot de passe
+                                Enter Password
                               </label>
                               <input
                                 type="password"
@@ -642,7 +649,7 @@ const Layout = () => {
                             </div>
                             <div className="space-y-2">
                               <label className="text-sm font-medium text-foreground">
-                                Confirmer le mot de passe
+                                Confirm Password
                               </label>
                               <input
                                 type="password"
@@ -663,8 +670,8 @@ const Layout = () => {
                               className="inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 h-10 px-6 bg-primary text-primary-foreground hover:bg-primary/90 hover:text-white shadow-sm"
                             >
                               {isSavingPassword
-                                ? "Modification..."
-                                : "Changer le mot de passe"}
+                                ? "Saving..."
+                                : "Change Password"}
                             </button>
                           </div>
                         </div>
@@ -672,12 +679,12 @@ const Layout = () => {
                         {/* Skills Section */}
                         <div className="space-y-4">
                           <h3 className="text-lg font-semibold border-b border-border pb-2 text-foreground">
-                            Mes Compétences
+                            My Skills
                           </h3>
                           <div className="flex flex-wrap gap-2 min-h-[40px]">
                             {skills.length === 0 ? (
                               <p className="text-muted-foreground text-sm">
-                                Aucune compétence ajoutée
+                                No skills added
                               </p>
                             ) : (
                               skills.map((skill) => (
@@ -693,7 +700,7 @@ const Layout = () => {
                           <div className="flex gap-2">
                             <input
                               type="text"
-                              placeholder="Ajouter une compétence..."
+                              placeholder="Add a skill..."
                               value={newSkill}
                               onChange={(e) => setNewSkill(e.target.value)}
                               onKeyPress={(e) =>
@@ -706,7 +713,7 @@ const Layout = () => {
                               disabled={isLoadingSkills || !newSkill.trim()}
                               className="inline-flex items-center justify-center rounded-md text-sm font-medium h-10 px-6 bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50 disabled:pointer-events-none"
                             >
-                              {isLoadingSkills ? "..." : "Ajouter"}
+                              {isLoadingSkills ? "..." : "Add"}
                             </button>
                           </div>
                         </div>
@@ -817,7 +824,7 @@ const Layout = () => {
                           </div>
                         </TooltipTrigger>
                         <TooltipContent side="left">
-                          <p>Ajouter une compétence</p>
+                          <p>Add a skill</p>
                         </TooltipContent>
                       </Tooltip>
 
@@ -850,17 +857,17 @@ const Layout = () => {
                               </DialogTrigger>
                             </TooltipTrigger>
                             <TooltipContent side="left">
-                              <p>Paramètres RH</p>
+                              <p>RH Settings</p>
                             </TooltipContent>
                           </Tooltip>
                           <DialogContent className="w-[1000px] h-[90vh] max-w-[90%] rounded-2xl md:rounded-4xl p-0 overflow-hidden flex flex-col">
                             <div className="bg-muted/40 dark:bg-neutral-800 px-8 py-6 border-b border-border flex items-center justify-between">
                               <DialogHeader className="text-left">
                                 <DialogTitle className="text-2xl font-bold dm-sans-bold">
-                                  Paramètres RH
+                                  RH Settings
                                 </DialogTitle>
                                 <DialogDescription>
-                                  Configuration globale de la plateforme et seuils d'alerte.
+                                  Global platform configuration and alert thresholds.
                                 </DialogDescription>
                               </DialogHeader>
                             </div>
@@ -869,12 +876,12 @@ const Layout = () => {
                                 {/* Alert Thresholds */}
                                 <div className="space-y-4">
                                   <h3 className="text-lg font-semibold border-b border-border pb-2 text-foreground">
-                                    Seuils d'Alerte (Tension)
+                                    Alert Thresholds (Tension)
                                   </h3>
                                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                     <div className="space-y-2">
                                       <label className="text-sm font-medium text-foreground">
-                                        Seuil de tension (Warning) %
+                                        Tension Threshold (Warning) %
                                       </label>
                                       <input
                                         type="number"
@@ -882,11 +889,11 @@ const Layout = () => {
                                         onChange={(e) => setRhTensionThreshold(Number(e.target.value))}
                                         className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                                       />
-                                      <p className="text-xs text-muted-foreground">Déclenche une alerte jaune.</p>
+                                      <p className="text-xs text-muted-foreground">Triggers a yellow alert.</p>
                                     </div>
                                     <div className="space-y-2">
                                       <label className="text-sm font-medium text-foreground">
-                                        Seuil Critique %
+                                        Critical Threshold %
                                       </label>
                                       <input
                                         type="number"
@@ -894,7 +901,7 @@ const Layout = () => {
                                         onChange={(e) => setRhCriticalThreshold(Number(e.target.value))}
                                         className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
                                       />
-                                      <p className="text-xs text-muted-foreground">Déclenche une alerte rouge.</p>
+                                      <p className="text-xs text-muted-foreground">Triggers a red alert.</p>
                                     </div>
                                   </div>
                                 </div>
@@ -902,15 +909,15 @@ const Layout = () => {
                                 {/* Automation Settings */}
                                 <div className="space-y-4">
                                   <h3 className="text-lg font-semibold border-b border-border pb-2 text-foreground">
-                                    Automatisation
+                                    Automation
                                   </h3>
                                   <div className="flex items-center justify-between p-4 border border-border rounded-lg bg-card bg-muted/20">
                                     <div className="space-y-0.5">
                                       <label className="text-sm font-medium text-foreground block">
-                                        Assignation automatique
+                                        Automatic Assignment
                                       </label>
                                       <p className="text-xs text-muted-foreground">
-                                        Assigner automatiquement les demandes de renfort selon les compétences.
+                                        Automatically assign reinforcement requests based on skills.
                                       </p>
                                     </div>
                                     <div className="flex items-center">
@@ -930,7 +937,7 @@ const Layout = () => {
                                     disabled={isSaving}
                                     className="inline-flex items-center justify-center rounded-md text-sm font-medium h-11 px-8 bg-primary text-primary-foreground hover:bg-primary/90 shadow-md disabled:opacity-50"
                                   >
-                                    {isSaving ? "Sauvegarde..." : "Sauvegarder la configuration"}
+                                    {isSaving ? "Saving..." : "Save configuration"}
                                   </button>
                                 </div>
                               </div>
@@ -962,7 +969,7 @@ const Layout = () => {
                           </div>
                         </TooltipTrigger>
                         <TooltipContent side="left">
-                          <p>Se déconnecter</p>
+                          <p>Logout</p>
                         </TooltipContent>
                       </Tooltip>
                     </TooltipProvider>
@@ -986,7 +993,7 @@ const Layout = () => {
           <div className="flex items-center justify-between mb-2 relative pt-14 pb-2 px-8 shrink-0">
             <div className="flex items-center justify-between w-full">
               <h2 className="text-2xl font-semibold dm-sans-semibold">
-                Alertes
+                Alerts
               </h2>
 
               <button
@@ -1074,7 +1081,7 @@ const Layout = () => {
             <div className="flex flex-col overflow-y-auto">
               {filteredAlerts.length === 0 ? (
                 <div className="p-8 text-center text-muted-foreground">
-                  Aucune alerte pour le moment.
+                  No alerts at the moment.
                 </div>
               ) : (
                 filteredAlerts.map((alert) => (
@@ -1113,20 +1120,20 @@ const Layout = () => {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              Êtes-vous sûr de vouloir vous déconnecter ?
+              Are you sure you want to log out?
             </AlertDialogTitle>
             <AlertDialogDescription>
-              Cette action vous déconnectera de votre compte. Vous devrez vous
-              reconnecter pour accéder à votre tableau de bord.
+              This action will log you out of your account. You will need to
+              log in again to access your dashboard.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={confirmLogout}
               className="bg-red-600 hover:bg-red-700"
             >
-              Se déconnecter
+              Log out
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

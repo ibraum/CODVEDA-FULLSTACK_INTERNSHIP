@@ -79,7 +79,7 @@ const TeamTab = () => {
     } catch (err: any) {
       console.error("Failed to fetch team data", err);
       // Only show error if we don't have data
-      if (!team) setError("Impossible de charger les données de l'équipe");
+      if (!team) setError("Failed to load team data");
     } finally {
       setLoading(false);
     }
@@ -155,7 +155,7 @@ const TeamTab = () => {
               />
             </svg>
             <p className="text-neutral-500 font-medium">
-              Vous n'êtes assigné à aucune équipe
+              You are not assigned to any team
             </p>
           </div>
         </CardContent>
@@ -166,7 +166,7 @@ const TeamTab = () => {
   // Prepare chart data
   const chartData = tensions
     .map((t) => ({
-      time: new Date(t.calculatedAt).toLocaleDateString("fr-FR", {
+      time: new Date(t.calculatedAt).toLocaleDateString("en-US", {
         month: "short",
         day: "numeric",
       }),
@@ -190,12 +190,12 @@ const TeamTab = () => {
 
   function getTensionLabel(level: string): string {
     const map: Record<string, string> = {
-      LOW: "Faible",
-      MODERATE: "Modérée",
-      HIGH: "Élevée",
-      CRITICAL: "Critique",
+      LOW: "Low",
+      MODERATE: "Moderate",
+      HIGH: "High",
+      CRITICAL: "Critical",
     };
-    return map[level] || "Inconnue";
+    return map[level] || "Unknown";
   }
 
   // Calculate statistics
@@ -222,7 +222,7 @@ const TeamTab = () => {
               <span className="font-medium bg-white/10 px-2 py-0.5 rounded text-white">
                 {manager
                   ? `${manager.firstName || ""} ${manager.lastName || ""}`.trim() || manager.email
-                  : "Chargement..."}
+                  : "Loading..."}
               </span>
             </p>
           </div>
@@ -247,7 +247,7 @@ const TeamTab = () => {
             <div className="flex justify-between items-start mb-4">
               <div>
                 <p className="text-sm font-medium text-neutral-500 uppercase tracking-wide">
-                  Membres
+                  Members
                 </p>
                 <div className="text-4xl font-bold dm-sans-bold text-foreground mt-1">
                   {totalMembers}
@@ -280,7 +280,7 @@ const TeamTab = () => {
             <div className="flex justify-between items-start mb-4">
               <div>
                 <p className="text-sm font-medium text-neutral-500 uppercase tracking-wide">
-                  Disponibles
+                  Available
                 </p>
                 <div className="text-4xl font-bold dm-sans-bold text-foreground mt-1">
                   {availableMembers}
@@ -314,7 +314,7 @@ const TeamTab = () => {
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <p className="text-sm font-medium text-neutral-500 uppercase tracking-wide">
-                    Surchargés
+                    Overloaded
                   </p>
                   <div className="text-4xl font-bold dm-sans-bold text-foreground mt-1">
                     {overloadedMembers}
@@ -344,7 +344,7 @@ const TeamTab = () => {
             <div className="flex justify-between items-start mb-4">
               <div>
                 <p className="text-sm font-medium text-neutral-400 uppercase tracking-wide">
-                  Surchargés
+                  Overloaded
                 </p>
                 <div className="text-4xl font-bold dm-sans-bold text-neutral-300 mt-1">
                   -
@@ -363,7 +363,7 @@ const TeamTab = () => {
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5 text-neutral-500">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
               </svg>
-              Évolution de la tension
+              Tension Evolution
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-6">
@@ -420,7 +420,7 @@ const TeamTab = () => {
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-5 text-neutral-500">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 0 1 8.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0 1 11.964-3.07M12 6.375a3.375 3.375 0 1 1-6.75 0 3.375 3.375 0 0 1 6.75 0Zm8.25 2.25a2.625 2.625 0 1 1-5.25 0 2.625 2.625 0 0 1 5.25 0Z" />
               </svg>
-              Membres de l'équipe
+              Team Members
             </CardTitle>
           </div>
         </CardHeader>
@@ -441,10 +441,9 @@ const TeamTab = () => {
                   d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"
                 />
               </svg>
-              <p className="font-medium mb-1">Informations restreintes</p>
+              <p className="font-medium mb-1">Restricted Information</p>
               <p className="text-sm">
-                Les détails des membres et les statistiques de l'équipe sont
-                accessibles uniquement aux managers et administrateurs RH.
+                Member details and team statistics are only accessible to managers and RH administrators.
               </p>
             </div>
           ) : (
@@ -452,12 +451,12 @@ const TeamTab = () => {
               <TableHeader className="bg-muted/50">
                 <TableRow className="hover:bg-transparent">
                   <TableHead className="w-[80px] pl-6">ID</TableHead>
-                  <TableHead>Employé</TableHead>
+                  <TableHead>Employee</TableHead>
                   <TableHead>Email</TableHead>
-                  <TableHead>Rôle</TableHead>
-                  <TableHead className="text-center">Disponibilité</TableHead>
+                  <TableHead>Role</TableHead>
+                  <TableHead className="text-center">Availability</TableHead>
                   {["MANAGER", "ADMIN_RH"].includes(user?.role || "") && (
-                    <TableHead className="text-center">Charge</TableHead>
+                    <TableHead className="text-center">Workload</TableHead>
                   )}
                 </TableRow>
               </TableHeader>
@@ -501,8 +500,8 @@ const TeamTab = () => {
                                   "bg-red-100 text-red-700"
                             )}
                           >
-                            {member.humanState.availability === "AVAILABLE" ? "Disponible" :
-                              member.humanState.availability === "MOBILISABLE" ? "Mobilisable" : "Indisponible"}
+                            {member.humanState.availability === "AVAILABLE" ? "Available" :
+                              member.humanState.availability === "MOBILISABLE" ? "On Standby" : "Unavailable"}
                           </Badge>
                         ) : "-"}
                       </TableCell>

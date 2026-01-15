@@ -57,7 +57,7 @@ const ManageSkillsTab = () => {
       setSkills(skillsData);
     } catch (err: any) {
       console.error("Failed to fetch skills", err);
-      setError("Impossible de charger les compétences");
+      setError("Failed to load skills");
     } finally {
       setLoading(false);
     }
@@ -74,7 +74,7 @@ const ManageSkillsTab = () => {
       setIsAddDialogOpen(false);
     } catch (err: any) {
       console.error("Failed to add skill", err);
-      alert("Erreur lors de l'ajout de la compétence");
+      alert("Error adding skill");
     } finally {
       setIsAdding(false);
     }
@@ -89,7 +89,7 @@ const ManageSkillsTab = () => {
       setSkillToDelete(null);
     } catch (err: any) {
       console.error("Failed to delete skill", err);
-      alert("Erreur lors de la suppression de la compétence");
+      alert("Error deleting skill");
     }
   };
 
@@ -103,7 +103,7 @@ const ManageSkillsTab = () => {
       setEditingSkill(null);
     } catch (err) {
       console.error("Failed to update skill", err);
-      alert("Erreur lors de la modification de la compétence");
+      alert("Error updating skill");
     } finally {
       setIsUpdating(false);
     }
@@ -142,10 +142,10 @@ const ManageSkillsTab = () => {
         <div className="relative z-10 w-full flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold mb-2 dm-sans-bold">
-              Gestion des Compétences
+              Skills Management
             </h1>
             <p className="text-neutral-300">
-              Définissez les compétences clés de l'entreprise
+              Define key company skills
             </p>
           </div>
           <button
@@ -166,7 +166,7 @@ const ManageSkillsTab = () => {
                 d="M12 4.5v15m7.5-7.5h-15"
               />
             </svg>
-            Ajouter une compétence
+            Add a skill
           </button>
         </div>
       </div>
@@ -180,7 +180,7 @@ const ManageSkillsTab = () => {
             <div className="flex justify-between items-start mb-4">
               <div>
                 <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
-                  Compétences disponibles
+                  Available Skills
                 </p>
                 <div className="text-4xl font-bold dm-sans-bold text-foreground mt-1">
                   {skills.length}
@@ -213,7 +213,7 @@ const ManageSkillsTab = () => {
             <div className="flex justify-between items-start mb-4">
               <div>
                 <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
-                  Compétences déclarées
+                  Declared Skills
                 </p>
                 <div className="text-4xl font-bold dm-sans-bold text-foreground mt-1">
                   {skills.reduce((sum, skill) => sum + (skill.userCount || 0), 0)}
@@ -243,15 +243,15 @@ const ManageSkillsTab = () => {
       {/* Skills List Table */}
       <Card>
         <CardHeader className="border-b border-border pb-4">
-          <CardTitle className="text-lg">Répertoire des compétences</CardTitle>
+          <CardTitle className="text-lg">Skills Directory</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           <div className="max-h-[600px] overflow-y-auto">
             <Table>
               <TableHeader className="bg-muted/50 sticky top-0 bg-card z-10">
                 <TableRow className="border-border hover:bg-muted/50">
-                  <TableHead className="w-2/3 text-muted-foreground">Nom</TableHead>
-                  <TableHead className="text-center text-muted-foreground">Utilisateurs</TableHead>
+                  <TableHead className="w-2/3 text-muted-foreground">Name</TableHead>
+                  <TableHead className="text-center text-muted-foreground">Users</TableHead>
                   <TableHead className="text-right text-muted-foreground">Actions</TableHead>
                 </TableRow>
               </TableHeader>
@@ -259,7 +259,7 @@ const ManageSkillsTab = () => {
                 {skills.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={3} className="h-32 text-center text-muted-foreground">
-                      Aucune compétence trouvée. Ajoutez-en une pour commencer.
+                      No skills found. Add one to start.
                     </TableCell>
                   </TableRow>
                 ) : (
@@ -284,7 +284,7 @@ const ManageSkillsTab = () => {
                         <button
                           onClick={() => setSkillToDelete(skill)}
                           className="p-2 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg text-muted-foreground hover:text-red-600 dark:hover:text-red-400 transition-colors"
-                          title="Supprimer"
+                          title="Delete"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
                             <path strokeLinecap="round" strokeLinejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
@@ -293,7 +293,7 @@ const ManageSkillsTab = () => {
                         <button
                           onClick={() => setEditingSkill(skill)}
                           className="p-2 hover:bg-blue-50 dark:hover:bg-blue-900/20 rounded-lg text-muted-foreground hover:text-blue-600 dark:hover:text-blue-400 transition-colors mr-1"
-                          title="Modifier"
+                          title="Edit"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
                             <path strokeLinecap="round" strokeLinejoin="round" d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
@@ -313,9 +313,9 @@ const ManageSkillsTab = () => {
       <Dialog open={isAddDialogOpen} onOpenChange={setIsAddDialogOpen}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle className="text-2xl dm-sans-bold">Ajouter une compétence</DialogTitle>
+            <DialogTitle className="text-2xl dm-sans-bold">Add Skill</DialogTitle>
             <DialogDescription>
-              Ajoutez une nouvelle compétence au répertoire de l'entreprise.
+              Add a new skill to the company directory.
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
@@ -324,7 +324,7 @@ const ManageSkillsTab = () => {
                 <label className="text-sm font-medium text-foreground">Nom de la compétence</label>
                 <input
                   type="text"
-                  placeholder="Ex: React.js, Gestion de projet..."
+                  placeholder="Ex: React.js, Project Management..."
                   value={newSkillName}
                   onChange={(e) => setNewSkillName(e.target.value)}
                   onKeyPress={(e) => e.key === "Enter" && handleAddSkill()}
@@ -345,7 +345,7 @@ const ManageSkillsTab = () => {
               disabled={isAdding || !newSkillName.trim()}
               className="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50"
             >
-              {isAdding ? "Ajout..." : "Ajouter"}
+              {isAdding ? "Adding..." : "Add"}
             </button>
           </div>
         </DialogContent>
@@ -355,9 +355,9 @@ const ManageSkillsTab = () => {
       <Dialog open={!!editingSkill} onOpenChange={(open) => !open && setEditingSkill(null)}>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle className="text-2xl dm-sans-bold">Modifier la compétence</DialogTitle>
+            <DialogTitle className="text-2xl dm-sans-bold">Edit Skill</DialogTitle>
             <DialogDescription>
-              Modifiez le nom de la compétence.
+              Edit the skill name.
             </DialogDescription>
           </DialogHeader>
           <div className="py-4">
@@ -390,7 +390,7 @@ const ManageSkillsTab = () => {
               disabled={isUpdating || !editingSkill?.name.trim()}
               className="px-4 py-2 text-sm font-medium bg-primary text-primary-foreground rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50"
             >
-              {isUpdating ? "Modification..." : "Sauvegarder"}
+              {isUpdating ? "Updating..." : "Save"}
             </button>
           </div>
         </DialogContent>
@@ -400,16 +400,16 @@ const ManageSkillsTab = () => {
       <AlertDialog open={!!skillToDelete} onOpenChange={(open) => !open && setSkillToDelete(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Êtes-vous sûr ?</AlertDialogTitle>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              Voulez-vous vraiment supprimer la compétence <span className="font-bold text-foreground">{skillToDelete?.name}</span> ?
-              Cette action est irréversible et retirera cette compétence de tous les profils utilisateurs.
+              Do you really want to delete the skill <span className="font-bold text-foreground">{skillToDelete?.name}</span> ?
+              This action is irreversible and will remove this skill from all user profiles.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Annuler</AlertDialogCancel>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
             <AlertDialogAction onClick={handleDeleteSkill} className="bg-red-600 hover:bg-red-700">
-              Supprimer
+              Delete
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

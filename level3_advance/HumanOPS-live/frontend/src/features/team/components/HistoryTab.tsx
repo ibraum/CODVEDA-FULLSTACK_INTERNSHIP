@@ -35,28 +35,28 @@ const HistoryTab = () => {
   }, []);
 
   const getAvailabilityLabel = (availability: string | undefined | null) => {
-    if (!availability) return "Inconnu";
+    if (!availability) return "Unknown";
     switch (availability) {
       case "AVAILABLE":
-        return "Disponible";
+        return "Available";
       case "MOBILISABLE":
-        return "Mobilisable";
+        return "On Standby";
       case "UNAVAILABLE":
-        return "Indisponible";
+        return "Unavailable";
       default:
         return availability;
     }
   };
 
   const getWorkloadLabel = (workload: string | undefined | null) => {
-    if (!workload) return "Inconnue";
+    if (!workload) return "Unknown";
     switch (workload) {
       case "LOW":
-        return "Faible";
+        return "Low";
       case "NORMAL":
-        return "Normale";
+        return "Normal";
       case "HIGH":
-        return "Élevée";
+        return "High";
       default:
         return workload;
     }
@@ -78,7 +78,7 @@ const HistoryTab = () => {
 
   const chartData = history
     .map((h) => ({
-      date: new Date(h.changedAt).toLocaleDateString("fr-FR", {
+      date: new Date(h.changedAt).toLocaleDateString("en-US", {
         month: "short",
         day: "numeric",
         hour: "2-digit",
@@ -127,10 +127,10 @@ const HistoryTab = () => {
         <div className="relative z-10 w-full flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold mb-2 dm-sans-bold">
-              Mon Historique
+              My History
             </h1>
             <p className="text-neutral-300">
-              Suivi de vos changements d'état et de charge de travail
+              Track your state and workload changes
             </p>
           </div>
         </div>
@@ -144,7 +144,7 @@ const HistoryTab = () => {
             <div className="flex justify-between items-start mb-4">
               <div>
                 <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
-                  Changements
+                  Changes
                 </p>
                 <div className="text-4xl font-bold dm-sans-bold text-foreground mt-1">
                   {history.length}
@@ -176,7 +176,7 @@ const HistoryTab = () => {
             <div className="flex justify-between items-start mb-4">
               <div>
                 <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
-                  Fois Disponible
+                  Times Available
                 </p>
                 <div className="text-4xl font-bold dm-sans-bold text-foreground mt-1">
                   {availableCount}
@@ -208,7 +208,7 @@ const HistoryTab = () => {
             <div className="flex justify-between items-start mb-4">
               <div>
                 <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">
-                  Surcharges
+                  Overloads
                 </p>
                 <div className="text-4xl font-bold dm-sans-bold text-foreground mt-1">
                   {highWorkloadCount}
@@ -240,7 +240,7 @@ const HistoryTab = () => {
         <Card className="border-border shadow-sm overflow-hidden bg-card">
           <CardHeader className="bg-muted/50 border-b border-border pb-4">
             <CardTitle className="text-lg font-bold dm-sans-bold text-foreground">
-              Évolution de la charge de travail
+              Workload Evolution
             </CardTitle>
           </CardHeader>
           <CardContent className="pt-6">
@@ -264,9 +264,9 @@ const HistoryTab = () => {
                     tickLine={false}
                     axisLine={false}
                     tickFormatter={(value) => {
-                      if (value === 1) return "Faible";
+                      if (value === 1) return "Low";
                       if (value === 2) return "Normal";
-                      if (value === 3) return "Élevé";
+                      if (value === 3) return "High";
                       return "";
                     }}
                     width={60}
@@ -282,10 +282,10 @@ const HistoryTab = () => {
                     }}
                     cursor={{ stroke: "var(--muted)", strokeWidth: 2 }}
                     formatter={(value: number | undefined) => {
-                      if (value === 1) return ["Faible", "Charge"];
-                      if (value === 2) return ["Normale", "Charge"];
-                      if (value === 3) return ["Élevée", "Charge"];
-                      return [value ?? 0, "Charge"];
+                      if (value === 1) return ["Low", "Workload"];
+                      if (value === 2) return ["Normal", "Workload"];
+                      if (value === 3) return ["High", "Workload"];
+                      return [value ?? 0, "Workload"];
                     }}
                   />
                   <Line
@@ -307,7 +307,7 @@ const HistoryTab = () => {
       <Card className="border-border shadow-sm overflow-hidden bg-card">
         <CardHeader className="bg-muted/50 border-b border-border pb-4">
           <CardTitle className="text-lg font-bold dm-sans-bold text-foreground">
-            Historique détaillé
+            Detailed History
           </CardTitle>
         </CardHeader>
         <CardContent className="p-0">
@@ -330,10 +330,10 @@ const HistoryTab = () => {
                 </svg>
               </div>
               <p className="text-foreground font-medium mb-1">
-                Aucun historique
+                No history
               </p>
               <p className="text-muted-foreground text-sm">
-                Vos changements d'état apparaîtront ici.
+                Your state changes will appear here.
               </p>
             </div>
           ) : (
@@ -361,14 +361,14 @@ const HistoryTab = () => {
                             item.workload === 'NORMAL' ? "bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-400 border-blue-200 dark:border-blue-900/30" :
                               "bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 border-red-200 dark:border-red-900/30"
                         )}>
-                          Charge {getWorkloadLabel(item.workload).toLowerCase()}
+                          Workload {getWorkloadLabel(item.workload).toLowerCase()}
                         </span>
                       </div>
                       <div className="text-xs text-muted-foreground mt-0.5 flex items-center gap-1">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-3">
                           <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
                         </svg>
-                        {new Date(item.changedAt).toLocaleDateString("fr-FR", {
+                        {new Date(item.changedAt).toLocaleDateString("en-US", {
                           weekday: 'long',
                           day: 'numeric',
                           month: 'long',
@@ -381,7 +381,7 @@ const HistoryTab = () => {
 
                   {index === 0 && (
                     <Badge variant="outline" className="bg-primary text-primary-foreground border-primary font-normal">
-                      Actuel
+                      Current
                     </Badge>
                   )}
                 </div>

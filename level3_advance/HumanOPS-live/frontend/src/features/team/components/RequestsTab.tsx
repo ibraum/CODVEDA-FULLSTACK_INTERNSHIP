@@ -67,9 +67,9 @@ const RequestsTab = () => {
 
 
   const getUrgencyLabel = (level: number) => {
-    if (level <= 3) return "Faible";
-    if (level <= 7) return "Moyenne";
-    return "Urgente";
+    if (level <= 3) return "Low";
+    if (level <= 7) return "Medium";
+    return "Urgent";
   };
 
   const getStatusColor = (status: string) => {
@@ -85,15 +85,15 @@ const RequestsTab = () => {
 
   const chartData = [
     {
-      name: "Ouvertes",
+      name: "Open",
       count: requests.filter((r) => r.status === "OPEN").length,
     },
     {
-      name: "Fermées",
+      name: "Closed",
       count: requests.filter((r) => r.status === "CLOSED").length,
     },
     {
-      name: "Urgentes",
+      name: "Urgent",
       count: requests.filter((r) => r.urgencyLevel > 7).length,
     },
   ];
@@ -106,10 +106,10 @@ const RequestsTab = () => {
         <div className="relative z-10 w-full flex justify-between items-center">
           <div>
             <h1 className="text-3xl font-bold mb-2 dm-sans-bold">
-              Gestion des Demandes
+              Request Management
             </h1>
             <p className="text-neutral-300">
-              Suivez et gérez les demandes de renfort pour votre équipe
+              Track and manage reinforcement requests for your team
             </p>
           </div>
           <CreateRequestDialog onSuccess={fetchRequests}>
@@ -128,7 +128,7 @@ const RequestsTab = () => {
                   d="M12 4.5v15m7.5-7.5h-15"
                 />
               </svg>
-              Nouvelle demande
+              New Request
             </button>
           </CreateRequestDialog>
         </div>
@@ -141,7 +141,7 @@ const RequestsTab = () => {
           <div className="relative z-10 flex flex-col h-full justify-between">
             <div className="flex justify-between items-start mb-4">
               <div>
-                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Total Demandes</p>
+                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Total Requests</p>
                 <div className="text-4xl font-bold dm-sans-bold text-foreground mt-1">{requests.length}</div>
               </div>
               <div className="h-10 w-10 bg-card rounded-full flex items-center justify-center border border-border shadow-sm">
@@ -159,7 +159,7 @@ const RequestsTab = () => {
           <div className="relative z-10 flex flex-col h-full justify-between">
             <div className="flex justify-between items-start mb-4">
               <div>
-                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">En cours</p>
+                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">In Progress</p>
                 <div className="text-4xl font-bold dm-sans-bold text-foreground mt-1">
                   {requests.filter((r) => r.status === "OPEN").length}
                 </div>
@@ -179,7 +179,7 @@ const RequestsTab = () => {
           <div className="relative z-10 flex flex-col h-full justify-between">
             <div className="flex justify-between items-start mb-4">
               <div>
-                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Urgentes</p>
+                <p className="text-sm font-medium text-muted-foreground uppercase tracking-wide">Urgent</p>
                 <div className="text-4xl font-bold dm-sans-bold text-foreground mt-1">
                   {requests.filter((r) => r.urgencyLevel > 7).length}
                 </div>
@@ -199,7 +199,7 @@ const RequestsTab = () => {
       {requests.length > 0 && (
         <Card>
           <CardHeader>
-            <CardTitle className="text-lg">Statistiques des demandes</CardTitle>
+            <CardTitle className="text-lg">Request Statistics</CardTitle>
           </CardHeader>
           <CardContent>
             <div className="h-[250px] w-full">
@@ -233,8 +233,8 @@ const RequestsTab = () => {
                   <Bar dataKey="count" radius={[4, 4, 0, 0]} barSize={50}>
                     {chartData.map((entry, index) => (
                       <Cell key={`cell-${index}`} fill={
-                        entry.name === "Urgentes" ? "#ef4444" :
-                          entry.name === "Ouvertes" ? "#22c55e" :
+                        entry.name === "Urgent" ? "#ef4444" :
+                          entry.name === "Open" ? "#22c55e" :
                             "var(--foreground)"
                       } />
                     ))}
@@ -249,7 +249,7 @@ const RequestsTab = () => {
       {/* Requests List */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Historique des demandes</CardTitle>
+          <CardTitle className="text-lg">Request History</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
           {requests.length === 0 ? (
@@ -269,10 +269,10 @@ const RequestsTab = () => {
                 />
               </svg>
               <p className="text-muted-foreground font-medium">
-                Aucune demande en cours
+                No requests in progress
               </p>
               <p className="text-muted-foreground/70 text-sm mt-1">
-                Les demandes de renfort apparaîtront ici
+                Reinforcement requests will appear here
               </p>
             </div>
           ) : (
@@ -297,12 +297,12 @@ const RequestsTab = () => {
                       </span>
                       <span className="text-sm text-muted-foreground">•</span>
                       <span className="text-sm text-muted-foreground">
-                        {new Date(request.createdAt).toLocaleDateString("fr-FR", { day: "numeric", month: "long" })}
+                        {new Date(request.createdAt).toLocaleDateString("en-US", { day: "numeric", month: "long" })}
                       </span>
                     </div>
                     <div className="flex items-center gap-3">
                       <h4 className="text-base font-semibold text-foreground group-hover:text-orange-600 transition-colors">
-                        Demande de Renfort
+                        Reinforcement Request
                       </h4>
                       {request.urgencyLevel > 7 && (
                         <span className="flex h-2 w-2 rounded-full bg-red-500 animate-pulse"></span>
@@ -325,7 +325,7 @@ const RequestsTab = () => {
 
                   <div className="flex items-center gap-6">
                     <div className="text-right">
-                      <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Priorité</div>
+                      <div className="text-xs text-muted-foreground uppercase tracking-wider mb-1">Priority</div>
                       <div className="flex items-center gap-2 justify-end">
                         <span className={cn("text-sm font-bold",
                           request.urgencyLevel > 7 ? "text-red-600" :
@@ -366,13 +366,13 @@ const RequestsTab = () => {
                           </AlertDialogTrigger>
                           <AlertDialogContent>
                             <AlertDialogHeader>
-                              <AlertDialogTitle>Êtes-vous sûr ?</AlertDialogTitle>
+                              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
                               <AlertDialogDescription>
-                                Cette action est irréversible. Cette demande de renfort sera définitivement supprimée.
+                                This action is irreversible. This reinforcement request will be permanently deleted.
                               </AlertDialogDescription>
                             </AlertDialogHeader>
                             <AlertDialogFooter>
-                              <AlertDialogCancel>Annuler</AlertDialogCancel>
+                              <AlertDialogCancel>Cancel</AlertDialogCancel>
                               <AlertDialogAction
                                 onClick={async () => {
                                   try {
@@ -384,7 +384,7 @@ const RequestsTab = () => {
                                 }}
                                 className="bg-red-600 hover:bg-red-700"
                               >
-                                Supprimer
+                                Delete
                               </AlertDialogAction>
                             </AlertDialogFooter>
                           </AlertDialogContent>
