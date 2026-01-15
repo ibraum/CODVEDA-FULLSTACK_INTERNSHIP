@@ -806,7 +806,7 @@ const Layout = () => {
                   </svg>
 
                   <div
-                    className={`h - 20 p - 1 group - hover: bg - card dark: group - hover: bg - card group - hover: shadow - lg overflow - hidden rounded - full grid gap - 1 cursor - pointer duration - 300 group absolute top - 0 z - [1000] ${user?.role === "ADMIN_RH"
+                    className={`h-20 p-1 group-hover:bg-card dark:group-hover:bg-card group-hover:shadow-lg overflow-hidden rounded-full grid gap-1 cursor-pointer duration-300 group absolute top-0 z-[1000] ${user?.role === "ADMIN_RH"
                       ? "group-hover:h-[256px] group-hover:grid-rows-3 group-hover:top-[-168px]"
                       : "group-hover:h-[172px] group-hover:grid-rows-2 group-hover:top-[-84px]"
                       } `}
@@ -934,9 +934,9 @@ const Layout = () => {
                                     <div className="flex items-center">
                                       <button
                                         onClick={() => setRhAutoAssign(!rhAutoAssign)}
-                                        className={`w - 11 h - 6 rounded - full transition - colors relative ${rhAutoAssign ? 'bg-primary' : 'bg-muted border border-input'} `}
+                                        className={`w-11 h-6 rounded-full transition-colors relative ${rhAutoAssign ? 'bg-primary' : 'bg-muted border border-input'} `}
                                       >
-                                        <div className={`w - 4 h - 4 rounded - full bg - white absolute top - 1 transition - transform ${rhAutoAssign ? 'left-6' : 'left-1'} `}></div>
+                                        <div className={`w-4 h-4 rounded-full bg-white absolute top-1 transition-transform ${rhAutoAssign ? 'left-6' : 'left-1'} `}></div>
                                       </button>
                                     </div>
                                   </div>
@@ -995,7 +995,7 @@ const Layout = () => {
         </main>
       </div>
       <div
-        className={`fixed inset - y - 0 right - 0 z - 50 w - full sm: w - [450px] lg:static lg: h - full lg: row - span - 2 lg: col - start - 2 bg - background border - l border - border transition - all duration - 500 ease -in -out shadow - 2xl lg: shadow - none ${isAlertPanelOpen
+        className={`fixed inset-y-0 right-0 z-50 w-full sm:w-[450px] lg:static lg:h-full lg:row-span-2 lg:col-start-2 bg-background border-l border-border transition-all duration-500 ease-in-out shadow-2xl lg:shadow-none ${isAlertPanelOpen
           ? "translate-x-0 opacity-100"
           : "translate-x-full opacity-0 lg:hidden"
           } `}
@@ -1039,14 +1039,14 @@ const Layout = () => {
               <div className="flex items-start gap-4">
                 <div
                   onClick={() => setActiveTab("all")}
-                  className={`pb - 2 px - 2 cursor - pointer transition - colors dm - sans - medium flex items - center justify - center gap - 2 border - b - 3 ${activeTab === "all"
+                  className={`pb-2 px-2 cursor-pointer transition-colors dm-sans-medium flex items-center justify-center gap-2 border-b-3 ${activeTab === "all"
                     ? "border-primary text-primary"
                     : "border-transparent text-muted-foreground hover:text-foreground"
                     } `}
                 >
                   <div className="">All</div>{" "}
                   <div
-                    className={`px - 2 text - xs rounded - sm ${activeTab === "all"
+                    className={`px-2 text-xs rounded-sm ${activeTab === "all"
                       ? "bg-primary text-primary-foreground"
                       : "bg-muted text-muted-foreground"
                       } `}
@@ -1056,14 +1056,14 @@ const Layout = () => {
                 </div>
                 <div
                   onClick={() => setActiveTab("unread")}
-                  className={`pb - 2 px - 2 cursor - pointer transition - colors dm - sans - medium flex items - center justify - center gap - 2 border - b - 3 ${activeTab === "unread"
+                  className={`pb-2 px-2 cursor-pointer transition-colors dm-sans-medium flex items-center justify-center gap-2 border-b-3 ${activeTab === "unread"
                     ? "border-primary text-primary"
                     : "border-transparent text-muted-foreground hover:text-foreground"
                     } `}
                 >
                   <div className="">Unread</div>{" "}
                   <div
-                    className={`px - 2 text - xs rounded - sm ${activeTab === "unread"
+                    className={`px-2 text-xs rounded-sm ${activeTab === "unread"
                       ? "bg-primary text-primary-foreground"
                       : "bg-muted text-muted-foreground"
                       } `}
@@ -1098,7 +1098,7 @@ const Layout = () => {
                 filteredAlerts.map((alert) => (
                   <div
                     key={alert.id}
-                    className={`px - 8 py - 4 grid grid - cols - [40px_1fr] gap - 2 border - b border - border cursor - pointer hover: bg - muted / 50 ${alert.isRead ? "bg-card" : "bg-orange-50 dark:bg-orange-900/10"
+                    className={`px-8 py-4 grid grid-cols-[40px_1fr] gap-2 border-b border-border cursor-pointer hover:bg-muted/50 ${alert.isRead ? "bg-card" : "bg-orange-50 dark:bg-orange-900/10"
                       } `}
                     onClick={() => !alert.isRead && markAsRead(alert.id)}
                   >
