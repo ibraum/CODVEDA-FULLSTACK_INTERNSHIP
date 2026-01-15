@@ -72,9 +72,6 @@ COPY --from=build /usr/src/app/prisma ./prisma
 # Config Prisma
 COPY --from=build /usr/src/app/prisma.config.ts ./prisma.config.ts
 
-# Modifier le script de seed pour utiliser le fichier compilé en production
-RUN sed -i 's/"seed": "tsx prisma\/seed.ts"/"seed": "node dist\/seed.js"/g' package.json
-
 EXPOSE 3000
 
-CMD ["sh", "-c", "NODE_ENV=development npx prisma migrate reset --force && node dist/index.js"]
+CMD ["sh", "-c", "NODE_ENV=development npx prisma migrate reset --force --skip-seed && node dist/seed.js && node dist/index.js"]
