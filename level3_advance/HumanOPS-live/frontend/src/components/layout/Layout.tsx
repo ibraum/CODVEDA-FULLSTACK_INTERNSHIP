@@ -511,6 +511,7 @@ const Layout = () => {
               </button>
             </div>
           </div>
+          <div className="my-4 w-full h-1 bg-neutral-300 md:hidden block"></div>
           <div className="w-full md:max-w-[875px] md:w-full lg:w-full lg:max-w-[750px] h-full flex flex-col justify-between items-start mt-4 lg:mt-0">
             <div className="w-full flex items-center justify-between gap-2 lg:gap-6 lg:flex">
               <div className="flex items-center lg:gap-6 gap-3">
