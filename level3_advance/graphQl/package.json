@@ -1,0 +1,17 @@
+{
+  "name": "graphql",
+  "version": "1.0.0",
+  "description": "Build a graphql api with authentication",
+  "keywords": [
+    "API",
+    "GRAPHQL",
+    "AUTH"
+  ],
+  "license": "ISC",
+  "author": "KONDO Ibrahim",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
