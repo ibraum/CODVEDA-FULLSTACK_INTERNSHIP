@@ -1,0 +1,105 @@
+# === GUIDE UTILISATION ===
+# 1. Copiez la Query ou Mutation (le bloc textuel)
+# 2. Collez dans la partie gauche d'Apollo Sandbox
+# 3. Exécutez avec le bouton "Run"
+# 4. Pour les routes protégées (*), ajoutez le Header Authorization
+# ========================
+
+# === 1. AUTHENTIFICATION (Public) ===
+
+# A. Register (Créer un compte)
+mutation Register {
+  register(email: "test_user@example.com", password: "password123") {
+    token
+    user {
+      id
+      email
+    }
+  }
+}
+
+# B. Login (Se connecter)
+# Utilisez ce token pour les requêtes suivantes !
+mutation Login {
+  login(email: "admin@graphql.com", password: "admin123") {
+    token
+    user {
+      id
+      email
+    }
+  }
+}
+
+# === 2. UTILISATEURS (Public) ===
+
+# C. Voir tous les utilisateurs
+query GetAllUsers {
+  users {
+    id
+    email
+    tasks {
+      title
+    }
+  }
+}
+
+# D. Voir un utilisateur spécifique (ID: "1")
+query GetUser {
+  user(id: "1") {
+    email
+    tasks {
+      title
+      completed
+    }
+  }
+}
+
+# === 3. TÂCHES (Nécessite Header Authorization) ===
+# Header -> Authorization: Bearer <VOTRE_TOKEN_LOGIN>
+
+# E. Voir mes tâches (Celles de l'utilisateur connecté)
+query GetMyTasks {
+  tasks {
+    id
+    title
+    description
+    completed
+  }
+}
+
+# F. Voir une tâche spécifique (ID: "1")
+# (Doit appartenir à l'utilisateur connecté)
+query GetTaskDetails {
+  task(id: "1") {
+    title
+    description
+    completed
+    user {
+      email
+    }
+  }
+}
+
+# G. Créer une nouvelle tâche
+mutation CreateNewTask {
+  createTask(title: "Apprendre Apollo Server", description: "Suivre le tuto complet") {
+    id
+    title
+    completed
+  }
+}
+
+# H. Mettre à jour une tâche (ID: "1")
+# On change le titre et le statut 'completed'
+mutation UpdateTaskStatus {
+  updateTask(id: "1", title: "Setup GraphQL Server (Fini)", completed: true) {
+    id
+    title
+    completed
+  }
+}
+
+# I. Supprimer une tâche (ID: "2")
+mutation DeleteTask {
+  deleteTask(id: "2")
+}
