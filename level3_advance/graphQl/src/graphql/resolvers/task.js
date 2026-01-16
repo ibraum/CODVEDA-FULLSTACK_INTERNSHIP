@@ -2,9 +2,10 @@ import { tasks, users } from '../../config/data.js';
 
 export const taskResolvers = {
   Query: {
-    tasks: (_, __, context) => {
+    tasks: (_, { limit = 10, offset = 0 }, context) => {
       if (!context.user) throw new Error('Unauthorized');
-      return tasks.filter(t => t.userId === context.user.id);
+      const userTasks = tasks.filter(t => t.userId === context.user.id);
+      return userTasks.slice(offset, offset + limit);
     },
     task: (_, { id }, context) => {
       if (!context.user) throw new Error('Unauthorized');
@@ -49,6 +50,6 @@ export const taskResolvers = {
     }
   },
   Task: {
-    user: (parent) => users.find(u => u.id === parent.userId)
+    user: (parent, _, { loaders }) => loaders.userLoader.load(parent.userId)
   }
 };

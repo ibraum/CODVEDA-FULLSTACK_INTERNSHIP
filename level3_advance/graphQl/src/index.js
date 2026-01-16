@@ -3,6 +3,7 @@ import { startStandaloneServer } from '@apollo/server/standalone';
 import { typeDefs } from './graphql/typeDefs/index.js';
 import { resolvers } from './graphql/resolvers/index.js';
 import { getUserFromToken } from './utils/auth.js';
+import { createLoaders } from './graphql/loaders.js';
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -17,9 +18,12 @@ const { url } = await startStandaloneServer(server, {
   context: async ({ req }) => {
     const token = req.headers.authorization || '';
     const user = getUserFromToken(token);
-    return { user };
+    return { 
+      user,
+      loaders: createLoaders() 
+    };
   },
 });
 
-console.log(`🚀  Server ready at: ${url}`);
+console.log(`Server ready at: ${url}`);
 console.log(`graphQl playground at: ${url}`);

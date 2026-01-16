@@ -1,5 +1,5 @@
 # === GUIDE UTILISATION ===
-# 1. Copiez la Query ou Mutation (le bloc textuel)
+# 1. Copiez la Query ou Mutation 
 # 2. Collez dans la partie gauche d'Apollo Sandbox
 # 3. Exécutez avec le bouton "Run"
 # 4. Pour les routes protégées (*), ajoutez le Header Authorization

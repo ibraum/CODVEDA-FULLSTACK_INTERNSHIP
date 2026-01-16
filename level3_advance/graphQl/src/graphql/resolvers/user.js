@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 
 export const userResolvers = {
   Query: {
-    users: () => users,
+    users: (_, { limit = 10, offset = 0 }) => users.slice(offset, offset + limit),
     user: (_, { id }) => users.find(u => u.id === id)
   },
   Mutation: {
@@ -42,6 +42,7 @@ export const userResolvers = {
     }
   },
   User: {
-    tasks: (parent) => tasks.filter(t => t.userId === parent.id)
+    tasks: (parent, { limit = 10, offset = 0 }, { loaders }) => 
+      loaders.tasksByUserIdLoader.load(parent.id).then(tasks => tasks.slice(offset, offset + limit))
   }
 };

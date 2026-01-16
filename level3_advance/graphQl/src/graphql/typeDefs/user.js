@@ -3,7 +3,7 @@ export const userTypeDefs = `#graphql
     id: ID!
     email: String!
     password: String
-    tasks: [Task]
+    tasks(limit: Int, offset: Int): [Task]
   }
 
   type AuthPayload {

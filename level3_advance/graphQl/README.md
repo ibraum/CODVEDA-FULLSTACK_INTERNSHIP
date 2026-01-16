@@ -2,21 +2,21 @@
 
 This is a robust, modular GraphQL API built with Node.js and Apollo Server. It features JWT Authentication and a "Task" resource management system.
 
-## 🚀 Features
+## Features
 
 - **GraphQL API**: Query and Mutate data precisely.
 - **Authentication**: Secure `register` and `login` with JWT.
 - **Modular Architecture**: Clean separation of TypeDefs, Resolvers, and Models.
 - **Mock Database**: In-memory data persistence (simulating a database).
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Runtime**: Node.js
 - **Server**: @apollo/server
-- **Language**: GraphQL (SDL)
+- **Language**: GraphQL 
 - **Auth**: jsonwebtoken, bcryptjs
 
-## 📦 Installation
+## Installation
 
 1.  **Install Dependencies**
 

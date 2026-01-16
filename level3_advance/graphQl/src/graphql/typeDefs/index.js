@@ -6,9 +6,9 @@ export const typeDefs = `#graphql
   ${taskTypeDefs}
 
   type Query {
-    users: [User]
+    users(limit: Int, offset: Int): [User]
     user(id: ID!): User
-    tasks: [Task]
+    tasks(limit: Int, offset: Int): [Task]
     task(id: ID!): Task
   }
 
